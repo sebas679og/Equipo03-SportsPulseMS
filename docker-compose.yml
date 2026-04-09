@@ -1,0 +1,23 @@
+name: Sports-Pulse-API
+
+services:
+  postgres-datasource:
+    image: postgres:18.3
+    environment:
+      POSTGRES_USER: ${SPORTS_PULSE_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPORTS_PULSE_DATASOURCE_PASSWORD}
+      SPORTS_PULSE_DATASOURCE_DB_AUTH: ${SPORTS_PULSE_DATASOURCE_DB_AUTH}
+      SPORTS_PULSE_DATASOURCE_DB_NOTIFICATIONS: ${SPORTS_PULSE_DATASOURCE_DB_NOTIFICATIONS}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sports-pulse-data:/var/lib/postgresql
+      - ./config/postgres_db/init-multiple-db.sh:/docker-entrypoint-initdb.d/init-multiple-db.sh
+    restart: always
+    networks:
+      - sports-pulse-network
+
+
+networks:
+  sports-pulse-network:
+    driver: bridge
