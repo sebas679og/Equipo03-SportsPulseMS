@@ -85,7 +85,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>ms-gateway</finalName>
+		<finalName>ms-fixtures</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
