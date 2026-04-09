@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sportspulse</groupId>
-	<artifactId>ms-gateway</artifactId>
+	<artifactId>ms-leagues</artifactId>
 	<version>0.0.1</version>
 	<name/>
 	<description/>
@@ -85,7 +85,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>ms-gateway</finalName>
+		<finalName>ms-leagues</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
