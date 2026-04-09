@@ -1,0 +1,146 @@
+name: Sports-Pulse-API
+
+services:
+  postgres-datasource:
+    image: postgres:18.3
+    environment:
+      POSTGRES_USER: ${SPORTS_PULSE_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPORTS_PULSE_DATASOURCE_PASSWORD}
+      SPORTS_PULSE_DATASOURCE_DB_AUTH: ${SPORTS_PULSE_DATASOURCE_DB_AUTH}
+      SPORTS_PULSE_DATASOURCE_DB_NOTIFICATIONS: ${SPORTS_PULSE_DATASOURCE_DB_NOTIFICATIONS}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sports-pulse-data:/var/lib/postgresql
+      - ./config/postgres_db/init-multiple-db.sh:/docker-entrypoint-initdb.d/init-multiple-db.sh
+    restart: always
+    networks:
+      - sports-pulse-network
+
+  ms-gateway:
+    build:
+      context: ./ms-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+      AUTH_SERVICE_URL: http://ms-auth:8081
+      LEAGUES_SERVICE_URL: http://ms-leagues:8082
+      TEAMS_SERVICE_URL: http://ms-teams:8083
+      FIXTURES_SERVICE_URL: http://ms-fixtures:8085
+      STANDINGS_SERVICE_URL: http://ms-standings:8086
+      NOTIFICATIONS_SERVICE_URL: http://ms-notifications:8088
+      DASHBOARD_SERVICE_URL: http://ms-dashboard:8089
+    restart: on-failure
+    networks:
+      - sports-pulse-network
+
+  ms-auth:
+    build:
+      context: ./ms-auth
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres-datasource
+    environment:
+      SPORTS_PULSE_DATASOURCE_URL_AUTH: jdbc:postgresql://postgres-datasource:5432/${SPORTS_PULSE_DATASOURCE_DB_AUTH}
+      SPORTS_PULSE_DATASOURCE_USERNAME: ${SPORTS_PULSE_DATASOURCE_USERNAME}
+      SPORTS_PULSE_DATASOURCE_PASSWORD: ${SPORTS_PULSE_DATASOURCE_PASSWORD}
+      SPORTS_PULSE_JPA_DDL: ${SPORTS_PULSE_JPA_DDL}
+      SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+    restart: on-failure
+    networks:
+      - sports-pulse-network
+
+  ms-leagues:
+    build:
+      context: ./ms-leagues
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+    restart: on-failure
+    networks:
+      - sports-pulse-network
+
+  ms-teams:
+    build:
+      context: ./ms-teams
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+    restart: on-failure
+    networks:
+      - sports-pulse-network
+
+  ms-fixtures:
+    build:
+      context: ./ms-fixtures
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    environment:
+      SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+    restart: on-failure
+    networks:
+      - sports-pulse-network
+
+  ms-standings:
+    build:
+      context: ./ms-standings
+      dockerfile: Dockerfile
+    ports:
+      - "8086:8086"
+    environment:
+      SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+    restart: on-failure
+    networks:
+      - sports-pulse-network
+
+  ms-notifications:
+    build:
+      context: ./ms-notifications
+      dockerfile: Dockerfile
+    ports:
+      - "8088:8088"
+    depends_on:
+      - postgres-datasource
+      - ms-fixtures
+    environment:
+      SPORTS_PULSE_DATASOURCE_URL_NOIFICATIONS: jdbc:postgresql://postgres-datasource:5432/${SPORTS_PULSE_DATASOURCE_DB_NOTIFICATIONS}
+      SPORTS_PULSE_DATASOURCE_USERNAME: ${SPORTS_PULSE_DATASOURCE_USERNAME}
+      SPORTS_PULSE_DATASOURCE_PASSWORD: ${SPORTS_PULSE_DATASOURCE_PASSWORD}
+      SPORTS_PULSE_JPA_DDL: ${SPORTS_PULSE_JPA_DDL}
+      SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+      FIXTURES_SERVICE_URL: http://ms-fixtures:8085
+    restart: on-failure
+    networks:
+      - sports-pulse-network
+
+  ms-dashboard:
+    build:
+      context: ./ms-dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "8089:8089"
+    depends_on:
+      - ms-fixtures
+      - ms-standings
+      - ms-leagues
+    environment:
+      SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+      FIXTURES_SERVICE_URL: http://ms-fixtures:8085
+      STANDINGS_SERVICE_URL: http://ms-standings:8086
+      LEAGUES_SERVICE_URL: http://ms-leagues:8082
+    restart: on-failure
+    networks:
+      - sports-pulse-network
+
+networks:
+  sports-pulse-network:
+    driver: bridge

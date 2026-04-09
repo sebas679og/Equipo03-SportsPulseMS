@@ -1,0 +1,30 @@
+# Maven build
+target/
+*.log
+.mvn/
+
+# Wrapper de Maven
+#mvnw
+#mvnw.cmd
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Configs de IDE
+.idea/
+*.iml
+.vscode/
+
+# Docker y Git
+.dockerignore
+.git/
+.gitignore
+.gitattributes
+
+# Documentación y otros archivos que no son necesarios en la imagen
+HELP.md
+
+# Logs o carpetas temporales comunes
+logs/
+tmp/
