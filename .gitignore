@@ -27,3 +27,11 @@ replay_pid*
 .idea/
 .vscode/
 *.iml
+
+# Environment variables
+.env
+
+# Database files
+*.db
+*.sql
+sports-pulse-data/
