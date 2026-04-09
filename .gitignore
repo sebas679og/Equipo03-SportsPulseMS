@@ -30,3 +30,8 @@ replay_pid*
 
 # Environment variables
 .env
+
+# Database files
+*.db
+*.sql
+sports-pulse-data/
