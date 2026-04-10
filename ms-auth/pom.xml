@@ -37,6 +37,7 @@
 		<jacoco.version>0.8.14</jacoco.version>
 		<spotless.version>3.4.0</spotless.version>
 		<google-java-format.version>1.35.0</google-java-format.version>
+		<passay.version>1.6.6</passay.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -102,6 +103,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok-mapstruct-binding</artifactId>
 			<version>${lombok-mapstruct-binding.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.passay</groupId>
+			<artifactId>passay</artifactId>
+			<version>${passay.version}</version>
+			<scope>compile</scope>
 		</dependency>
 
 
