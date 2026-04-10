@@ -6,201 +6,25 @@ on:
 
 jobs:
 
-  auth-service:
+  code-quality:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - ms-auth
+          - ms-dashboard
+          - ms-fixtures
+          - ms-gateway
+          - ms-leagues
+          - ms-notifications
+          - ms-standings
+          - ms-teams
+      max-parallel: 1
 
     defaults:
       run:
-        working-directory: ms-auth
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Java 21
-        uses: actions/setup-java@v5
-        with:
-          java-version: "21"
-          distribution: "temurin"
-          cache: maven
-
-      - name: Spotless — check format
-        run: mvn spotless:check
-
-      - name: Checkstyle — check style
-        run: mvn checkstyle:check
-
-      - name: PMD — check for code issues
-        run: mvn pmd:check
-
-  dashboard-service:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ms-dashboard
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Java 21
-        uses: actions/setup-java@v5
-        with:
-          java-version: "21"
-          distribution: "temurin"
-          cache: maven
-
-      - name: Spotless — check format
-        run: mvn spotless:check
-
-      - name: Checkstyle — check style
-        run: mvn checkstyle:check
-
-      - name: PMD — check for code issues
-        run: mvn pmd:check
-
-  fixtures-service:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ms-fixtures
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Java 21
-        uses: actions/setup-java@v5
-        with:
-          java-version: "21"
-          distribution: "temurin"
-          cache: maven
-
-      - name: Spotless — check format
-        run: mvn spotless:check
-
-      - name: Checkstyle — check style
-        run: mvn checkstyle:check
-
-      - name: PMD — check for code issues
-        run: mvn pmd:check
-
-  gateway-service:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ms-gateway
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Java 21
-        uses: actions/setup-java@v5
-        with:
-          java-version: "21"
-          distribution: "temurin"
-          cache: maven
-
-      - name: Spotless — check format
-        run: mvn spotless:check
-
-      - name: Checkstyle — check style
-        run: mvn checkstyle:check
-
-      - name: PMD — check for code issues
-        run: mvn pmd:check
-
-  leagues-service:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ms-leagues
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Java 21
-        uses: actions/setup-java@v5
-        with:
-          java-version: "21"
-          distribution: "temurin"
-          cache: maven
-
-      - name: Spotless — check format
-        run: mvn spotless:check
-
-      - name: Checkstyle — check style
-        run: mvn checkstyle:check
-
-      - name: PMD — check for code issues
-        run: mvn pmd:check
-
-  notifications-service:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ms-notifications
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Java 21
-        uses: actions/setup-java@v5
-        with:
-          java-version: "21"
-          distribution: "temurin"
-          cache: maven
-
-      - name: Spotless — check format
-        run: mvn spotless:check
-
-      - name: Checkstyle — check style
-        run: mvn checkstyle:check
-
-      - name: PMD — check for code issues
-        run: mvn pmd:check
-
-  standings-service:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ms-standings
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up Java 21
-        uses: actions/setup-java@v5
-        with:
-          java-version: "21"
-          distribution: "temurin"
-          cache: maven
-
-      - name: Spotless — check format
-        run: mvn spotless:check
-
-      - name: Checkstyle — check style
-        run: mvn checkstyle:check
-
-      - name: PMD — check for code issues
-        run: mvn pmd:check
-
-  teams-service:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ms-teams
+        working-directory: ${{ matrix.service }}
 
     steps:
       - name: Checkout repository
