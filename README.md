@@ -99,15 +99,17 @@ X-RapidAPI-Host: api-football-v1.p.rapidapi.com
 1. Clone the repository:
 ```bash
 git clone https://github.com/sebas679og/Equipo06-SportsPulseMS.git
-cd sportpulse
+cd Equipo06-SportsPulseMS
 ```
 
-2. Create a `.env` file in the root directory:
-```env
-RAPIDAPI_KEY=your_api_key_here
+2. Copy the template and edite the `.env` file:
+
+```bash
+cp .env.template .env
 ```
+
 > [!IMPORTANT]
-> ⚠️ Do **not** commit this file. Add `.env` to your `.gitignore`.
+> Do **not** commit this file. Add `.env` to your `.gitignore`.
 
 3. Start all services:
 ```bash
@@ -160,3 +162,9 @@ http://localhost:{PORT}/swagger-ui/index.html
 | [ms-standings](./docs/ms-standings.md) | League classification tables |
 | [ms-notifications](./docs/ms-notifications.md) | Alert subscriptions and webhooks |
 | [ms-dashboard](./docs/ms-dashboard.md) | Aggregated daily summary |
+
+---
+
+## Contribution
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) to learn about the workflow, branch conventions, commits, and pull requests.
