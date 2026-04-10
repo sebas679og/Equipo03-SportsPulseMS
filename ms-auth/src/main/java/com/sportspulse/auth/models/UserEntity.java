@@ -14,6 +14,7 @@ import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(
     name = "users",
@@ -35,7 +37,7 @@ import lombok.Setter;
       @UniqueConstraint(name = "uk_username", columnNames = "username"),
       @UniqueConstraint(name = "uk_email", columnNames = "email")
     })
-public class User {
+public class UserEntity {
 
   @Id @GeneratedValue private UUID id;
 
