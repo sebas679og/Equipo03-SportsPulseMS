@@ -12,6 +12,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,20 +56,20 @@ public class UserEntity {
   private UserRole role;
 
   @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
-  private Instant createdDate;
+  private Instant createdAt;
 
   @Column(nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
-  private Instant updatedDate;
+  private Instant updatedAt;
 
   @PrePersist
   protected void onCreate() {
-    Instant now = Instant.now();
-    this.createdDate = now;
-    this.updatedDate = now;
+    Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    this.createdAt = now;
+    this.updatedAt = now;
   }
 
   @PreUpdate
   protected void onUpdate() {
-    this.updatedDate = Instant.now();
+    this.updatedAt = Instant.now().truncatedTo(ChronoUnit.MILLIS);
   }
 }
