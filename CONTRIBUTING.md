@@ -16,6 +16,7 @@ Thank you for being part of this project. This document defines the workflows, c
     - [Branch Naming Conventions](#branch-naming-conventions)
     - [Keeping Your Branch Up to Date](#keeping-your-branch-up-to-date)
 - [Commit Conventions](#commit-conventions)
+- [Linters and Tests](#linters-and-tests)
 - [Pull Requests](#pull-requests)
 - [Versioning](#versioning)
 
@@ -240,9 +241,67 @@ test: add unit tests for StandingsService
 
 ---
 
+## Linters and Tests
+
+Before opening any PR, it is **mandatory** to run Spotless locally to ensure that the code follows the project's defined style.
+Remember that to apply validations, you must navigate to the affected microservice directory and execute the commands from there.
+
+Applies the formatter automatically — **mandatory step before any PR**:
+
+```bash
+./mvnw spotless:apply
+```
+
+Checks that the code already complies with the format without modifying it:
+
+```bash
+./mvnw spotless:check
+```
+> [!IMPORTANT]
+> If `spotless:check` fails in the pipeline, the PR will be rejected. Always run `spotless:apply` before pushing to avoid this.
+
+Verifies that the code complies with predefined style rules and best practices:
+
+```bash
+./mvnw checkstyle:check
+```
+
+> [!IMPORTANT]
+> If `checkstyle:check` fails, the PR will also be rejected. Make sure to fix the reported issues before pushing.
+
+Performs static code analysis to detect quality issues, common errors, and bad practices:
+
+```bash
+./mvnw pmd:check
+```
+
+> [!IMPORTANT]
+> If `pmd:check` fails, the PR will also be rejected. Make sure to fix the reported issues before pushing.
+
+### Run Tests Only
+
+Runs tests while skipping Spotless, Checkstyle, and PMD validations:
+
+```bash
+./mvnw -B clean verify "-Dspotless.check.skip=true" "-Dcheckstyle.skip=true" "-Dpmd.skip=true"
+```
+
+### Linters + Tests Together
+
+Runs the formatter and tests in a single step:
+
+```bash
+./mvnw -B clean verify
+```
+
+> [!TIP]
+> It is recommended to run this command before every PR to ensure both style and tests pass successfully.
+
+---
+
 ## Pull Requests
 
-### Before Opening a PR
+### From `feat/` to `dev`
 
 1. Make sure your branch is up to date with `dev`:
 
@@ -251,24 +310,15 @@ git fetch origin
 git rebase origin/dev
 ```
 
-2. Confirm your changes compile and the affected service starts correctly inside Docker:
+2. Run linters and tests locally (see previous section) before opening the PR.
+3. Open the PR on GitHub targeting the `dev` branch.
+4. The PR title must follow the same format as commits.
+5. Briefly describe what changes were made and why.
+6. Assign at least one reviewer from the team.
 
-```bash
-docker-compose up --build ms-<service-name>
-```
+### From `dev` to `main`
 
----
-
-### Opening the PR
-
-- Open the pull request on GitHub targeting the **`dev`** branch.
-- The **PR title** must follow the same commit convention format (e.g. `feat: add live fixtures endpoint`).
-- Fill in the PR description with:
-    - **What** changed and **why**.
-    - Any relevant context, decisions made, or trade-offs.
-    - Steps to test the change manually if applicable.
-- Assign **at least one reviewer** from the team.
-- Link any related issues using GitHub keywords (e.g. `Closes #42`).
+Only project maintainers should open PRs from `dev` to `main`. Once merged, the GitHub Actions workflow will automatically build and publish the Docker images.
 
 ---
 
