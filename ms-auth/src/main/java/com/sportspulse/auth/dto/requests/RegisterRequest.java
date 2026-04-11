@@ -3,6 +3,7 @@ package com.sportspulse.auth.dto.requests;
 import com.sportspulse.auth.utils.validators.password.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import lombok.Setter;
 public class RegisterRequest {
 
   @NotBlank(message = "Username is required")
+  @Pattern(regexp = "^\\S+$", message = "Username must not contain spaces")
   private String username;
 
   @NotBlank(message = "Email is required")
