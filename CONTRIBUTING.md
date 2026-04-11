@@ -41,8 +41,8 @@ Make sure the following tools are installed on your machine before proceeding:
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/sebas679og/Equipo06-SportsPulseMS.git
-cd Equipo06-SportsPulseMS
+git https://github.com/sebas679og/Equipo03-SportsPulseMS
+cd Equipo03-SportsPulseMS
 ```
 
 ---
