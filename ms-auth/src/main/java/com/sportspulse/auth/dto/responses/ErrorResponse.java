@@ -1,6 +1,7 @@
 package com.sportspulse.auth.dto.responses;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import lombok.Builder;
 import lombok.Value;
 
@@ -15,5 +16,5 @@ public class ErrorResponse {
 
   String description;
 
-  @Builder.Default Instant timestamp = Instant.ofEpochMilli(Instant.now().toEpochMilli());
+  @Builder.Default Instant timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 }
