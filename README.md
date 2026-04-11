@@ -98,8 +98,8 @@ X-RapidAPI-Host: api-football-v1.p.rapidapi.com
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/sebas679og/Equipo06-SportsPulseMS.git
-cd Equipo06-SportsPulseMS
+git https://github.com/sebas679og/Equipo03-SportsPulseMS
+cd Equipo03-SportsPulseMS
 ```
 
 2. Copy the template and edite the `.env` file:
