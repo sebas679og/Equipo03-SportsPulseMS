@@ -217,7 +217,6 @@
 				<configuration>
 					<excludes>
 						<exclude>**/*Application.class</exclude>
-						<exclude>**/*MapperImpl.class</exclude>
 					</excludes>
 				</configuration>
 				<executions>
