@@ -42,8 +42,7 @@ public class AuthController {
            not conflict with existing accounts.
            """)
   @io.swagger.v3.oas.annotations.parameters.RequestBody(
-      description =
-          "User registration data. All fields are required.",
+      description = "User registration data. All fields are required.",
       required = true,
       content =
           @Content(
