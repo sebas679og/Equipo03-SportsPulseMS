@@ -6,6 +6,10 @@ import com.sportspulse.auth.utils.enums.UserRole;
 /** Utility class for creating mock user data for testing purposes. */
 public class UserDataProvider {
 
+  public static final String VALID_USERNAME = "johndoe";
+  public static final String VALID_EMAIL = "john@example.com";
+  public static final String VALID_PASSWORD = "Secure@123";
+
   /** Static mock of fake user data. */
   public static UserEntity createMockUser() {
     return UserEntity.builder()
