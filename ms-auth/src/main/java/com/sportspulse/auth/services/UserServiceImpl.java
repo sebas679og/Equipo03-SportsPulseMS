@@ -1,6 +1,6 @@
 package com.sportspulse.auth.services;
 
-import com.sportspulse.auth.config.JwtProperties;
+import com.sportspulse.auth.config.properties.JwtProperties;
 import com.sportspulse.auth.dto.requests.LoginRequest;
 import com.sportspulse.auth.dto.requests.RegisterRequest;
 import com.sportspulse.auth.dto.responses.LoginResponse;

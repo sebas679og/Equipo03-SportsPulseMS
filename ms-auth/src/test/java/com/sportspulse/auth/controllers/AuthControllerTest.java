@@ -10,8 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sportspulse.auth.AbstractIntegrationTest;
 import com.sportspulse.auth.UserDataProvider;
-import com.sportspulse.auth.config.ApiPaths;
-import com.sportspulse.auth.config.JwtProperties;
+import com.sportspulse.auth.config.constants.ApiPaths;
+import com.sportspulse.auth.config.properties.JwtProperties;
 import com.sportspulse.auth.dto.requests.LoginRequest;
 import com.sportspulse.auth.dto.requests.RegisterRequest;
 import com.sportspulse.auth.models.UserEntity;

@@ -1,4 +1,4 @@
-package com.sportspulse.auth.config;
+package com.sportspulse.auth.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;

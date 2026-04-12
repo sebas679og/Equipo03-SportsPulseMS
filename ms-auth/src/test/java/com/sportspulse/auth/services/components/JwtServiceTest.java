@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
-import com.sportspulse.auth.config.JwtProperties;
+import com.sportspulse.auth.config.properties.JwtProperties;
 import com.sportspulse.auth.config.SecurityConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

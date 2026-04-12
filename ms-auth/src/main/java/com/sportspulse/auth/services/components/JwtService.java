@@ -1,6 +1,6 @@
 package com.sportspulse.auth.services.components;
 
-import com.sportspulse.auth.config.JwtProperties;
+import com.sportspulse.auth.config.properties.JwtProperties;
 import com.sportspulse.auth.config.SecurityConfig;
 import com.sportspulse.auth.dto.responses.TokenValidationResponse;
 import com.sportspulse.auth.utils.enums.UserRole;

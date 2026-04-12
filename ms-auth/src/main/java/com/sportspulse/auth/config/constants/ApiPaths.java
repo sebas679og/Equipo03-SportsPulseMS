@@ -1,4 +1,4 @@
-package com.sportspulse.auth.config;
+package com.sportspulse.auth.config.constants;
 
 /**
  * Centralized definition of API endpoint paths.

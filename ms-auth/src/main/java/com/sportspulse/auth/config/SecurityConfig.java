@@ -1,5 +1,8 @@
 package com.sportspulse.auth.config;
 
+import com.sportspulse.auth.config.constants.ApiPaths;
+import com.sportspulse.auth.config.properties.JwtProperties;
+import com.sportspulse.auth.utils.security.filter.InternalApiKeyFilter;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
@@ -15,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Security configuration for the application.
@@ -29,6 +33,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
   private final JwtProperties jwtProperties;
+  private final InternalApiKeyFilter internalApiKeyFilter;
 
   /**
    * Configures the security filter chain.
@@ -56,8 +61,11 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, ApiPaths.Auth.LOGIN)
                     .permitAll()
+                    .requestMatchers(HttpMethod.GET, ApiPaths.Validate.TOKEN)
+                    .permitAll()
                     .anyRequest()
-                    .denyAll());
+                    .authenticated())
+        .addFilterBefore(internalApiKeyFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
