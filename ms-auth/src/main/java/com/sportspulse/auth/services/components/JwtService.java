@@ -2,6 +2,8 @@ package com.sportspulse.auth.services.components;
 
 import com.sportspulse.auth.config.JwtProperties;
 import com.sportspulse.auth.config.SecurityConfig;
+import com.sportspulse.auth.dto.responses.TokenValidationResponse;
+import com.sportspulse.auth.utils.enums.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.time.Instant;
@@ -51,5 +53,21 @@ public class JwtService {
         .build()
         .parseSignedClaims(token)
         .getPayload();
+  }
+
+  /**
+   * Extracts user information from a JWT token.
+   *
+   * @param token the JWT token to parse
+   * @return a TokenValidationResponse containing user details and validation result
+   */
+  public TokenValidationResponse extractUserInfo(String token) {
+    Claims claims = validateAndExtract(token);
+    return TokenValidationResponse.builder()
+        .valid(true)
+        .userId(UUID.fromString(claims.getSubject()))
+        .username(claims.get("username", String.class))
+        .role(UserRole.valueOf(claims.get("role", String.class)))
+        .build();
   }
 }
