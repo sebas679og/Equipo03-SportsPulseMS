@@ -1,5 +1,7 @@
 package com.sportspulse.auth.config;
 
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.crypto.SecretKey;
+
 /**
  * Security configuration for the application.
  *
@@ -24,6 +28,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+  private final JwtProperties jwtProperties;
 
   /**
    * Configures the security filter chain.
@@ -61,5 +67,11 @@ public class SecurityConfig {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public SecretKey getSigningKey() {
+    byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
+    return Keys.hmacShaKeyFor(keyBytes);
   }
 }
