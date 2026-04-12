@@ -30,10 +30,6 @@ public class SecurityConfig {
    *
    * <p>- Disables session creation (stateless API) - Disables CSRF protection (suitable for REST
    * APIs) - Adds basic security headers - Defines authorization rules for endpoints
-   *
-   * @param http the {@link HttpSecurity} to configure
-   * @return the configured {@link SecurityFilterChain}
-   * @throws Exception if an error occurs during configuration
    */
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -53,19 +49,15 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, ApiPaths.Auth.REGISTER)
                     .permitAll()
+                    .requestMatchers(HttpMethod.POST, ApiPaths.Auth.LOGIN)
+                    .permitAll()
                     .anyRequest()
                     .denyAll());
 
     return http.build();
   }
 
-  /**
-   * Provides a password encoder bean.
-   *
-   * <p>Uses BCrypt hashing algorithm to securely store user passwords.
-   *
-   * @return the {@link PasswordEncoder} implementation
-   */
+  /** Provides a password encoder bean. */
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
