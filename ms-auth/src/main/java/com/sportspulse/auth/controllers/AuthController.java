@@ -1,8 +1,10 @@
 package com.sportspulse.auth.controllers;
 
 import com.sportspulse.auth.config.ApiPaths;
+import com.sportspulse.auth.dto.requests.LoginRequest;
 import com.sportspulse.auth.dto.requests.RegisterRequest;
 import com.sportspulse.auth.dto.responses.ErrorResponse;
+import com.sportspulse.auth.dto.responses.LoginResponse;
 import com.sportspulse.auth.dto.responses.RegisterResponse;
 import com.sportspulse.auth.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -76,5 +78,11 @@ public class AuthController {
   public ResponseEntity<RegisterResponse> registerUser(
       @RequestBody @Valid RegisterRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(request));
+  }
+
+  @PostMapping(ApiPaths.Auth.LOGIN)
+  public ResponseEntity<LoginResponse> userAuthentication(
+      @RequestBody @Valid LoginRequest request) {
+    return ResponseEntity.status(HttpStatus.OK).body(userService.loginUser(request));
   }
 }
