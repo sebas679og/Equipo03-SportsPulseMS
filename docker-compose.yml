@@ -24,6 +24,7 @@ services:
     ports:
       - "8080:8080"
     environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
       AUTH_SERVICE_URL: http://ms-auth:8081
       LEAGUES_SERVICE_URL: http://ms-leagues:8082
@@ -45,6 +46,7 @@ services:
     depends_on:
       - postgres-datasource
     environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SPORTS_PULSE_DATASOURCE_URL_AUTH: jdbc:postgresql://postgres-datasource:5432/${SPORTS_PULSE_DATASOURCE_DB_AUTH}
       SPORTS_PULSE_DATASOURCE_USERNAME: ${SPORTS_PULSE_DATASOURCE_USERNAME}
       SPORTS_PULSE_DATASOURCE_PASSWORD: ${SPORTS_PULSE_DATASOURCE_PASSWORD}
@@ -61,6 +63,7 @@ services:
     ports:
       - "8082:8082"
     environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
     restart: on-failure
     networks:
@@ -73,6 +76,7 @@ services:
     ports:
       - "8083:8083"
     environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
     restart: on-failure
     networks:
@@ -85,6 +89,7 @@ services:
     ports:
       - "8085:8085"
     environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
     restart: on-failure
     networks:
@@ -97,6 +102,7 @@ services:
     ports:
       - "8086:8086"
     environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
     restart: on-failure
     networks:
@@ -112,6 +118,7 @@ services:
       - postgres-datasource
       - ms-fixtures
     environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SPORTS_PULSE_DATASOURCE_URL_NOIFICATIONS: jdbc:postgresql://postgres-datasource:5432/${SPORTS_PULSE_DATASOURCE_DB_NOTIFICATIONS}
       SPORTS_PULSE_DATASOURCE_USERNAME: ${SPORTS_PULSE_DATASOURCE_USERNAME}
       SPORTS_PULSE_DATASOURCE_PASSWORD: ${SPORTS_PULSE_DATASOURCE_PASSWORD}
@@ -133,6 +140,7 @@ services:
       - ms-standings
       - ms-leagues
     environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
       FIXTURES_SERVICE_URL: http://ms-fixtures:8085
       STANDINGS_SERVICE_URL: http://ms-standings:8086
