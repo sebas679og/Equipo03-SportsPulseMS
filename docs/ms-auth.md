@@ -114,7 +114,7 @@ UserRole: USER, ADMIN
 
 ---
 
-### 3. `POST /api/auth/validate`
+### 3. `GET /api/auth/validate`
 
 **Access:** Internal (consumed by other microservices)
 
@@ -138,9 +138,10 @@ Authorization: Bearer <token>
 **Response `401 Unauthorized`:**
 ```json
 {
-  "valid": false,
-  "error": "TOKEN_EXPIRED",
-  "message": "The token has expired"
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Invalid or missing internal API key",
+  "timestamp": "2025-01-15T10:30:000Z"
 }
 ```
 
@@ -151,7 +152,7 @@ Authorization: Bearer <token>
 Other microservices can validate JWT tokens in one of two ways:
 
 - **Locally:** Verify the token signature using the shared secret key available via the `JWT_SECRET` environment variable.
-- **Remotely:** Call `POST /api/auth/validate` on `ms-auth`.
+- **Remotely:** Call `GET /api/auth/validate` on `ms-auth` with the service apikey.
 
 ---
 
@@ -170,5 +171,5 @@ Other microservices can validate JWT tokens in one of two ways:
 ## Notes
 
 - Passwords are never stored in plain text; bcrypt hashing is mandatory.
-- The `POST /api/auth/validate` endpoint should be treated as internal and ideally not exposed through the gateway to end users.
+- The `GET /api/auth/validate` endpoint should be treated as internal and ideally not exposed through the gateway to end users.
 - Token expiration is set to **3600 seconds (1 hour)** by default.
