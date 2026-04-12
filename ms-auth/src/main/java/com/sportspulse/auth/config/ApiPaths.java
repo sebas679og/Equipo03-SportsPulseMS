@@ -16,6 +16,11 @@ public final class ApiPaths {
     public static final String LOGIN = "/api/auth/login";
   }
 
+  /** Endpoints related to token validation. */
+  public static final class Validate {
+    public static final String TOKEN = "/api/auth/validate";
+  }
+
   /** API documentation endpoints. */
   public static final class Docs {
     public static final String SWAGGER_UI = "/swagger-ui/**";
