@@ -5,6 +5,8 @@ on:
     types: [assigned]
   pull_request:
     types: [opened, closed]
+    branches-ignore:
+      - main
   push:
     branches-ignore:
       - main
