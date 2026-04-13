@@ -68,6 +68,46 @@
             "description": "# 🔐 User Authentication\n\n## 📌 Endpoint\n\n**POST**  \n`http://localhost:8080/api/auth/login`\n\n---\n\n## 📖 Description\n\nAuthenticates a **registered user** and generates a **JWT token** required to access protected endpoints.\n\nThis endpoint validates the provided credentials and, if correct, returns an access token along with its metadata.\n\n---\n\n# 🔓 Access\n\nThis endpoint is **public**.\n\nNo authentication is required.\n\n---\n\n# 📥 Request\n\n## Request Body (JSON)\n\n``` json\n{\n  \"email\": \"johndoe@email.com\",\n  \"password\": \"SecurePass#123\"\n}\n\n ```\n\n---\n\n### Validation Rules\n\n| Field | Type | Required | Constraints |\n| --- | --- | --- | --- |\n| email | String | ✅ Yes | Must be a valid email format |\n| password | String | ✅ Yes | Must not be null or empty |\n\n---\n\n### Additional Constraints\n\n- ❌ Fields must not be null\n    \n- ❌ Fields must not be empty\n    \n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nAuthentication successful. A JWT token is generated and returned.\n\n---\n\n### Response Body (JSON)\n\n``` json\n{\n  \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3NDQ2MGU1YS03YTg5LTQ5ZDYtOTMyZC00MTAwNDZlY2YzNDkiLCJ1c2VybmFtZSI6Imp1bGkiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc3NTk2MzA3MiwiZXhwIjoxNzc1OTY2NjcyfQ.0SqQX1fmrReMTovON4nQuI84LTG58apr_OMrP3evKCg\",\n  \"tokenType\": \"Bearer\",\n  \"expiresIn\": 3600,\n  \"userId\": \"74460e5a-7a89-49d6-932d-410046ecf349\"\n}\n\n ```\n\n---\n\n### Response Fields\n\n| Field | Type | Description |\n| --- | --- | --- |\n| token | String | JWT access token |\n| tokenType | String | Token type (always `Bearer`) |\n| expiresIn | Long | Token expiration time in seconds |\n| userId | UUID | Unique identifier of the authenticated user |\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid or malformed data.\n\n**Possible Causes:**\n\n- Missing required fields\n    \n- Fields with null values\n    \n- Empty strings\n    \n- Invalid email format\n    \n\n### Example Response\n\n``` json\n{\n  \"code\": 400,\n  \"name\": \"Bad Request\",\n  \"description\": \"Email must be a valid format\",\n  \"timestamp\": \"2026-04-11T19:00:00.000Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication failed due to invalid credentials.\n\n**Possible Causes:**\n\n- Incorrect email\n    \n- Incorrect password\n    \n- User does not exist\n    \n\n### Example Response\n\n``` json\n{\n  \"code\": 401,\n  \"name\": \"Unauthorized\",\n  \"description\": \"Invalid email or password\",\n  \"timestamp\": \"2026-04-11T19:00:00.000Z\"\n}\n\n ```"
           },
           "response": []
+        },
+        {
+          "name": "Validate Token - (Internal)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{JWT_TOKEN}}",
+                "description": "Token to validate",
+                "type": "text"
+              },
+              {
+                "key": "X-Internal-API-Key",
+                "value": "{{API_KEY}}",
+                "description": "Communication key between services",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"johndoe@email.com\",\r\n  \"password\": \"SecurePass#123\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL_MS_AUTH}}/api/auth/validate",
+              "host": [
+                "{{URL_MS_AUTH}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "validate"
+              ]
+            },
+            "description": "# 🔐 Token Validation (Internal)\n\n## 📌 Endpoint\n\n**GET**  \n`http://localhost:8080/api/auth/validate`\n\n---\n\n## 📖 Description\n\nValidates a **JWT token** to ensure it is:\n\n- Well-formed\n    \n- Not expired\n    \n- Properly signed\n    \n\nThis endpoint is designed for **internal communication between microservices**.\n\nIf the token is valid, it returns basic user information extracted from the token.\n\n---\n\n# 🔒 Access\n\nThis endpoint is **restricted to internal services only**.\n\nIt requires:\n\n- A valid **JWT token**\n    \n- A valid **Internal API Key**\n    \n\n---\n\n# 📥 Request\n\n## Headers\n\n| Header | Required | Description |\n| --- | --- | --- |\n| Authorization | ✅ Yes | Bearer token (`Bearer {{JWT_TOKEN}}`) |\n| X-Internal-API-Key | ✅ Yes | Internal API key for service-to-service access |\n\n---\n\n## Example Request\n\n``` http\nGET /api/auth/validate\nAuthorization: Bearer {{JWT_TOKEN}}\nX-Internal-API-Key: {{API-KEY}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nThe token is valid and user information is returned.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"valid\": true,\n  \"userId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"username\": \"javier_ruiz\",\n  \"role\": \"USER\"\n}\n\n ```\n\n---\n\n### 🔐 401 Unauthorized\n\nThe request could not be authenticated.\n\n**Possible Causes:**\n\n- Missing Authorization header\n    \n- Invalid or malformed JWT\n    \n- Expired token\n    \n- Missing X-Internal-API-Key header\n    \n\n### Example Response:\n\n``` json\n{\n  \"code\": 401,\n  \"name\": \"UNAUTHORIZED\",\n  \"description\": \"Invalid or missing authentication credentials\",\n  \"timestamp\": \"2026-04-11T20:00:00.000Z\"\n}\n\n ```\n\n---\n\n## ⛔ 403 Forbidden\n\nThe request was authenticated but not authorized.\n\n**Possible Causes:**\n\n- Invalid X-Internal-API-Key\n    \n\n### Example Response:\n\n``` json\n{\n  \"code\": 403,\n  \"name\": \"FORBIDDEN\",\n  \"description\": \"Invalid internal API key\",\n  \"timestamp\": \"2026-04-11T20:01:00.000Z\"\n}\n\n ```"
+          },
+          "response": []
         }
       ],
       "description": "**Port:** `8081`  \n**Database:** PostgreSQL (`auth_db`)\n\nThe `ms-auth` service manages user registration and authentication. It is responsible for issuing JWT tokens that all other domain microservices must validate on every protected request.\n\n---"
@@ -101,6 +141,16 @@
     {
       "key": "URL_MS_AUTH",
       "value": "http://localhost:8081"
+    },
+    {
+      "key": "JWT_TOKEN",
+      "value": "",
+      "description": "Token to validate"
+    },
+    {
+      "key": "API_KEY",
+      "value": "b7dc94658f191e32a5f0228b6776f313e34dc4ca048961ce5d408f9553cb0c11",
+      "description": "Communication key between services"
     }
   ]
 }
