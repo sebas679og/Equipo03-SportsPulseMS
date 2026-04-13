@@ -13,6 +13,7 @@ public final class ApiPaths {
   /** Authentication-related endpoints. */
   public static final class Auth {
     public static final String REGISTER = "/api/auth/register";
+    public static final String LOGIN = "/api/auth/login";
   }
 
   /** API documentation endpoints. */

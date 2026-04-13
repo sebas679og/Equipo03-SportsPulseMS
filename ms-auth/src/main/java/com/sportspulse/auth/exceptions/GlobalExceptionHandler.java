@@ -46,12 +46,21 @@ public class GlobalExceptionHandler {
     return badRequest(description);
   }
 
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex) {
+    return unauthorized(ex.getMessage());
+  }
+
   private ResponseEntity<ErrorResponse> conflict(String message) {
     return buildErrorResponse(HttpStatus.CONFLICT, message);
   }
 
   private ResponseEntity<ErrorResponse> badRequest(String message) {
     return buildErrorResponse(HttpStatus.BAD_REQUEST, message);
+  }
+
+  private ResponseEntity<ErrorResponse> unauthorized(String message) {
+    return buildErrorResponse(HttpStatus.UNAUTHORIZED, message);
   }
 
   private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String description) {

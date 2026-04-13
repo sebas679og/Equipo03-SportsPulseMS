@@ -1,8 +1,10 @@
 package com.sportspulse.auth.controllers;
 
 import com.sportspulse.auth.config.ApiPaths;
+import com.sportspulse.auth.dto.requests.LoginRequest;
 import com.sportspulse.auth.dto.requests.RegisterRequest;
 import com.sportspulse.auth.dto.responses.ErrorResponse;
+import com.sportspulse.auth.dto.responses.LoginResponse;
 import com.sportspulse.auth.dto.responses.RegisterResponse;
 import com.sportspulse.auth.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +38,7 @@ public class AuthController {
       summary = "Register a new user",
       description =
           """
-           "Endpoint to register a new user account.
+           Endpoint to register a new user account.
            This endpoint accepts user registration data and creates
            a new account if the provided information is valid and does
            not conflict with existing accounts.
@@ -76,5 +78,51 @@ public class AuthController {
   public ResponseEntity<RegisterResponse> registerUser(
       @RequestBody @Valid RegisterRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(request));
+  }
+
+  @Operation(
+      summary = "User authentication",
+      description =
+          """
+                     Endpoint to authenticate a registered user.
+                     This endpoint accepts the user's authentication data,
+                     generates a token with a custom expiration, and validates
+                     their registration in the system.
+                     """)
+  @io.swagger.v3.oas.annotations.parameters.RequestBody(
+      description = "User authentication data. All fields are mandatory.",
+      required = true,
+      content =
+          @Content(
+              mediaType = MediaType.APPLICATION_JSON_VALUE,
+              schema = @Schema(implementation = LoginRequest.class)))
+  @ApiResponses({
+    @ApiResponse(
+        responseCode = "200",
+        description =
+            "User successfully authenticated - Returns the details of the generated token.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = LoginResponse.class))),
+    @ApiResponse(
+        responseCode = "400",
+        description = "Validation error - Invalid input fields",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized - Incorrect credentials.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+  })
+  @PostMapping(ApiPaths.Auth.LOGIN)
+  public ResponseEntity<LoginResponse> userAuthentication(
+      @RequestBody @Valid LoginRequest request) {
+    return ResponseEntity.status(HttpStatus.OK).body(userService.loginUser(request));
   }
 }
