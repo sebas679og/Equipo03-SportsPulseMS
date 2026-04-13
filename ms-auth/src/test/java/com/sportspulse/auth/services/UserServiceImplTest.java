@@ -16,6 +16,7 @@ import com.sportspulse.auth.dto.requests.LoginRequest;
 import com.sportspulse.auth.dto.requests.RegisterRequest;
 import com.sportspulse.auth.dto.responses.LoginResponse;
 import com.sportspulse.auth.dto.responses.RegisterResponse;
+import com.sportspulse.auth.dto.responses.TokenValidationResponse;
 import com.sportspulse.auth.exceptions.ResourceConflictException;
 import com.sportspulse.auth.exceptions.UnauthorizedException;
 import com.sportspulse.auth.models.UserEntity;
@@ -434,6 +435,74 @@ class UserServiceImplTest {
         verify(jwtProperties, never()).getTokenType();
         verify(jwtProperties, never()).getExpiration();
       }
+    }
+  }
+
+  @Nested
+  @DisplayName("valiadteToken()")
+  class ValidateToken {
+    
+    @Test
+    @DisplayName("tokenValidate() throws UnauthorizedException when Authorization header is null")
+    void tokenValidate_throwsUnauthorizedException_whenHeaderIsNull() {
+      assertThatThrownBy(() -> userService.tokenValidate(null))
+              .isInstanceOf(UnauthorizedException.class)
+              .hasMessageContaining("Missing or malformed Authorization header");
+    }
+
+    @Test
+    @DisplayName("tokenValidate() throws UnauthorizedException when header does not start with token type prefix")
+    void tokenValidate_throwsUnauthorizedException_whenHeaderIsMalformed() {
+      when(jwtProperties.getTokenType()).thenReturn("Bearer");
+
+      assertThatThrownBy(() -> userService.tokenValidate("Basic sometoken"))
+              .isInstanceOf(UnauthorizedException.class)
+              .hasMessageContaining("Missing or malformed Authorization header");
+    }
+
+    @Test
+    @DisplayName("tokenValidate() throws UnauthorizedException when header has correct prefix but no token")
+    void tokenValidate_throwsUnauthorizedException_whenHeaderHasOnlyPrefix() {
+      when(jwtProperties.getTokenType()).thenReturn("Bearer");
+
+      assertThatThrownBy(() -> userService.tokenValidate("Bearer"))
+              .isInstanceOf(UnauthorizedException.class)
+              .hasMessageContaining("Missing or malformed Authorization header");
+    }
+
+    @Test
+    @DisplayName("tokenValidate() strips the prefix and delegates to jwtService with the raw token")
+    void tokenValidate_stripsPrefix_andDelegatesToJwtService() {
+      String rawToken = "eyJhbGciOiJIUzI1NiJ9.payload.signature";
+      String header = "Bearer " + rawToken;
+      TokenValidationResponse expected = TokenValidationResponse.builder()
+              .valid(true)
+              .userId(UUID.randomUUID())
+              .username("john.doe")
+              .role(UserRole.USER)
+              .build();
+
+      when(jwtProperties.getTokenType()).thenReturn("Bearer");
+      when(jwtService.extractUserInfo(rawToken)).thenReturn(expected);
+
+      TokenValidationResponse result = userService.tokenValidate(header);
+
+      assertThat(result).isEqualTo(expected);
+      verify(jwtService).extractUserInfo(rawToken);
+    }
+
+    @Test
+    @DisplayName("tokenValidate() propagates JwtException thrown by jwtService")
+    void tokenValidate_propagatesJwtException_whenTokenIsInvalid() {
+      String rawToken = "invalid.token.here";
+      String header = "Bearer " + rawToken;
+
+      when(jwtProperties.getTokenType()).thenReturn("Bearer");
+      when(jwtService.extractUserInfo(rawToken)).thenThrow(new io.jsonwebtoken.JwtException("bad token"));
+
+      assertThatThrownBy(() -> userService.tokenValidate(header))
+              .isInstanceOf(io.jsonwebtoken.JwtException.class)
+              .hasMessageContaining("bad token");
     }
   }
 }
