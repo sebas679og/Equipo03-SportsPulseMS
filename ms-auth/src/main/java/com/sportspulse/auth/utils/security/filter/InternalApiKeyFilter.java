@@ -1,6 +1,7 @@
 package com.sportspulse.auth.utils.security.filter;
 
 import com.sportspulse.auth.config.constants.ApiPaths;
+import com.sportspulse.auth.config.constants.InternalHeaders;
 import com.sportspulse.auth.utils.security.extractor.InternalApiKeyExtractor;
 import com.sportspulse.auth.utils.security.writer.HttpErrorResponseWriter;
 import jakarta.servlet.FilterChain;
@@ -26,9 +27,15 @@ public class InternalApiKeyFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
+    String apiKey = request.getHeader(InternalHeaders.INTERNAL_API_KEY);
+
+    if (apiKey == null) {
+      errorResponseWriter.write(response, HttpStatus.UNAUTHORIZED, "Missing internal API key");
+      return;
+    }
+
     if (!apiKeyExtractor.isValid(request)) {
-      errorResponseWriter.write(
-          response, HttpStatus.UNAUTHORIZED, "Invalid or missing internal API key");
+      errorResponseWriter.write(response, HttpStatus.FORBIDDEN, "Invalid internal API key");
       return;
     }
 

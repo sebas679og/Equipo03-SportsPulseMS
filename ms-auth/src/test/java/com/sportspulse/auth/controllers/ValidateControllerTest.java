@@ -99,16 +99,16 @@ public class ValidateControllerTest extends AbstractIntegrationTest {
   }
 
   @Test
-  public void shouldReturn401WhenInternalServiceAuthorizationIsInvalid() throws Exception {
+  public void shouldReturn403WhenInternalServiceAuthorizationIsInvalid() throws Exception {
     mockMvc
         .perform(
             get(ApiPaths.Validate.TOKEN)
                 .header(
                     InternalHeaders.AUTHORIZATION, jwtProperties.getTokenType() + " " + validToken)
                 .header(InternalHeaders.INTERNAL_API_KEY, "invalid-api-key"))
-        .andExpect(status().isUnauthorized())
-        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
-        .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+        .andExpect(status().isForbidden())
+        .andExpect(jsonPath("$.code").value(HttpStatus.FORBIDDEN.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.FORBIDDEN.getReasonPhrase()))
         .andExpect(jsonPath("$.description").exists())
         .andExpect(jsonPath("$.timestamp").exists());
   }

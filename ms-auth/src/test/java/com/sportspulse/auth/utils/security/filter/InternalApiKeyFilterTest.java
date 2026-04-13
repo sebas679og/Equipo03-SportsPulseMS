@@ -1,10 +1,12 @@
 package com.sportspulse.auth.utils.security.filter;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.sportspulse.auth.config.constants.ApiPaths;
+import com.sportspulse.auth.config.constants.InternalHeaders;
 import com.sportspulse.auth.utils.security.extractor.InternalApiKeyExtractor;
 import com.sportspulse.auth.utils.security.writer.HttpErrorResponseWriter;
 import jakarta.servlet.FilterChain;
@@ -39,24 +41,36 @@ class InternalApiKeyFilterTest {
   @Test
   @DisplayName("doFilterInternal() proceeds to filter chain when API key is valid")
   void doFilterInternal_proceedsChain_whenApiKeyIsValid() throws ServletException, IOException {
+    when(request.getHeader(InternalHeaders.INTERNAL_API_KEY)).thenReturn("valid-key");
     when(apiKeyExtractor.isValid(request)).thenReturn(true);
 
     filter.doFilterInternal(request, response, filterChain);
 
     verify(filterChain).doFilter(request, response);
-    verify(errorResponseWriter, never())
-        .write(response, HttpStatus.UNAUTHORIZED, "Invalid or missing internal API key");
+    verify(errorResponseWriter, never()).write(any(), any(), any());
   }
 
   @Test
-  @DisplayName("doFilterInternal() writes 401 and halts chain when API key is invalid")
-  void doFilterInternal_writes401_whenApiKeyIsInvalid() throws ServletException, IOException {
-    when(apiKeyExtractor.isValid(request)).thenReturn(false);
+  @DisplayName("doFilterInternal() writes 401 and halts chain when API key header is missing")
+  void doFilterInternal_writes401_whenApiKeyHeaderIsMissing() throws ServletException, IOException {
+    when(request.getHeader(InternalHeaders.INTERNAL_API_KEY)).thenReturn(null);
 
     filter.doFilterInternal(request, response, filterChain);
 
     verify(errorResponseWriter)
-        .write(response, HttpStatus.UNAUTHORIZED, "Invalid or missing internal API key");
+        .write(response, HttpStatus.UNAUTHORIZED, "Missing internal API key");
+    verify(filterChain, never()).doFilter(request, response);
+  }
+
+  @Test
+  @DisplayName("doFilterInternal() writes 403 and halts chain when API key is invalid")
+  void doFilterInternal_writes403_whenApiKeyIsInvalid() throws ServletException, IOException {
+    when(request.getHeader(InternalHeaders.INTERNAL_API_KEY)).thenReturn("wrong-key");
+    when(apiKeyExtractor.isValid(request)).thenReturn(false);
+
+    filter.doFilterInternal(request, response, filterChain);
+
+    verify(errorResponseWriter).write(response, HttpStatus.FORBIDDEN, "Invalid internal API key");
     verify(filterChain, never()).doFilter(request, response);
   }
 
