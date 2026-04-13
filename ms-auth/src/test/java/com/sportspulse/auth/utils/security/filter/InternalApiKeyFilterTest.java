@@ -24,75 +24,73 @@ import org.springframework.http.HttpStatus;
 @DisplayName("InternalApiKeyFilter")
 class InternalApiKeyFilterTest {
 
-    @Mock private InternalApiKeyExtractor apiKeyExtractor;
-    @Mock private HttpErrorResponseWriter errorResponseWriter;
-    @Mock private HttpServletRequest request;
-    @Mock private HttpServletResponse response;
-    @Mock private FilterChain filterChain;
+  @Mock private InternalApiKeyExtractor apiKeyExtractor;
+  @Mock private HttpErrorResponseWriter errorResponseWriter;
+  @Mock private HttpServletRequest request;
+  @Mock private HttpServletResponse response;
+  @Mock private FilterChain filterChain;
 
-    @InjectMocks private InternalApiKeyFilter filter;
+  @InjectMocks private InternalApiKeyFilter filter;
 
-    // ---------------------------------------------------------------------------
-    // doFilterInternal
-    // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // doFilterInternal
+  // ---------------------------------------------------------------------------
 
-    @Test
-    @DisplayName("doFilterInternal() proceeds to filter chain when API key is valid")
-    void doFilterInternal_proceedsChain_whenApiKeyIsValid()
-            throws ServletException, IOException {
-        when(apiKeyExtractor.isValid(request)).thenReturn(true);
+  @Test
+  @DisplayName("doFilterInternal() proceeds to filter chain when API key is valid")
+  void doFilterInternal_proceedsChain_whenApiKeyIsValid() throws ServletException, IOException {
+    when(apiKeyExtractor.isValid(request)).thenReturn(true);
 
-        filter.doFilterInternal(request, response, filterChain);
+    filter.doFilterInternal(request, response, filterChain);
 
-        verify(filterChain).doFilter(request, response);
-        verify(errorResponseWriter, never())
-                .write(response, HttpStatus.UNAUTHORIZED, "Invalid or missing internal API key");
-    }
+    verify(filterChain).doFilter(request, response);
+    verify(errorResponseWriter, never())
+        .write(response, HttpStatus.UNAUTHORIZED, "Invalid or missing internal API key");
+  }
 
-    @Test
-    @DisplayName("doFilterInternal() writes 401 and halts chain when API key is invalid")
-    void doFilterInternal_writes401_whenApiKeyIsInvalid()
-            throws ServletException, IOException {
-        when(apiKeyExtractor.isValid(request)).thenReturn(false);
+  @Test
+  @DisplayName("doFilterInternal() writes 401 and halts chain when API key is invalid")
+  void doFilterInternal_writes401_whenApiKeyIsInvalid() throws ServletException, IOException {
+    when(apiKeyExtractor.isValid(request)).thenReturn(false);
 
-        filter.doFilterInternal(request, response, filterChain);
+    filter.doFilterInternal(request, response, filterChain);
 
-        verify(errorResponseWriter)
-                .write(response, HttpStatus.UNAUTHORIZED, "Invalid or missing internal API key");
-        verify(filterChain, never()).doFilter(request, response);
-    }
+    verify(errorResponseWriter)
+        .write(response, HttpStatus.UNAUTHORIZED, "Invalid or missing internal API key");
+    verify(filterChain, never()).doFilter(request, response);
+  }
 
-    // ---------------------------------------------------------------------------
-    // shouldNotFilter
-    // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // shouldNotFilter
+  // ---------------------------------------------------------------------------
 
-    @Test
-    @DisplayName("shouldNotFilter() returns false for the validate-token path (filter applies)")
-    void shouldNotFilter_returnsFalse_whenUriIsValidateTokenPath() {
-        when(request.getRequestURI()).thenReturn(ApiPaths.Validate.TOKEN);
+  @Test
+  @DisplayName("shouldNotFilter() returns false for the validate-token path (filter applies)")
+  void shouldNotFilter_returnsFalse_whenUriIsValidateTokenPath() {
+    when(request.getRequestURI()).thenReturn(ApiPaths.Validate.TOKEN);
 
-        boolean result = filter.shouldNotFilter(request);
+    boolean result = filter.shouldNotFilter(request);
 
-        org.assertj.core.api.Assertions.assertThat(result).isFalse();
-    }
+    org.assertj.core.api.Assertions.assertThat(result).isFalse();
+  }
 
-    @Test
-    @DisplayName("shouldNotFilter() returns true for any other path (filter is skipped)")
-    void shouldNotFilter_returnsTrue_whenUriIsNotValidateTokenPath() {
-        when(request.getRequestURI()).thenReturn("/api/v1/some/other/endpoint");
+  @Test
+  @DisplayName("shouldNotFilter() returns true for any other path (filter is skipped)")
+  void shouldNotFilter_returnsTrue_whenUriIsNotValidateTokenPath() {
+    when(request.getRequestURI()).thenReturn("/api/v1/some/other/endpoint");
 
-        boolean result = filter.shouldNotFilter(request);
+    boolean result = filter.shouldNotFilter(request);
 
-        org.assertj.core.api.Assertions.assertThat(result).isTrue();
-    }
+    org.assertj.core.api.Assertions.assertThat(result).isTrue();
+  }
 
-    @Test
-    @DisplayName("shouldNotFilter() returns true for the root path")
-    void shouldNotFilter_returnsTrue_whenUriIsRoot() {
-        when(request.getRequestURI()).thenReturn("/");
+  @Test
+  @DisplayName("shouldNotFilter() returns true for the root path")
+  void shouldNotFilter_returnsTrue_whenUriIsRoot() {
+    when(request.getRequestURI()).thenReturn("/");
 
-        boolean result = filter.shouldNotFilter(request);
+    boolean result = filter.shouldNotFilter(request);
 
-        org.assertj.core.api.Assertions.assertThat(result).isTrue();
-    }
+    org.assertj.core.api.Assertions.assertThat(result).isTrue();
+  }
 }

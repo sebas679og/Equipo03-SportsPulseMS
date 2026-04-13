@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
-import com.sportspulse.auth.config.properties.JwtProperties;
 import com.sportspulse.auth.config.SecurityConfig;
+import com.sportspulse.auth.config.properties.JwtProperties;
 import com.sportspulse.auth.dto.responses.TokenValidationResponse;
 import com.sportspulse.auth.utils.enums.UserRole;
 import io.jsonwebtoken.Claims;
@@ -316,7 +316,7 @@ class JwtServiceTest {
       String tamperedToken = token.substring(0, token.lastIndexOf('.') + 1) + "invalidsignature";
 
       assertThatThrownBy(() -> jwtService.extractUserInfo(tamperedToken))
-              .isInstanceOf(io.jsonwebtoken.JwtException.class);
+          .isInstanceOf(io.jsonwebtoken.JwtException.class);
     }
 
     @Test
@@ -325,17 +325,17 @@ class JwtServiceTest {
       // Build an already-expired token manually
       Instant past = Instant.now().truncatedTo(ChronoUnit.MILLIS).minusSeconds(3600);
       String expiredToken =
-              Jwts.builder()
-                      .subject(UUID.randomUUID().toString())
-                      .claim("username", "john.doe")
-                      .claim("role", UserRole.USER.name())
-                      .issuedAt(Date.from(past))
-                      .expiration(Date.from(past.plusSeconds(1)))
-                      .signWith(config.getSigningKey())
-                      .compact();
+          Jwts.builder()
+              .subject(UUID.randomUUID().toString())
+              .claim("username", "john.doe")
+              .claim("role", UserRole.USER.name())
+              .issuedAt(Date.from(past))
+              .expiration(Date.from(past.plusSeconds(1)))
+              .signWith(config.getSigningKey())
+              .compact();
 
       assertThatThrownBy(() -> jwtService.extractUserInfo(expiredToken))
-              .isInstanceOf(io.jsonwebtoken.JwtException.class);
+          .isInstanceOf(io.jsonwebtoken.JwtException.class);
     }
   }
 }
