@@ -118,11 +118,12 @@ UserRole: USER, ADMIN
 
 **Access:** Internal (consumed by other microservices)
 
-**Description:** Validates a JWT token and returns the associated user information. This is the endpoint called by other services to verify that the token received in a request is valid.
+**Description:** Validates a JWT token and returns the associated user information. This endpoint is used exclusively for inter-service communication and must not be exposed to public clients.
 
 **Required Header:**
 ```
 Authorization: Bearer <token>
+X-Internal-API-Key: <service-api-key>
 ```
 
 **Response `200 OK`:**
@@ -145,14 +146,31 @@ Authorization: Bearer <token>
 }
 ```
 
+**Response `403 Forbiden`:**
+
+```json
+{
+  "code": 403,
+  "name": "FORBIDDEN",
+  "description": "Invalid internal API key",
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+| Case | Status |
+|------|--------|
+| Missing `Authorization` | 401 |
+| Invalid JWT | 401 |
+| Missing `X-Internal-API-Key` | 401 |
+| Invalid API Key | 403 |
+
 ---
 
 ## JWT Validation Strategy
 
-Other microservices can validate JWT tokens in one of two ways:
+Other microservices can validate JWT tokens in the following way:
 
-- **Locally:** Verify the token signature using the shared secret key available via the `JWT_SECRET` environment variable.
-- **Remotely:** Call `GET /api/auth/validate` on `ms-auth` with the service apikey.
+- **Remotely:** Call `GET /api/auth/validate` on `ms-auth` with the service's apikey.
 
 ---
 
@@ -160,11 +178,18 @@ Other microservices can validate JWT tokens in one of two ways:
 
 | Variable | Description | Example |
 |---|---|---|
-| `SPRING_DATASOURCE_URL` | PostgreSQL connection URL | `jdbc:postgresql://postgres-auth:5432/auth_db` |
-| `SPRING_DATASOURCE_USERNAME` | Database username | `admin` |
-| `SPRING_DATASOURCE_PASSWORD` | Database password | `admin123` |
-| `JWT_SECRET` | Secret key used to sign JWT tokens | `sportpulse-secret-key-2025` |
-| `JWT_EXPIRATION` | Token expiry in milliseconds | `3600000` |
+| `SPORTS_PULSE_DATASOURCE_URL_AUTH` | PostgreSQL connection URL for auth service | `jdbc:postgresql://postgres-auth:5432/auth_db` |
+| `SPORTS_PULSE_DATASOURCE_USERNAME` | Database username | `admin` |
+| `SPORTS_PULSE_DATASOURCE_PASSWORD` | Database password | `admin123` |
+| `SPORTS_PULSE_JWT_SECRET` | Base64-encoded secret key used to sign JWT tokens (generated with `openssl rand -base64 32`) | `Y3VzdG9tLXNlY3JldC1rZXktZXhhbXBsZQ==` |
+| `SPORTS_PULSE_JWT_EXPIRATION` | Token expiry in seconds | `3600` |
+| `SPORTS_PULSE_TOKEN_TYPE` | Token type used in Authorization header | `Bearer` |
+| `SPORTS_PULSE_INTERNAL_API_KEY` | Hexadecimal API key for internal microservice communication (generated with `openssl rand -hex 32`) | `a3f5c9d8e1b2476f9a0c1234d5e6f789abcd1234ef567890abcd1234ef567890` |
+| `SPRING_PROFILES_ACTIVE` | Active Spring profile | `prod` |
+| `SPORTS_PULSE_JPA_DDL` | Hibernate DDL mode | `validate` |
+| `SPORTS_PULSE_JPA_SHOW_SQL` | Enable SQL logging | `false` |
+| `SPORTS_PULSE_LEVEL_LOGIN` | Logging level for application | `INFO` |
+| `SWAGGER_UI_DOCUMENTATION_ENABLED` | Enable Swagger/OpenAPI documentation | `false` |
 
 ---
 
