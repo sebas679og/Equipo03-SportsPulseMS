@@ -69,6 +69,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -82,6 +83,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -95,6 +97,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -108,6 +111,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -149,6 +153,7 @@ services:
       FIXTURES_SERVICE_URL: http://ms-fixtures:8085
       STANDINGS_SERVICE_URL: http://ms-standings:8086
       LEAGUES_SERVICE_URL: http://ms-leagues:8082
+      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
