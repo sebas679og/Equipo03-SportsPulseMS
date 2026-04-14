@@ -39,6 +39,7 @@ public class AbstractIntegrationTest {
 
   @DynamicPropertySource
   static void redisProperties(DynamicPropertyRegistry registry) {
+    REDIS.start();
     registry.add("spring.data.redis.host", REDIS::getHost);
     registry.add("spring.data.redis.port", REDIS::getFirstMappedPort);
     registry.add("sportspulse.gateway.services.auth", () -> "http://localhost:" + wireMock.port());
