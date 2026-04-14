@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.redis.testcontainers.RedisContainer;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,8 +27,8 @@ public class AbstractIntegrationTest {
 
   protected static WireMockServer wireMock;
 
-  @BeforeAll
-  static void startWireMock() {
+  static {
+    REDIS.start();
     wireMock = new WireMockServer(WireMockConfiguration.options().dynamicPort());
     wireMock.start();
   }
