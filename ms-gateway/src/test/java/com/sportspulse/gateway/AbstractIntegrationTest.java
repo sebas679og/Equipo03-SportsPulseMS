@@ -1,6 +1,5 @@
 package com.sportspulse.gateway;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.redis.testcontainers.RedisContainer;
@@ -53,7 +52,6 @@ public class AbstractIntegrationTest {
       registry.add("spring.data.redis.host", () -> "localhost");
       registry.add("spring.data.redis.port", () -> 6379);
     }
-    
     registry.add("sportspulse.gateway.services.auth", () -> "http://localhost:" + wireMock.getPort());
   }
 }

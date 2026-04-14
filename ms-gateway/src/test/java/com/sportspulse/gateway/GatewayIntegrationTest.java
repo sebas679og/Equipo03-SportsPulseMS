@@ -9,6 +9,9 @@ import com.sportspulse.gateway.config.constants.InternalHeaders;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -27,10 +30,14 @@ class GatewayIntegrationTest extends AbstractIntegrationTest {
 
   @Autowired private ReactiveStringRedisTemplate redisTemplate;
 
+  @Autowired
+  private CircuitBreakerRegistry circuitBreakerRegistry;
+
   @BeforeEach
   void setUp() {
     redisTemplate.execute(connection -> connection.serverCommands().flushAll()).then().block();
-
+    circuitBreakerRegistry.getAllCircuitBreakers()
+            .forEach(CircuitBreaker::reset);
     wireMock.resetAll();
   }
 
@@ -173,7 +180,8 @@ class GatewayIntegrationTest extends AbstractIntegrationTest {
     String bodyAsString = new String(rawBody, StandardCharsets.UTF_8);
     assertThat(bodyAsString).isNotBlank();
 
-    wireMock.verify(WireMock.postRequestedFor(WireMock.urlEqualTo("/api/auth/login")));
+    wireMock.verify(WireMock.moreThanOrExactly(1),
+            WireMock.postRequestedFor(WireMock.urlEqualTo("/api/auth/login")));
   }
 
   @Test
