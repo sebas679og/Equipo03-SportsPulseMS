@@ -53,6 +53,7 @@ jobs:
           path: ms-gateway/target/site/jacoco/
 
   run-tests:
+    needs: ms-gateway-tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
