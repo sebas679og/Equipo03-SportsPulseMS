@@ -16,7 +16,7 @@ import org.testcontainers.utility.DockerImageName;
 
 /** Base integration test configuration. */
 @ActiveProfiles("test")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @Testcontainers
 public class AbstractIntegrationTest {
   @Container
