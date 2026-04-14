@@ -14,7 +14,7 @@ import org.testcontainers.utility.DockerImageName;
 
 /** Base integration test configuration. */
 @ActiveProfiles("test")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @AutoConfigureWebTestClient
 public class AbstractIntegrationTest {
 
@@ -32,7 +32,7 @@ public class AbstractIntegrationTest {
       REDIS.start();
     }
 
-    wireMock = new WireMockServer(WireMockConfiguration.options().dynamicPort());
+    wireMock = new WireMockServer(WireMockConfiguration.options().port(8081));
     wireMock.start();
   }
 
@@ -54,6 +54,6 @@ public class AbstractIntegrationTest {
       registry.add("spring.data.redis.port", () -> 6379);
     }
 
-    registry.add("sportspulse.gateway.services.auth", () -> "http://localhost:" + wireMock.port());
+    registry.add("sportspulse.gateway.services.auth", () -> "http://localhost:8081");
   }
 }
