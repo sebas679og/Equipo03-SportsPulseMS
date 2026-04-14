@@ -6,4 +6,6 @@ public final class InternalHeaders {
   private InternalHeaders() {}
 
   public static final String CLIENT_IP_HEADER = "X-Forwarded-For";
+  public static final String AUTHORIZATION = "Authorization";
+  public static final String CONTENT_TYPE = "Content-Type";
 }
