@@ -44,7 +44,7 @@ jobs:
           echo "Redis did not start in time" && exit 1
 
       - name: Run tests (gateway)
-        run: mvn -B clean verify -Dspotless.check.skip=true -Dcheckstyle.skip=true -Dpmd.skip=true
+        run: mvn -B clean verify -e -Dspotless.check.skip=true -Dcheckstyle.skip=true -Dpmd.skip=true
 
       - name: Upload JaCoCo report
         uses: actions/upload-artifact@v4
