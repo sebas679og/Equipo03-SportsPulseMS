@@ -1,5 +1,7 @@
 package com.sportspulse.gateway;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.common.Slf4jNotifier;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.redis.testcontainers.RedisContainer;
@@ -23,17 +25,16 @@ public class AbstractIntegrationTest {
 
   static RedisContainer REDIS;
 
-  @RegisterExtension
-  protected static WireMockExtension wireMock =
-      WireMockExtension.newInstance()
-          .options(WireMockConfiguration.wireMockConfig().dynamicPort())
-          .failOnUnmatchedRequests(false)
-          .build();
+  protected static final WireMockServer wireMock;
 
   static {
+    wireMock = new WireMockServer(WireMockConfiguration.wireMockConfig()
+            .dynamicPort()
+            .notifier(new Slf4jNotifier(true)));
+    wireMock.start();
+
     if (!IS_CI) {
-      REDIS =
-          new RedisContainer(DockerImageName.parse("redis:8.6.2-alpine"))
+      REDIS = new RedisContainer(DockerImageName.parse("redis:8.6.2-alpine"))
               .waitingFor(Wait.forListeningPort());
       REDIS.start();
     }
@@ -41,7 +42,7 @@ public class AbstractIntegrationTest {
 
   @AfterAll
   static void stopContainers() {
-    if (REDIS != null) {
+    if (REDIS != null && REDIS.isRunning()) {
       REDIS.stop();
     }
   }
@@ -55,7 +56,7 @@ public class AbstractIntegrationTest {
       registry.add("spring.data.redis.host", () -> "localhost");
       registry.add("spring.data.redis.port", () -> 6379);
     }
-    registry.add(
-        "sportspulse.gateway.services.auth", () -> "http://localhost:" + wireMock.getPort());
+    registry.add("sportspulse.gateway.services.auth",
+            () -> "http://localhost:" + wireMock.port());
   }
 }
