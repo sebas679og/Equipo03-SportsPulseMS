@@ -13,6 +13,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 
+/** Abstraction Configuration Redis and wiremock Test. */
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -23,14 +24,16 @@ public class AbstractIntegrationTest {
   static RedisContainer REDIS;
 
   @RegisterExtension
-  protected static WireMockExtension wireMock = WireMockExtension.newInstance()
+  protected static WireMockExtension wireMock =
+      WireMockExtension.newInstance()
           .options(WireMockConfiguration.wireMockConfig().dynamicPort())
           .failOnUnmatchedRequests(false)
           .build();
 
   static {
     if (!IS_CI) {
-      REDIS = new RedisContainer(DockerImageName.parse("redis:8.6.2-alpine"))
+      REDIS =
+          new RedisContainer(DockerImageName.parse("redis:8.6.2-alpine"))
               .waitingFor(Wait.forListeningPort());
       REDIS.start();
     }
@@ -52,6 +55,7 @@ public class AbstractIntegrationTest {
       registry.add("spring.data.redis.host", () -> "localhost");
       registry.add("spring.data.redis.port", () -> 6379);
     }
-    registry.add("sportspulse.gateway.services.auth", () -> "http://localhost:" + wireMock.getPort());
+    registry.add(
+        "sportspulse.gateway.services.auth", () -> "http://localhost:" + wireMock.getPort());
   }
 }
