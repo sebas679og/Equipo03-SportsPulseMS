@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.redis.testcontainers.RedisContainer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -16,7 +17,8 @@ import org.testcontainers.utility.DockerImageName;
 
 /** Base integration test configuration. */
 @ActiveProfiles("test")
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
 @Testcontainers
 public class AbstractIntegrationTest {
   @Container
@@ -39,7 +41,6 @@ public class AbstractIntegrationTest {
 
   @DynamicPropertySource
   static void redisProperties(DynamicPropertyRegistry registry) {
-    REDIS.start();
     registry.add("spring.data.redis.host", REDIS::getHost);
     registry.add("spring.data.redis.port", REDIS::getFirstMappedPort);
     registry.add("sportspulse.gateway.services.auth", () -> "http://localhost:" + wireMock.port());
