@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.ratelimit.RateLimiter;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.ReturnType;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 /** FixedWindowRateLimiter Implements a fixed-window rate limiting strategy using Redis. */
+@Slf4j
 @Primary
 @Component
 @RequiredArgsConstructor
@@ -83,6 +85,15 @@ public class FixedWindowRateLimiter implements RateLimiter<FixedWindowRateLimite
               headers.put("X-RateLimit-Reset-In", ttl + "s");
 
               return new Response(allowed, headers);
+            })
+        .switchIfEmpty(Mono.just(new Response(true, Collections.emptyMap())))
+        .onErrorResume(
+            ex -> {
+              if (log.isWarnEnabled()) {
+                log.warn(
+                    "Redis unavailable during rate limit check for key='{}', failing open", key);
+              }
+              return Mono.just(new Response(true, Collections.emptyMap()));
             });
   }
 
