@@ -1,17 +1,21 @@
 package com.sportspulse.gateway.config;
 
 import com.sportspulse.gateway.config.constants.ApiPathsServices;
+import com.sportspulse.gateway.config.constants.InternalHeaders;
 import com.sportspulse.gateway.config.properties.GatewayServicesProperties;
 import com.sportspulse.gateway.exceptions.GatewayFallbackHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
 
 /** GatewayRoutesConfig Configures gateway routes and fallback handlers. */
 @Configuration

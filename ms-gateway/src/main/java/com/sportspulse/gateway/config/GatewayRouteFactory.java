@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -24,107 +26,72 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class GatewayRouteFactory {
 
-  @Qualifier("defaultRateLimiter")
-  private final RedisRateLimiter defaultRateLimiter;
-
-  @Qualifier("bruteForceRateLimiter")
-  private final RedisRateLimiter bruteForceRateLimiter;
-
+  private final FixedWindowRateLimiter fixedWindowRateLimiter;
   private final KeyResolver keyResolver;
   private final JsonResponseWriter responseWriter;
 
-  /**
-   * Constructs a GatewayRouteFactory with the required rate limiters, key resolver, and response
-   * writer.
-   *
-   * @param defaultRateLimiter the default rate limiter for standard requests
-   * @param bruteForceRateLimiter the rate limiter for brute-force protection
-   * @param keyResolver resolves keys for rate limiting
-   * @param responseWriter writes JSON responses for errors
-   */
-  public GatewayRouteFactory(
-      @Qualifier("defaultRateLimiter") RedisRateLimiter defaultRateLimiter,
-      @Qualifier("bruteForceRateLimiter") RedisRateLimiter bruteForceRateLimiter,
-      KeyResolver keyResolver,
-      JsonResponseWriter responseWriter) {
-    this.defaultRateLimiter = defaultRateLimiter;
-    this.bruteForceRateLimiter = bruteForceRateLimiter;
-    this.keyResolver = keyResolver;
-    this.responseWriter = responseWriter;
+  private static final FixedWindowRateLimiter.Config DEFAULT_CONFIG =
+          new FixedWindowRateLimiter.Config(); // 60 req / 60s
+
+  private static final FixedWindowRateLimiter.Config BRUTE_FORCE_CONFIG =
+          buildConfig(5, 60); // 5 req / 60s
+
+  private static FixedWindowRateLimiter.Config buildConfig(int max, long window) {
+    FixedWindowRateLimiter.Config c = new FixedWindowRateLimiter.Config();
+    c.setMaxRequests(max);
+    c.setWindowSeconds(window);
+    return c;
   }
 
   public Function<GatewayFilterSpec, UriSpec> applyStandardFilters(String circuitName) {
-    return applyFilters(circuitName, defaultRateLimiter);
+    return applyFilters(circuitName, DEFAULT_CONFIG);
   }
 
   public Function<GatewayFilterSpec, UriSpec> applyBruteForceFilters(String circuitName) {
-    return applyFilters(circuitName, bruteForceRateLimiter);
+    return applyFilters(circuitName, BRUTE_FORCE_CONFIG);
   }
 
   private Function<GatewayFilterSpec, UriSpec> applyFilters(
-      String circuitName, RedisRateLimiter rateLimiter) {
+          String circuitName, FixedWindowRateLimiter.Config config) {
     return f ->
-        f.filter(rateLimitFilter(rateLimiter))
-            .circuitBreaker(c -> c.setName(circuitName).setFallbackUri("forward:/fallback/503"));
+            f.filter(rateLimitFilter(config))
+                    .circuitBreaker(c -> c.setName(circuitName).setFallbackUri("forward:/fallback/503"));
   }
 
-  private GatewayFilter rateLimitFilter(RedisRateLimiter rateLimiter) {
+  private GatewayFilter rateLimitFilter(FixedWindowRateLimiter.Config config) {
     return (exchange, chain) ->
-        keyResolver
-            .resolve(exchange)
-            .flatMap(
-                key ->
-                    rateLimiter.isAllowed(
-                        Optional.ofNullable(
-                                (Route)
-                                    exchange.getAttribute(
-                                        ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR))
-                            .map(Route::getId)
-                            .orElse("default"),
-                        key))
-            .flatMap(
-                response -> {
-                  if (response.isAllowed()) {
-                    return chain.filter(exchange);
-                  }
-                  String retryAfter = resolveRetryAfter(response);
-                  String message =
-                      retryAfter != null
-                          ? "Too many requests, please try again in " + retryAfter
-                          : "Too many requests, please try again later";
-                  return responseWriter.write(exchange, HttpStatus.TOO_MANY_REQUESTS, message);
-                });
+            keyResolver
+                    .resolve(exchange)
+                    .flatMap(
+                            key ->
+                                    fixedWindowRateLimiter.isAllowed(
+                                            Optional.ofNullable(
+                                                            (Route) exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR))
+                                                    .map(Route::getId)
+                                                    .orElse("default"),
+                                            key,
+                                            config))
+                    .flatMap(
+                            response -> {
+                              if (response.isAllowed()) {
+                                return chain.filter(exchange);
+                              }
+                              String retryAfter = resolveRetryAfter(response);
+                              String message = retryAfter != null
+                                      ? "Too many requests, please try again in " + retryAfter
+                                      : "Too many requests, please try again later";
+                              return responseWriter.write(exchange, HttpStatus.TOO_MANY_REQUESTS, message);
+                            });
   }
 
   private String resolveRetryAfter(RateLimiter.Response response) {
     try {
-      Map<String, String> headers = response.getHeaders();
-
-      String remainingStr = headers.get("X-RateLimit-Remaining");
-      String requestedStr = headers.get("X-RateLimit-Requested-Tokens");
-      String replenishStr = headers.get("X-RateLimit-Replenish-Rate");
-
-      if (remainingStr == null || requestedStr == null || replenishStr == null) {
-        return null;
-      }
-
-      int remaining = Integer.parseInt(remainingStr.trim());
-      int requested = Integer.parseInt(requestedStr.trim());
-      int replenishRate = Integer.parseInt(replenishStr.trim());
-
-      int tokensNeeded = requested - remaining; // cuánto falta realmente
-      if (tokensNeeded <= 0) {
-        return "0s";
-      }
-
-      long waitSeconds = (long) Math.ceil((double) tokensNeeded / replenishRate);
-      return waitSeconds + "s";
-    } catch (NumberFormatException e) {
-      if (log.isWarnEnabled()) {
-        log.warn("[GatewayRouteFactory] Could not parse X-RateLimit-Reset header");
-      }
+      String resetIn = response.getHeaders().get("X-RateLimit-Reset-In");
+      return (resetIn != null && !resetIn.isBlank()) ? resetIn : null;
+    } catch (Exception e) {
       return null;
     }
   }
