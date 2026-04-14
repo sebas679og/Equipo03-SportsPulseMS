@@ -1,11 +1,15 @@
 package com.sportspulse.gateway.config;
 
 import com.sportspulse.gateway.exceptions.JsonResponseWriter;
+import java.time.Instant;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.cloud.gateway.filter.ratelimit.RateLimiter;
 import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.route.builder.GatewayFilterSpec;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Component;
  * GatewayRouteFactory Builds and applies standard and brute-force rate limiting filters for gateway
  * routes.
  */
+@Slf4j
 @Component
 public class GatewayRouteFactory {
 
@@ -84,10 +89,43 @@ public class GatewayRouteFactory {
                   if (response.isAllowed()) {
                     return chain.filter(exchange);
                   }
-                  return responseWriter.write(
-                      exchange,
-                      HttpStatus.TOO_MANY_REQUESTS,
-                      "Too many requests, please try again later");
+                  String retryAfter = resolveRetryAfter(response);
+                  String message =
+                      retryAfter != null
+                          ? "Too many requests, please try again in " + retryAfter
+                          : "Too many requests, please try again later";
+                  return responseWriter.write(exchange, HttpStatus.TOO_MANY_REQUESTS, message);
                 });
+  }
+
+  private String resolveRetryAfter(RateLimiter.Response response) {
+    try {
+      Map<String, String> headers = response.getHeaders();
+
+      String remainingStr = headers.get("X-RateLimit-Remaining");
+      String requestedStr = headers.get("X-RateLimit-Requested-Tokens");
+      String replenishStr = headers.get("X-RateLimit-Replenish-Rate");
+
+      if (remainingStr == null || requestedStr == null || replenishStr == null) {
+        return null;
+      }
+
+      int remaining = Integer.parseInt(remainingStr.trim());
+      int requested = Integer.parseInt(requestedStr.trim());
+      int replenishRate = Integer.parseInt(replenishStr.trim());
+
+      int tokensNeeded = requested - remaining; // cuánto falta realmente
+      if (tokensNeeded <= 0) {
+        return "0s";
+      }
+
+      long waitSeconds = (long) Math.ceil((double) tokensNeeded / replenishRate);
+      return waitSeconds + "s";
+    } catch (NumberFormatException e) {
+      if (log.isWarnEnabled()) {
+        log.warn("[GatewayRouteFactory] Could not parse X-RateLimit-Reset header");
+      }
+      return null;
+    }
   }
 }
