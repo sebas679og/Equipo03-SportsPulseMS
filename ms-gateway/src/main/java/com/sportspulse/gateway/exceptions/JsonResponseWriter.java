@@ -37,7 +37,7 @@ public class JsonResponseWriter {
             ex -> {
               if (log.isErrorEnabled()) {
                 log.error(
-                    "[JsonResponseWriter] Serialization failed — status={} message='{}': {}",
+                    "Serialization failed — status={} message='{}': {}",
                     status,
                     message,
                     ex.getMessage());
@@ -60,7 +60,7 @@ public class JsonResponseWriter {
 
     if (response.isCommitted()) {
       if (log.isWarnEnabled()) {
-        log.warn("[JsonResponseWriter] Response already committed — status={}", status);
+        log.warn("Response already committed — status={}", status);
       }
       return Mono.empty();
     }
@@ -84,7 +84,7 @@ public class JsonResponseWriter {
 
     } catch (JsonProcessingException ex) {
       if (log.isErrorEnabled()) {
-        log.error("[JsonResponseWriter] Fallback serialization also failed: {}", ex.getMessage());
+        log.error("Fallback serialization also failed: {}", ex.getMessage());
       }
       return exchange.getResponse().setComplete();
     }

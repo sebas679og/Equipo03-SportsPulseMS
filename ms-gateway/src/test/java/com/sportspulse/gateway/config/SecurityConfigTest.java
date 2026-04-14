@@ -40,22 +40,22 @@ class SecurityConfigTest {
   // ─── Access Denied Handler ───────────────────────────────────────────────
 
   @Test
-  @DisplayName("accessDeniedHandler writes HTTP 403 FORBIDDEN response")
-  void accessDeniedHandler_writesForbiddenResponse() {
+  @DisplayName("accessDeniedHandler writes HTTP 404 NOT_FOUND response")
+  void accessDeniedHandler_writesNotFoundResponse() {
     MockServerHttpRequest request = MockServerHttpRequest.get("/some/resource").build();
     ServerWebExchange exchange = MockServerWebExchange.from(request);
     AccessDeniedException denied = new AccessDeniedException("Denied");
 
-    when(responseWriter.write(eq(exchange), eq(HttpStatus.FORBIDDEN), eq("Access denied")))
+    when(responseWriter.write(eq(exchange), eq(HttpStatus.NOT_FOUND), eq("Access denied")))
         .thenReturn(Mono.empty());
 
     // Invoke handler directly via a thin wrapper
     ServerAccessDeniedHandler handler =
-        (exch, ex) -> responseWriter.write(exch, HttpStatus.FORBIDDEN, "Access denied");
+        (exch, ex) -> responseWriter.write(exch, HttpStatus.NOT_FOUND, "Access denied");
 
     StepVerifier.create(handler.handle(exchange, denied)).verifyComplete();
 
-    verify(responseWriter).write(exchange, HttpStatus.FORBIDDEN, "Access denied");
+    verify(responseWriter).write(exchange, HttpStatus.NOT_FOUND, "Access denied");
   }
 
   @Test

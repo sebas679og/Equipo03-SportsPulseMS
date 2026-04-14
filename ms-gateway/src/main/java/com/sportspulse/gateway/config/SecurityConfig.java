@@ -44,7 +44,7 @@ public class SecurityConfig {
                         (exchange, denied) -> {
                           if (log.isWarnEnabled()) {
                             log.warn(
-                                "[SecurityWebFilterChain] Access denied — path='{}'",
+                                "Access denied — path='{}'",
                                 exchange.getRequest().getPath().value());
                           }
                           ;
@@ -55,11 +55,10 @@ public class SecurityConfig {
                         (exchange, authEx) -> {
                           if (log.isWarnEnabled()) {
                             log.warn(
-                                "[SecurityWebFilterChain] Unauthorized access — path='{}'",
+                                "Unauthorized access — path='{}'",
                                 exchange.getRequest().getPath().value());
                           }
-                          return responseWriter.write(
-                              exchange, HttpStatus.UNAUTHORIZED, "Unauthorized");
+                          return responseWriter.write(exchange, HttpStatus.NOT_FOUND, "Not found");
                         }))
         .build();
   }

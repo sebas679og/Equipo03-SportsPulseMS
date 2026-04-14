@@ -28,10 +28,7 @@ public class GatewayFallbackHandler {
     String routeId = route != null ? route.getId() : "unknown";
 
     if (log.isErrorEnabled()) {
-      log.error(
-          "[GatewayFallbackHandler] Service unavailable — route='{}' path='{}'",
-          routeId,
-          request.path());
+      log.error("Service unavailable — route='{}' path='{}'", routeId, request.path());
     }
 
     return ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE)
