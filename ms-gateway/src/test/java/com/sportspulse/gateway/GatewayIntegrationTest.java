@@ -8,33 +8,26 @@ import com.sportspulse.gateway.config.constants.ApiPathsServices;
 import com.sportspulse.gateway.config.constants.InternalHeaders;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.util.Assert;
 
 class GatewayIntegrationTest extends AbstractIntegrationTest {
 
   @Autowired private WebTestClient webTestClient;
 
-  @Autowired private StringRedisTemplate redisTemplate;
+  @Autowired private ReactiveStringRedisTemplate redisTemplate;
 
   @BeforeEach
   void setUp() {
-    RedisConnectionFactory factory = redisTemplate.getConnectionFactory();
-    Assert.notNull(factory, "RedisConnectionFactory must not be null");
-
-    try (RedisConnection conn = factory.getConnection()) {
-      conn.serverCommands().flushAll();
-    }
+    redisTemplate.execute(connection -> connection.serverCommands().flushAll()).then().block();
 
     wireMock.resetAll();
   }
@@ -427,7 +420,7 @@ class GatewayIntegrationTest extends AbstractIntegrationTest {
         .expectStatus()
         .isOk();
 
-    Set<String> keys = redisTemplate.keys("*");
+    Set<String> keys = redisTemplate.keys("*").collect(Collectors.toSet()).block();
     assertThat(keys).isNotNull();
 
     boolean hasKeyForIpA = keys.stream().anyMatch(k -> k.contains(ipA));
@@ -438,7 +431,7 @@ class GatewayIntegrationTest extends AbstractIntegrationTest {
     String keyA = keys.stream().filter(k -> k.contains(ipA)).findFirst().orElseThrow();
     String keyB = keys.stream().filter(k -> k.contains(ipB)).findFirst().orElseThrow();
 
-    assertThat(redisTemplate.opsForValue().get(keyA)).isEqualTo("1");
-    assertThat(redisTemplate.opsForValue().get(keyB)).isEqualTo("2");
+    assertThat(redisTemplate.opsForValue().get(keyA).block()).isEqualTo("1");
+    assertThat(redisTemplate.opsForValue().get(keyB).block()).isEqualTo("2");
   }
 }
