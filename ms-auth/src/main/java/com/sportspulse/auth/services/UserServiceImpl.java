@@ -1,11 +1,13 @@
 package com.sportspulse.auth.services;
 
-import com.sportspulse.auth.config.JwtProperties;
+import com.sportspulse.auth.config.properties.JwtProperties;
 import com.sportspulse.auth.dto.requests.LoginRequest;
 import com.sportspulse.auth.dto.requests.RegisterRequest;
 import com.sportspulse.auth.dto.responses.LoginResponse;
 import com.sportspulse.auth.dto.responses.RegisterResponse;
+import com.sportspulse.auth.dto.responses.TokenValidationResponse;
 import com.sportspulse.auth.exceptions.ResourceConflictException;
+import com.sportspulse.auth.exceptions.UnauthorizedException;
 import com.sportspulse.auth.models.UserEntity;
 import com.sportspulse.auth.repositories.UserRepository;
 import com.sportspulse.auth.services.components.JwtService;
@@ -55,6 +57,16 @@ public class UserServiceImpl implements UserService {
         .expiresIn(jwtProperties.getExpiration())
         .userId(user.getId())
         .build();
+  }
+
+  @Override
+  public TokenValidationResponse tokenValidate(String authorizationHeader) {
+    if (authorizationHeader == null
+        || !authorizationHeader.startsWith(jwtProperties.getTokenType() + " ")) {
+      throw new UnauthorizedException("Missing or malformed Authorization header");
+    }
+    String token = authorizationHeader.substring(jwtProperties.getTokenType().length() + 1);
+    return jwtService.extractUserInfo(token);
   }
 
   /** Method for validating the existence of a user and email. */

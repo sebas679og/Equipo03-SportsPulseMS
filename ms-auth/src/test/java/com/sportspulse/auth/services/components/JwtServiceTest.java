@@ -5,8 +5,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
-import com.sportspulse.auth.config.JwtProperties;
 import com.sportspulse.auth.config.SecurityConfig;
+import com.sportspulse.auth.config.properties.JwtProperties;
+import com.sportspulse.auth.dto.responses.TokenValidationResponse;
+import com.sportspulse.auth.utils.enums.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -18,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.Date;
 import java.util.UUID;
 import javax.crypto.SecretKey;
 import org.junit.jupiter.api.BeforeEach;
@@ -287,6 +290,52 @@ class JwtServiceTest {
         assertThatThrownBy(() -> jwtService.validateAndExtract(expiredToken))
             .isInstanceOf(ExpiredJwtException.class);
       }
+    }
+
+    @Test
+    @DisplayName("extractUserInfo() returns a valid TokenValidationResponse with correct user data")
+    void extractUserInfo_returnsValidResponse_whenTokenIsValid() {
+      UUID userId = UUID.randomUUID();
+      String username = "john.doe";
+      String role = UserRole.USER.name();
+
+      String token = jwtService.generateToken(userId, username, role);
+      TokenValidationResponse result = jwtService.extractUserInfo(token);
+
+      assertThat(result.isValid()).isTrue();
+      assertThat(result.getUserId()).isEqualTo(userId);
+      assertThat(result.getUsername()).isEqualTo(username);
+      assertThat(result.getRole()).isEqualTo(UserRole.USER);
+    }
+
+    @Test
+    @DisplayName("extractUserInfo() throws JwtException when token is tampered")
+    void extractUserInfo_throwsJwtException_whenTokenIsTampered() {
+      UUID userId = UUID.randomUUID();
+      String token = jwtService.generateToken(userId, "john.doe", UserRole.USER.name());
+      String tamperedToken = token.substring(0, token.lastIndexOf('.') + 1) + "invalidsignature";
+
+      assertThatThrownBy(() -> jwtService.extractUserInfo(tamperedToken))
+          .isInstanceOf(io.jsonwebtoken.JwtException.class);
+    }
+
+    @Test
+    @DisplayName("extractUserInfo() throws JwtException when token is expired")
+    void extractUserInfo_throwsJwtException_whenTokenIsExpired() {
+      // Build an already-expired token manually
+      Instant past = Instant.now().truncatedTo(ChronoUnit.MILLIS).minusSeconds(3600);
+      String expiredToken =
+          Jwts.builder()
+              .subject(UUID.randomUUID().toString())
+              .claim("username", "john.doe")
+              .claim("role", UserRole.USER.name())
+              .issuedAt(Date.from(past))
+              .expiration(Date.from(past.plusSeconds(1)))
+              .signWith(config.getSigningKey())
+              .compact();
+
+      assertThatThrownBy(() -> jwtService.extractUserInfo(expiredToken))
+          .isInstanceOf(io.jsonwebtoken.JwtException.class);
     }
   }
 }

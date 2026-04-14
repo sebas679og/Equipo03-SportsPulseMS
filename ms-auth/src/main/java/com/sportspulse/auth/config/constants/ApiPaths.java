@@ -1,4 +1,4 @@
-package com.sportspulse.auth.config;
+package com.sportspulse.auth.config.constants;
 
 /**
  * Centralized definition of API endpoint paths.
@@ -14,6 +14,11 @@ public final class ApiPaths {
   public static final class Auth {
     public static final String REGISTER = "/api/auth/register";
     public static final String LOGIN = "/api/auth/login";
+  }
+
+  /** Endpoints related to token validation. */
+  public static final class Validate {
+    public static final String TOKEN = "/api/auth/validate";
   }
 
   /** API documentation endpoints. */
