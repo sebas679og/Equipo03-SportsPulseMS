@@ -1,6 +1,7 @@
 package com.sportspulse.gateway;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.common.Slf4jNotifier;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.redis.testcontainers.RedisContainer;
 import org.junit.jupiter.api.AfterAll;
@@ -18,31 +19,42 @@ import org.testcontainers.utility.DockerImageName;
 @AutoConfigureWebTestClient
 public class AbstractIntegrationTest {
 
+  static final boolean IS_CI = System.getenv("CI") != null;
+
+  static RedisContainer REDIS;
+
   protected static final WireMockServer wireMock;
-  private static final RedisContainer REDIS;
 
   static {
-    REDIS =
-        new RedisContainer(DockerImageName.parse("redis:8.6.2-alpine"))
-            .waitingFor(Wait.forListeningPort());
-    REDIS.start();
-
-    wireMock = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
+    wireMock =
+        new WireMockServer(
+            WireMockConfiguration.wireMockConfig().dynamicPort().notifier(new Slf4jNotifier(true)));
     wireMock.start();
+
+    if (!IS_CI) {
+      REDIS =
+          new RedisContainer(DockerImageName.parse("redis:8.6.2-alpine"))
+              .waitingFor(Wait.forListeningPort());
+      REDIS.start();
+    }
   }
 
   @AfterAll
   static void stopContainers() {
-    wireMock.stop();
-    if (REDIS.isRunning()) {
+    if (REDIS != null && REDIS.isRunning()) {
       REDIS.stop();
     }
   }
 
   @DynamicPropertySource
   static void properties(DynamicPropertyRegistry registry) {
-    registry.add("spring.data.redis.host", REDIS::getHost);
-    registry.add("spring.data.redis.port", REDIS::getFirstMappedPort);
+    if (!IS_CI) {
+      registry.add("spring.data.redis.host", REDIS::getHost);
+      registry.add("spring.data.redis.port", REDIS::getFirstMappedPort);
+    } else {
+      registry.add("spring.data.redis.host", () -> "localhost");
+      registry.add("spring.data.redis.port", () -> 6379);
+    }
     registry.add("sportspulse.gateway.services.auth", () -> "http://localhost:" + wireMock.port());
   }
 }
