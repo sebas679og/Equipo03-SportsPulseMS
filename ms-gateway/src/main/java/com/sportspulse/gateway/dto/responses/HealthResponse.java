@@ -15,6 +15,7 @@ import lombok.Value;
 @Builder
 public class HealthResponse {
   ServiceStatus gateway;
+  ServiceStatus dependencies;
 
   @Builder.Default Instant timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

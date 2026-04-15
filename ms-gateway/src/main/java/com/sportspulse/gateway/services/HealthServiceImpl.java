@@ -3,6 +3,7 @@ package com.sportspulse.gateway.services;
 import com.sportspulse.gateway.config.properties.GatewayServicesProperties;
 import com.sportspulse.gateway.dto.responses.HealthResponse;
 import com.sportspulse.gateway.integration.client.ServiceClient;
+import com.sportspulse.gateway.services.components.GatewayHealthIndicator;
 import com.sportspulse.gateway.utils.enums.ServiceStatus;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class HealthServiceImpl implements HealthService {
 
   private final ServiceClient serviceClient;
   private final GatewayServicesProperties properties;
+  private final GatewayHealthIndicator gatewayHealthIndicator;
 
   @Override
   public Mono<HealthResponse> getHeathStatusServices() {
@@ -42,17 +44,22 @@ public class HealthServiceImpl implements HealthService {
                     .getHealthService(entry.getKey(), entry.getValue())
                     .map(status -> Map.entry(entry.getKey(), status)))
         .collectMap(Map.Entry::getKey, Map.Entry::getValue)
-        .map(
+        .flatMap(
             servicesStatus -> {
-              ServiceStatus gatewayStatus =
-                  servicesStatus.values().stream().allMatch(status -> status == ServiceStatus.UP)
+              ServiceStatus dependenciesStatus =
+                  servicesStatus.values().stream().allMatch(s -> s == ServiceStatus.UP)
                       ? ServiceStatus.UP
                       : ServiceStatus.DOWN;
 
-              return HealthResponse.builder()
-                  .gateway(gatewayStatus)
-                  .services(servicesStatus)
-                  .build();
+              return gatewayHealthIndicator
+                  .getGatewayStatus()
+                  .map(
+                      gatewayStatus ->
+                          HealthResponse.builder()
+                              .gateway(gatewayStatus)
+                              .dependencies(dependenciesStatus)
+                              .services(servicesStatus)
+                              .build());
             });
   }
 }
