@@ -84,14 +84,8 @@ jobs:
               console.log('No issue number found in branch name or commits — skipping.');
               return;
             }
-  
-            console.log(`Found issue #${issueNumber} from push on branch "${branchName}"`);
-  
-            const { data: issue } = await github.rest.issues.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: parseInt(issueNumber),
-            });
+            
+            console.log(`Issues detected: ${[...allIssues].join(', ')}`);
             
             for (const issueNumber of allIssues) {
               const { data: issue } = await github.rest.issues.get({
