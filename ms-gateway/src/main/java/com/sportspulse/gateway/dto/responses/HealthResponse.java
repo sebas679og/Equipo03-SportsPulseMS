@@ -18,5 +18,5 @@ public class HealthResponse {
 
   @Builder.Default Instant timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-  Map<String, String> services;
+  Map<String, ServiceStatus> services;
 }
