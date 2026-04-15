@@ -23,7 +23,7 @@ public class ServiceClientImpl implements ServiceClient {
   private final WebClient webClient;
 
   @Override
-  public ServiceStatus getHealthService(String serviceName, String baseUrl) {
+  public Mono<ServiceStatus> getHealthService(String serviceName, String baseUrl) {
 
     return webClient
         .get()
@@ -42,8 +42,7 @@ public class ServiceClientImpl implements ServiceClient {
                     e.getMessage());
               }
               return Mono.just(ServiceStatus.DOWN);
-            })
-        .block();
+            });
   }
 
   private ServiceStatus mapToStatus(String serviceName, String baseUrl, ServiceResponse response) {
