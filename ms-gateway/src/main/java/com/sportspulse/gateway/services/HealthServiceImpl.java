@@ -47,7 +47,8 @@ public class HealthServiceImpl implements HealthService {
         .flatMap(
             servicesStatus -> {
               ServiceStatus dependenciesStatus =
-                  servicesStatus.values().stream().allMatch(s -> s == ServiceStatus.UP)
+                  !servicesStatus.isEmpty()
+                          && servicesStatus.values().stream().allMatch(s -> s == ServiceStatus.UP)
                       ? ServiceStatus.UP
                       : ServiceStatus.DOWN;
 
