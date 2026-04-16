@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.common.Slf4jNotifier;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.redis.testcontainers.RedisContainer;
-import org.junit.jupiter.api.AfterAll;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,7 +20,7 @@ public class AbstractIntegrationTest {
 
   static final boolean IS_CI = System.getenv("CI") != null;
 
-  static RedisContainer REDIS;
+  static final RedisContainer REDIS;
 
   protected static final WireMockServer wireMock;
 
@@ -35,14 +34,9 @@ public class AbstractIntegrationTest {
       REDIS =
           new RedisContainer(DockerImageName.parse("redis:8.6.2-alpine"))
               .waitingFor(Wait.forListeningPort());
-      REDIS.start();
-    }
-  }
-
-  @AfterAll
-  static void stopContainers() {
-    if (REDIS != null && REDIS.isRunning()) {
-      REDIS.stop();
+      REDIS.start(); // ← start() explícito aquí, ANTES de @DynamicPropertySource
+    } else {
+      REDIS = null;
     }
   }
 
@@ -56,5 +50,16 @@ public class AbstractIntegrationTest {
       registry.add("spring.data.redis.port", () -> 6379);
     }
     registry.add("sportspulse.gateway.services.auth", () -> "http://localhost:" + wireMock.port());
+    registry.add(
+        "sportspulse.gateway.services.leagues", () -> "http://localhost:" + wireMock.port());
+    registry.add("sportspulse.gateway.services.teams", () -> "http://localhost:" + wireMock.port());
+    registry.add(
+        "sportspulse.gateway.services.fixtures", () -> "http://localhost:" + wireMock.port());
+    registry.add(
+        "sportspulse.gateway.services.standings", () -> "http://localhost:" + wireMock.port());
+    registry.add(
+        "sportspulse.gateway.services.notifications", () -> "http://localhost:" + wireMock.port());
+    registry.add(
+        "sportspulse.gateway.services.dashboard", () -> "http://localhost:" + wireMock.port());
   }
 }

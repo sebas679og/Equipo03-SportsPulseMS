@@ -66,28 +66,37 @@ jobs:
             // ────────────────────────────────────────────────────────────────────────────────
   
             const branchMatch = branchName.match(/(?:^|[\/\-_])(\d+)(?:[\/\-_]|$)/);
-            const commitMatch = commitMessages.match(
-              /(?:closes?|fixes?|resolves?|refs?)\s+#(\d+)|(?:^|\s)#(\d+)/im
-            );
+            const commitMatches = [...commitMessages.matchAll(/(?:closes?|fixes?|resolves?|refs?)\s+#(\d+)|(?:^|\s)#(\d+)/gim)];
+            
+            const commitIssueNumbers = commitMatches.map(m => m[1] || m[2]);
+            
+            const allIssues = new Set();
+            
+            if (branchMatch) {
+              allIssues.add(branchMatch[1]);
+            }
+            
+            commitIssueNumbers.forEach(num => {
+              if (num) allIssues.add(num);
+            });
   
-            const issueNumber = branchMatch?.[1]
-              || commitMatch?.[1]
-              || commitMatch?.[2];
-  
-            if (!issueNumber) {
+            if (allIssues.size === 0) {
               console.log('No issue number found in branch name or commits — skipping.');
               return;
             }
-  
-            console.log(`Found issue #${issueNumber} from push on branch "${branchName}"`);
-  
-            const { data: issue } = await github.rest.issues.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: parseInt(issueNumber),
+            
+            console.log(`Issues detected: ${[...allIssues].join(', ')}`);
+            
+            for (const issueNumber of allIssues) {
+              const { data: issue } = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(issueNumber),
             });
-  
+            
+            console.log(`Moving issue #${issueNumber} to In progress`);
             await move(github, issue.node_id, 'In progress');
+            }
 
   # ─── IN PROGRESS → IN REVIEW ───────────────────────────────────────────────
   move-to-in-review:
@@ -103,38 +112,41 @@ jobs:
           script: |
             const move = require('./.github/scripts/move-project-card.js');
             const getLinkedIssues = require('./.github/scripts/get-linked-issues.js');
-
+            
             const prNumber = context.payload.pull_request.number;
             const prBody   = context.payload.pull_request.body  || '';
             const prTitle  = context.payload.pull_request.title || '';
             const combined = `${prTitle}\n${prBody}`;
 
-            // 1. Try to find the issue by text (closes #42, etc.)
-            const textMatch =
-              combined.match(/(?:closes?|fixes?|resolves?|refs?)\s+#(\d+)/i) ||
-              combined.match(/#(\d+)/);
+            const textMatches = [...combined.matchAll(
+              /(?:closes?|fixes?|resolves?|refs?)\s+#(\d+)|#(\d+)/gim
+            )];
+            
+            const textIssueNumbers = textMatches.map(m => m[1] || m[2]);
 
-            let issueNodeIds = [];
+            const linkedIssueNodeIds = await getLinkedIssues(github, context, prNumber);
 
-            if (textMatch) {
-              console.log(`Issue #${textMatch[1]} found in the PR text`);
+            const issueNodeIds = new Set(linkedIssueNodeIds);
+            
+            for (const issueNumber of textIssueNumbers) {
+              if (!issueNumber) continue;
+          
               const { data: issue } = await github.rest.issues.get({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: parseInt(textMatch[1]),
+                issue_number: parseInt(issueNumber),
               });
-              issueNodeIds = [issue.node_id];
-            } else {
-              // 2. Fallback: GraphQL query for the Development section link
-              console.log('There is no reference in text, searching for Development link...');
-              issueNodeIds = await getLinkedIssues(github, context, prNumber);
+          
+              issueNodeIds.add(issue.node_id);
             }
 
-            if (issueNodeIds.length === 0) {
+            if (issueNodeIds.size === 0) {
               console.log('No linked issues found — skipping.');
               return;
             }
-
+            
+            console.log(`Moving ${issueNodeIds.size} issue(s) to In review`);
+            
             for (const nodeId of issueNodeIds) {
               await move(github, nodeId, 'In review');
             }
@@ -156,35 +168,45 @@ jobs:
           script: |
             const move = require('./.github/scripts/move-project-card.js');
             const getLinkedIssues = require('./.github/scripts/get-linked-issues.js');
-
+            
             const prNumber = context.payload.pull_request.number;
             const prBody   = context.payload.pull_request.body  || '';
             const prTitle  = context.payload.pull_request.title || '';
-            const combined = `${prTitle}\n${prBody}`;
+            
+            const regex = /(?:closes?|fixes?|resolves?)\s+#(\d+)/gim;
 
-            const textMatch =
-              combined.match(/(?:closes?|fixes?|resolves?|refs?)\s+#(\d+)/i) ||
-              combined.match(/#(\d+)/);
+            const bodyMatches = [...prBody.matchAll(regex)].map(m => m[1]);
 
-            let issueNodeIds = [];
+            const titleMatches = [...prTitle.matchAll(regex)].map(m => m[1]);
 
-            if (textMatch) {
-              console.log(`Issue #${textMatch[1]} found in the PR text`);
+            const linkedIssueNodeIds = await getLinkedIssues(github, context, prNumber);
+
+            const issueNodeIds = new Set();
+
+            const allTextIssues = [...bodyMatches, ...titleMatches];
+            
+            for (const issueNumber of allTextIssues) {
+              if (!issueNumber) continue;
+            
               const { data: issue } = await github.rest.issues.get({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: parseInt(textMatch[1]),
+                issue_number: parseInt(issueNumber),
               });
-              issueNodeIds = [issue.node_id];
-            } else {
-              console.log('There is no reference in text, searching for Development link...');
-              issueNodeIds = await getLinkedIssues(github, context, prNumber);
+            
+              issueNodeIds.add(issue.node_id);
             }
-
-            if (issueNodeIds.length === 0) {
+            
+            for (const nodeId of linkedIssueNodeIds) {
+              issueNodeIds.add(nodeId);
+            }
+            
+            if (issueNodeIds.size === 0) {
               console.log('No linked issues found — skipping.');
               return;
             }
+            
+            console.log(`Moving ${issueNodeIds.size} unique issue(s) to Done`);
 
             for (const nodeId of issueNodeIds) {
               await move(github, nodeId, 'Done');
