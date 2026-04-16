@@ -24,7 +24,7 @@ public class WebClientConfig {
    *     and API key
    * @return a configured {@link WebClient} for the Football API
    */
-  @Bean
+  @Bean("apiFootballWebClient")
   public WebClient apiFootballWebClient(ApiFootballProperties apiFootballProperties) {
     return WebClient.builder()
         .baseUrl(apiFootballProperties.getBaseUrl())
@@ -51,7 +51,7 @@ public class WebClientConfig {
    *     URL and API key
    * @return a configured {@link WebClient} for the authentication service
    */
-  @Bean
+  @Bean("msAuthWebClient")
   public WebClient msAuthWebClient(MsAuthProperties msAuthProperties) {
     return WebClient.builder()
         .baseUrl(msAuthProperties.getBaseUrl())

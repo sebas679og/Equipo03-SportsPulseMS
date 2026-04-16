@@ -6,6 +6,8 @@ package com.sportspulse.teams.config.constants;
  */
 public final class InternalHeaders {
 
+  private InternalHeaders() {}
+
   /** ApiFootball Contains header constants specific to the Football API integration. */
   public static final class ApiFootball {
     public static final String API_FOOTBALL_KEY = "x-apisports-key";
@@ -14,5 +16,6 @@ public final class InternalHeaders {
   /** MsAuth Contains header constants specific to internal authentication between microservices. */
   public static final class MsAuth {
     public static final String MS_AUTH_KEY = "X-Internal-API-Key";
+    public static final String TYPE_TOKEN = "Bearer";
   }
 }
