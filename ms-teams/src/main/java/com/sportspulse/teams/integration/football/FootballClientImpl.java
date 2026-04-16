@@ -7,6 +7,7 @@ import com.sportspulse.teams.integration.football.dto.teamid.ApiFootballTeamResp
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -24,6 +25,7 @@ public class FootballClientImpl implements FootballClient {
   private final WebClient apiFootballWebClient;
 
   @Override
+  @Cacheable(value = "teams", key = "#teamId")
   public ApiFootballTeamResponse getApiFootballTeamById(int teamId) {
     WebClient.RequestHeadersSpec<?> request =
         apiFootballWebClient
