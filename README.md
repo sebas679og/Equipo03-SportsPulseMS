@@ -78,7 +78,7 @@ All domain services → validate JWT issued by ms-auth
 | Variable                   | Description | Value                         |
 |----------------------------|-------------|-------------------------------|
 | `SPORT_PULSE_API_BASE_URL` | Base endpoint for the football API | `https://v3.football.api-sports.io` |
-| `RAPIDAPI_KEY`             | Your private secret key from RapidAPI | `YOUR_API_KEY`|
+| `FOOTBALL_API_KEY`             | Your private secret key from RapidAPI | `YOUR_API_KEY`|
 
 ### **Endpoint Mapping**
 

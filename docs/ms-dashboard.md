@@ -135,7 +135,7 @@ public interface StandingsClient {
 | `STANDINGS_SERVICE_URL` | URL for ms-standings | `http://ms-standings:8086` |
 | `LEAGUES_SERVICE_URL` | URL for ms-leagues | `http://ms-leagues:8082` |
 | `SPORT_PULSE_API_BASE_URL` | Base endpoint for the football API | `https://v3.football.api-sports.io` |
-| `RAPIDAPI_KEY`             | Private key for API-Football authentication | `YOUR_API_KEY`|
+| `FOOTBALL_API_KEY`             | Private key for API-Football authentication | `YOUR_API_KEY`|
 
 ---
 
