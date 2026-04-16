@@ -1,6 +1,6 @@
-package com.sportspulse.teams.integration.client;
+package com.sportspulse.teams.integration.client.football;
 
-import com.sportspulse.teams.integration.dto.response.teamid.ApiFootballTeamResponse;
+import com.sportspulse.teams.integration.client.football.dto.teamid.ApiFootballTeamResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
