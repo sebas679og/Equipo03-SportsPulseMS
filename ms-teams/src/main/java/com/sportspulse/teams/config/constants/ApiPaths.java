@@ -15,4 +15,12 @@ public final class ApiPaths {
   public static final class AuthService {
     public static final String VALIDATE_TOKEN = "/api/auth/validate";
   }
+
+  /**
+   * Teams Defines API endpoint paths related to team services. Provides constants to ensure
+   * consistency when building requests for health checks and monitoring.
+   */
+  public static final class Teams {
+    public static final String ACTUATOR_HEALTH = "/actuator/health";
+  }
 }
