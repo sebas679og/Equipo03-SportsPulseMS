@@ -86,6 +86,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+      SPORT_PULSE_API_BASE_URL: ${SPORT_PULSE_API_BASE_URL}
+      FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -99,6 +101,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+      SPORT_PULSE_API_BASE_URL: ${SPORT_PULSE_API_BASE_URL}
+      FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -112,6 +116,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+      SPORT_PULSE_API_BASE_URL: ${SPORT_PULSE_API_BASE_URL}
+      FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -125,6 +131,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+      SPORT_PULSE_API_BASE_URL: ${SPORT_PULSE_API_BASE_URL}
+      FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -166,6 +174,8 @@ services:
       FIXTURES_SERVICE_URL: http://ms-fixtures:8085
       STANDINGS_SERVICE_URL: http://ms-standings:8086
       LEAGUES_SERVICE_URL: http://ms-leagues:8082
+      SPORT_PULSE_API_BASE_URL: ${SPORT_PULSE_API_BASE_URL}
+      FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network

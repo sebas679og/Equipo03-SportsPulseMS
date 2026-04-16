@@ -67,13 +67,22 @@ All domain services → validate JWT issued by ms-auth
 
 ## 🔑 External API — API-Football (RapidAPI)
 
-**Base URL:** `https://api-football-v1.p.rapidapi.com/v3`
+### **Configuration Details:**
 
-**Required headers on every call:**
-```
-X-RapidAPI-Key: YOUR_API_KEY
-X-RapidAPI-Host: api-football-v1.p.rapidapi.com
-```
+- **Base URL:** Managed via `SPORT_PULSE_API_BASE_URL` (`https://v3.football.api-sports.io`)
+
+- **Authentication:** Managed via `RAPIDAPI_KEY` (Injected as `x-apisports-Key` header).
+
+### ⚙️ **Environment Variables**
+
+| Variable                   | Description | Value                         |
+|----------------------------|-------------|-------------------------------|
+| `SPORT_PULSE_API_BASE_URL` | Base endpoint for the football API | `https://v3.football.api-sports.io` |
+| `FOOTBALL_API_KEY`             | Your private secret key from RapidAPI | `YOUR_API_KEY`|
+
+### **Endpoint Mapping**
+
+The following endpoints are consumed by the microservices using the `base-url` defined above:
 
 | RapidAPI Endpoint | Used by |
 |---|---|

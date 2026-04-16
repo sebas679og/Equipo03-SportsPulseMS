@@ -149,8 +149,9 @@ Since this service is called by multiple other services, implementing caching is
 
 | Variable | Description | Example |
 |---|---|---|
-| `RAPIDAPI_KEY` | API key for RapidAPI | `your_api_key_here` |
+| `FOOTBALL_API_KEY` | API key for RapidAPI | `your_api_key_here` |
 | `JWT_SECRET` | Shared JWT secret for token validation | `sportpulse-secret-key-2025` |
+| `SPORT_PULSE_API_BASE_URL` | Base endpoint for the football API     | `https://v3.football.api-sports.io` |
 
 ---
 
