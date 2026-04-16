@@ -87,7 +87,7 @@ services:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
       SPORT_PULSE_API_BASE_URL: ${SPORT_PULSE_API_BASE_URL}
-      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
+      FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -102,7 +102,7 @@ services:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
       SPORT_PULSE_API_BASE_URL: ${SPORT_PULSE_API_BASE_URL}
-      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
+      FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -117,7 +117,7 @@ services:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
       SPORT_PULSE_API_BASE_URL: ${SPORT_PULSE_API_BASE_URL}
-      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
+      FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -132,7 +132,7 @@ services:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
       SPORT_PULSE_API_BASE_URL: ${SPORT_PULSE_API_BASE_URL}
-      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
+      FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -175,7 +175,7 @@ services:
       STANDINGS_SERVICE_URL: http://ms-standings:8086
       LEAGUES_SERVICE_URL: http://ms-leagues:8082
       SPORT_PULSE_API_BASE_URL: ${SPORT_PULSE_API_BASE_URL}
-      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
+      FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
     restart: on-failure
     networks:
       - sports-pulse-network
