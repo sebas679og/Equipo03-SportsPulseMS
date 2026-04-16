@@ -1,4 +1,4 @@
-package com.sportspulse.teams.integration.client.football.dto.teamid;
+package com.sportspulse.teams.integration.football.dto.teamid;
 
 /**
  * VenueResponse Represents the details of a sports venue. Contains information such as identity,

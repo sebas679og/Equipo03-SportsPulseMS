@@ -1,4 +1,4 @@
-package com.sportspulse.teams.integration.client.football.dto.teamid;
+package com.sportspulse.teams.integration.football.dto.teamid;
 
 import java.util.List;
 import java.util.Map;

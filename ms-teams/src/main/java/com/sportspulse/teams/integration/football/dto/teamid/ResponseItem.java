@@ -1,4 +1,4 @@
-package com.sportspulse.teams.integration.client.football.dto.teamid;
+package com.sportspulse.teams.integration.football.dto.teamid;
 
 /**
  * ResponseItem Represents a composite response containing both team and venue details. Serves as a

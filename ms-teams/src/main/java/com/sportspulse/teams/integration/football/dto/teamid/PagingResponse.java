@@ -1,4 +1,4 @@
-package com.sportspulse.teams.integration.client.football.dto.teamid;
+package com.sportspulse.teams.integration.football.dto.teamid;
 
 /**
  * PagingResponse Represents pagination details for API responses. Contains information about the

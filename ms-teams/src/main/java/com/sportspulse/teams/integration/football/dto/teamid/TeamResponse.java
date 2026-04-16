@@ -1,4 +1,4 @@
-package com.sportspulse.teams.integration.client.football.dto.teamid;
+package com.sportspulse.teams.integration.football.dto.teamid;
 
 /**
  * TeamResponse Represents the details of a football team. Contains information such as identity,

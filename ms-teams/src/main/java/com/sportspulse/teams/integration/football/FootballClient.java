@@ -1,6 +1,6 @@
-package com.sportspulse.teams.integration.client.football;
+package com.sportspulse.teams.integration.football;
 
-import com.sportspulse.teams.integration.client.football.dto.teamid.ApiFootballTeamResponse;
+import com.sportspulse.teams.integration.football.dto.teamid.ApiFootballTeamResponse;
 
 /**
  * FootballClient Defines the contract for interacting with the Football API. Provides methods to
