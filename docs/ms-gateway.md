@@ -66,7 +66,8 @@ Requests to routes **not included** in the protected configuration will be forwa
 ```json
 {
   "gateway": "UP",
-  "timestamp": "2025-01-15T10:30:00Z",
+  "timestamp": "2025-01-15T10:30:000Z",
+  "dependencies": "UP",
   "services": {
     "ms-auth": "UP",
     "ms-leagues": "UP",
