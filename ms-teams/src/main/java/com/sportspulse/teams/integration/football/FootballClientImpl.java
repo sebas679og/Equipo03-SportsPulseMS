@@ -73,10 +73,12 @@ public class FootballClientImpl implements FootballClient {
                     .defaultIfEmpty("No body")
                     .flatMap(
                         body -> {
-                          log.error(
-                              "Api-Football error. Status: {}, Body: {}",
-                              response.statusCode(),
-                              body);
+                          if (log.isErrorEnabled()) {
+                            log.error(
+                                "Api-Football error. Status: {}, Body: {}",
+                                response.statusCode(),
+                                body);
+                          }
                           return Mono.error(
                               new CustomServiceUnavailableException(
                                   "Api-Football is not currently available, please try again"));

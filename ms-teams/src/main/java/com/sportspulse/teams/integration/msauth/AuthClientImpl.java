@@ -80,10 +80,12 @@ public class AuthClientImpl implements AuthClient {
                     .defaultIfEmpty("No body")
                     .flatMap(
                         body -> {
-                          log.error(
-                              "Auth Service 5xx error. Status: {}, Body: {}",
-                              response.statusCode(),
-                              body);
+                          if (log.isErrorEnabled()) {
+                            log.error(
+                                "Auth Service 5xx error. Status: {}, Body: {}",
+                                response.statusCode(),
+                                body);
+                          }
                           return Mono.error(
                               new CustomServiceUnavailableException(
                                   "Session validation service is not available at this time"));
