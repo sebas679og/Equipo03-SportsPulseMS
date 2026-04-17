@@ -70,7 +70,9 @@ public class SecurityConfig {
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers(HttpMethod.GET, ApiPaths.Teams.ACTUATOR_HEALTH)
+                auth.requestMatchers(ApiPaths.Docs.SWAGGER_UI, ApiPaths.Docs.API_DOCS)
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, ApiPaths.Teams.ACTUATOR_HEALTH)
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, ApiPaths.Teams.TEAM_BY_ID)
                     .authenticated()

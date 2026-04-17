@@ -24,4 +24,10 @@ public final class ApiPaths {
     public static final String ACTUATOR_HEALTH = "/actuator/health";
     public static final String TEAM_BY_ID = "/api/teams/{teamId}";
   }
+
+  /** API documentation endpoints. */
+  public static final class Docs {
+    public static final String SWAGGER_UI = "/swagger-ui/**";
+    public static final String API_DOCS = "/v3/api-docs/**";
+  }
 }
