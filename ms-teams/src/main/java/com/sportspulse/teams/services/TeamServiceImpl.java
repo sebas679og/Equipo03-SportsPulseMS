@@ -7,6 +7,7 @@ import com.sportspulse.teams.integration.football.FootballClient;
 import com.sportspulse.teams.integration.football.dto.teamid.ApiFootballTeamResponse;
 import com.sportspulse.teams.utils.mappers.TeamMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
  * <p>Maps the API response into domain-specific {@link TeamResponse} and {@link StadiumResponse}
  * objects, ensuring that the application works with consistent and structured data models.
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService {

@@ -22,5 +22,6 @@ public final class ApiPaths {
    */
   public static final class Teams {
     public static final String ACTUATOR_HEALTH = "/actuator/health";
+    public static final String TEAM_BY_ID = "/api/teams/{teamId}";
   }
 }

@@ -17,7 +17,12 @@ import org.mapstruct.Mapping;
 public interface TeamMapper {
 
   @Mapping(target = "stadium", source = "venue")
+  @Mapping(target = "id", source = "team.id")
+  @Mapping(target = "name", source = "team.name")
   @Mapping(target = "country", source = "team.country")
+  @Mapping(target = "logo", source = "team.logo")
+  @Mapping(target = "founded", source = "team.founded")
+  @Mapping(target = "national", source = "team.national")
   TeamResponse toTeamResponse(ApiResponseItem item);
 
   StadiumResponse toStadiumResponse(ApiVenueResponse venue);

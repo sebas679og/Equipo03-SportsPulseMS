@@ -16,6 +16,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +24,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -68,14 +70,19 @@ public class SecurityConfig {
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers(ApiPaths.Teams.ACTUATOR_HEALTH)
+                auth.requestMatchers(HttpMethod.GET, ApiPaths.Teams.ACTUATOR_HEALTH)
                     .permitAll()
+                    .requestMatchers(HttpMethod.GET, ApiPaths.Teams.TEAM_BY_ID)
+                    .authenticated()
                     .anyRequest()
-                    .authenticated())
+                    .denyAll())
         .addFilterBefore(dualHeaderGuardFilter(), UsernamePasswordAuthenticationFilter.class)
         .addFilterAfter(bearerAuthenticationFilter(), dualHeaderGuardFilter().getClass())
         .addFilterAfter(internalApiKeyAuthenticationFilter(), BearerAuthenticationFilter.class)
-        .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedEntryPoint()));
+        .exceptionHandling(
+            ex ->
+                ex.authenticationEntryPoint(unauthorizedEntryPoint())
+                    .accessDeniedHandler(accessDeniedHandler()));
 
     return http.build();
   }
@@ -128,5 +135,11 @@ public class SecurityConfig {
   public AuthenticationEntryPoint unauthorizedEntryPoint() {
     return (request, response, authException) ->
         writer.sendError(response, HttpStatus.UNAUTHORIZED, "Authentication required");
+  }
+
+  @Bean
+  public AccessDeniedHandler accessDeniedHandler() {
+    return (request, response, ex) ->
+        writer.sendError(response, HttpStatus.NOT_FOUND, "The requested resource does not exist");
   }
 }
