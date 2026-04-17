@@ -13,5 +13,5 @@ public record ApiFootballTeamResponse(
     Map<String, String> parameters,
     List<Object> errors,
     int results,
-    PagingResponse paging,
-    List<ResponseItem> response) {}
+    ApiPagingResponse paging,
+    List<ApiResponseItem> response) {}
