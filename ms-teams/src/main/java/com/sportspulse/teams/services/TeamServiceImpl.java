@@ -3,6 +3,7 @@ package com.sportspulse.teams.services;
 import com.sportspulse.teams.dto.responses.StadiumResponse;
 import com.sportspulse.teams.dto.responses.TeamResponse;
 import com.sportspulse.teams.exceptions.CustomBadGatewayException;
+import com.sportspulse.teams.exceptions.CustomBadRequestException;
 import com.sportspulse.teams.exceptions.CustomNotFoundException;
 import com.sportspulse.teams.exceptions.CustomTooManyRequestsException;
 import com.sportspulse.teams.integration.football.FootballClient;
@@ -30,6 +31,9 @@ public class TeamServiceImpl implements TeamService {
 
   @Override
   public TeamResponse getTeamById(int teamId) {
+    if (teamId <= 0) {
+      throw new CustomBadRequestException("teamId must be a positive number greater than 0.");
+    }
 
     ApiFootballTeamResponse api = footballClient.getApiFootballTeamById(teamId);
 

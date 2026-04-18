@@ -1,5 +1,6 @@
 package com.sportspulse.teams.filters;
 
+import com.sportspulse.teams.exceptions.CustomUnauthorizedException;
 import com.sportspulse.teams.integration.msauth.AuthClient;
 import com.sportspulse.teams.integration.msauth.dto.UserResponse;
 import jakarta.servlet.FilterChain;
@@ -52,13 +53,18 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
 
     UserResponse user = authClient.isTokenValid(token);
 
-    UsernamePasswordAuthenticationToken authentication =
-        new UsernamePasswordAuthenticationToken(
-            user, null, List.of(new SimpleGrantedAuthority(String.join("", "ROLE_", user.role()))));
+    try {
+      UsernamePasswordAuthenticationToken authentication =
+          new UsernamePasswordAuthenticationToken(
+              user,
+              null,
+              List.of(new SimpleGrantedAuthority(String.join("", "ROLE_", user.role()))));
 
-    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+      authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    filterChain.doFilter(request, response);
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      filterChain.doFilter(request, response);
+    } catch (CustomUnauthorizedException ignored) {
+    }
   }
 }

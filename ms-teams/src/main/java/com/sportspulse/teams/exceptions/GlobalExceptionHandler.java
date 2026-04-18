@@ -47,6 +47,12 @@ public class GlobalExceptionHandler {
     return buildErrorResponse(HttpStatus.BAD_GATEWAY, ex.getMessage());
   }
 
+  @ExceptionHandler(CustomBadRequestException.class)
+  public ResponseEntity<ErrorResponse> handlerCustomBadRequestException(
+      CustomBadRequestException ex) {
+    return badRequest(ex.getMessage());
+  }
+
   /**
    * Handles {@link MethodArgumentTypeMismatchException} thrown when a request parameter cannot be
    * converted to the expected type.
@@ -63,12 +69,16 @@ public class GlobalExceptionHandler {
     String message =
         String.format(
             "The parameter '%s' received an invalid value: '%s'", ex.getName(), ex.getValue());
-    return buildErrorResponse(HttpStatus.BAD_REQUEST, message);
+    return badRequest(message);
   }
 
   @ExceptionHandler(NoResourceFoundException.class)
   public ResponseEntity<ErrorResponse> handleNoResourceFound(NoResourceFoundException ex) {
     return notFound("The requested resource does not exist");
+  }
+
+  private ResponseEntity<ErrorResponse> badRequest(String message) {
+    return buildErrorResponse(HttpStatus.BAD_REQUEST, message);
   }
 
   private ResponseEntity<ErrorResponse> notFound(String message) {
