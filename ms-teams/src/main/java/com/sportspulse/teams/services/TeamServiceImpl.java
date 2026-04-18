@@ -2,10 +2,13 @@ package com.sportspulse.teams.services;
 
 import com.sportspulse.teams.dto.responses.StadiumResponse;
 import com.sportspulse.teams.dto.responses.TeamResponse;
+import com.sportspulse.teams.exceptions.CustomBadGatewayException;
 import com.sportspulse.teams.exceptions.CustomNotFoundException;
+import com.sportspulse.teams.exceptions.CustomTooManyRequestsException;
 import com.sportspulse.teams.integration.football.FootballClient;
 import com.sportspulse.teams.integration.football.dto.teamid.ApiFootballTeamResponse;
 import com.sportspulse.teams.utils.mappers.TeamMapper;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,8 @@ public class TeamServiceImpl implements TeamService {
 
     ApiFootballTeamResponse api = footballClient.getApiFootballTeamById(teamId);
 
+    handleApiFootballErrors(api);
+
     var item =
         api.response().stream()
             .findFirst()
@@ -39,5 +44,29 @@ public class TeamServiceImpl implements TeamService {
                         "The requested team was not found in Api-Football"));
 
     return teamMapper.toTeamResponse(item);
+  }
+
+  private void handleApiFootballErrors(ApiFootballTeamResponse api) {
+    if (api.errors() == null || api.errors().isEmpty()) {
+      return;
+    }
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> errorDetail = (Map<String, Object>) api.errors().getFirst();
+
+    if (errorDetail.containsKey("requests")) {
+      log.warn(
+          "Api-Football 429 Rate Limit exceeded. "
+              + "Available requests have been exhausted. Body: {}",
+          errorDetail);
+      throw new CustomTooManyRequestsException(
+          "The daily request limit to Api-Football has been "
+              + "reached, please try again tomorrow");
+    } else {
+      log.error("Api-Football returned errors in the response. Body: {}", errorDetail);
+      throw new CustomBadGatewayException(
+          "An error occurred while processing the request to Api-Football. "
+              + "Please try again later.");
+    }
   }
 }

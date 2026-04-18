@@ -1,8 +1,6 @@
 package com.sportspulse.teams.integration.football;
 
-import com.sportspulse.teams.exceptions.CustomNotFoundException;
 import com.sportspulse.teams.exceptions.CustomServiceUnavailableException;
-import com.sportspulse.teams.exceptions.CustomTooManyRequestsException;
 import com.sportspulse.teams.integration.football.dto.teamid.ApiFootballTeamResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,29 +39,20 @@ public class FootballClientImpl implements FootballClient {
         .retrieve()
         .onStatus(
             status -> status.value() == 204,
-            response -> {
-              log.warn(
-                  "Api-Football 204 No Content. The requested team was not found. Team: {}",
-                  teamId);
-              return Mono.error(
-                  new CustomNotFoundException("The requested team was not found in Api-Football"));
-            })
-        .onStatus(
-            status -> status.value() == 429,
             response ->
                 response
                     .bodyToMono(String.class)
                     .defaultIfEmpty("No body")
                     .flatMap(
                         body -> {
-                          log.warn(
-                              "Api-Football 429 Rate Limit exceeded. "
-                                  + "Available requests have been exhausted. Body: {}",
-                              body);
+                          log.error(
+                              "Api-Football 204 No Content. The requested team Api-Football error. "
+                                  + "Team: {}, Body: {}",
+                              teamId,
+                              response);
                           return Mono.error(
-                              new CustomTooManyRequestsException(
-                                  "The daily request limit to Api-Football has been "
-                                      + "reached, please try again tomorrow"));
+                              new CustomServiceUnavailableException(
+                                  "Api-Football is not currently available, please try again"));
                         }))
         .onStatus(
             status -> status.value() == 499 || status.value() == 500,

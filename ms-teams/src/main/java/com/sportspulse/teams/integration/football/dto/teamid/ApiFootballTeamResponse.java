@@ -1,5 +1,7 @@
 package com.sportspulse.teams.integration.football.dto.teamid;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.sportspulse.teams.utils.deserializers.FlexibleErrorsDeserializer;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +13,7 @@ import java.util.Map;
 public record ApiFootballTeamResponse(
     String get,
     Map<String, String> parameters,
-    List<Object> errors,
+    @JsonDeserialize(using = FlexibleErrorsDeserializer.class) List<Object> errors,
     int results,
     ApiPagingResponse paging,
     List<ApiResponseItem> response) {}
