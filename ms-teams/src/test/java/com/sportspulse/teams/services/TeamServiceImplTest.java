@@ -9,7 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 
-import com.sportspulse.teams.dto.responses.TeamResponse;
+import com.sportspulse.teams.dto.responses.TeamByIdResponse;
 import com.sportspulse.teams.exceptions.CustomNotFoundException;
 import com.sportspulse.teams.exceptions.CustomServiceUnavailableException;
 import com.sportspulse.teams.exceptions.CustomTooManyRequestsException;
@@ -55,12 +55,12 @@ class TeamServiceImplTest {
   void getTeamById_whenApiReturnsResult_returnsMappedTeamResponse() {
     ApiResponseItem item = mock(ApiResponseItem.class);
     ApiFootballTeamResponse apiResponse = buildApiResponse(List.of(item));
-    TeamResponse expected = mock(TeamResponse.class);
+    TeamByIdResponse expected = mock(TeamByIdResponse.class);
 
     given(footballClient.getApiFootballTeamById(TEAM_ID)).willReturn(apiResponse);
     given(teamMapper.toTeamResponse(item)).willReturn(expected);
 
-    TeamResponse result = teamService.getTeamById(TEAM_ID);
+    TeamByIdResponse result = teamService.getTeamById(TEAM_ID);
 
     assertThat(result).isEqualTo(expected);
   }
@@ -72,7 +72,7 @@ class TeamServiceImplTest {
     ApiFootballTeamResponse apiResponse = buildApiResponse(List.of(item));
 
     given(footballClient.getApiFootballTeamById(TEAM_ID)).willReturn(apiResponse);
-    given(teamMapper.toTeamResponse(any())).willReturn(mock(TeamResponse.class));
+    given(teamMapper.toTeamResponse(any())).willReturn(mock(TeamByIdResponse.class));
 
     teamService.getTeamById(TEAM_ID);
 
@@ -87,7 +87,7 @@ class TeamServiceImplTest {
     ApiFootballTeamResponse apiResponse = buildApiResponse(List.of(firstItem, secondItem));
 
     given(footballClient.getApiFootballTeamById(TEAM_ID)).willReturn(apiResponse);
-    given(teamMapper.toTeamResponse(firstItem)).willReturn(mock(TeamResponse.class));
+    given(teamMapper.toTeamResponse(firstItem)).willReturn(mock(TeamByIdResponse.class));
 
     teamService.getTeamById(TEAM_ID);
 
@@ -102,7 +102,7 @@ class TeamServiceImplTest {
     ApiFootballTeamResponse apiResponse = buildApiResponse(List.of(item));
 
     given(footballClient.getApiFootballTeamById(TEAM_ID)).willReturn(apiResponse);
-    given(teamMapper.toTeamResponse(item)).willReturn(mock(TeamResponse.class));
+    given(teamMapper.toTeamResponse(item)).willReturn(mock(TeamByIdResponse.class));
 
     teamService.getTeamById(TEAM_ID);
 

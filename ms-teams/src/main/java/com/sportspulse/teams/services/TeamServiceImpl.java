@@ -1,13 +1,14 @@
 package com.sportspulse.teams.services;
 
-import com.sportspulse.teams.dto.responses.StadiumResponse;
-import com.sportspulse.teams.dto.responses.TeamResponse;
+import com.sportspulse.teams.dto.responses.StadiumByIdResponse;
+import com.sportspulse.teams.dto.responses.TeamByIdResponse;
 import com.sportspulse.teams.exceptions.CustomBadGatewayException;
 import com.sportspulse.teams.exceptions.CustomBadRequestException;
 import com.sportspulse.teams.exceptions.CustomNotFoundException;
 import com.sportspulse.teams.exceptions.CustomTooManyRequestsException;
 import com.sportspulse.teams.integration.football.FootballClient;
 import com.sportspulse.teams.integration.football.dto.teamid.ApiFootballTeamResponse;
+import com.sportspulse.teams.integration.football.dto.teamid.ApiResponseItem;
 import com.sportspulse.teams.utils.mappers.TeamMapper;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
  * TeamServiceImpl Implementation of the {@link TeamService} interface that retrieves team data from
  * an external football API via {@link FootballClient}.
  *
- * <p>Maps the API response into domain-specific {@link TeamResponse} and {@link StadiumResponse}
+ * <p>Maps the API response into domain-specific {@link TeamByIdResponse} and {@link StadiumByIdResponse}
  * objects, ensuring that the application works with consistent and structured data models.
  */
 @Slf4j
@@ -30,7 +31,7 @@ public class TeamServiceImpl implements TeamService {
   private final TeamMapper teamMapper;
 
   @Override
-  public TeamResponse getTeamById(int teamId) {
+  public TeamByIdResponse getTeamById(int teamId) {
     if (teamId <= 0) {
       throw new CustomBadRequestException("teamId must be a positive number greater than 0.");
     }
@@ -39,7 +40,7 @@ public class TeamServiceImpl implements TeamService {
 
     handleApiFootballErrors(api);
 
-    var item =
+    ApiResponseItem item =
         api.response().stream()
             .findFirst()
             .orElseThrow(

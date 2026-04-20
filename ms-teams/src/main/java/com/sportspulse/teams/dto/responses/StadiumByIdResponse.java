@@ -1,7 +1,6 @@
 package com.sportspulse.teams.dto.responses;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.Value;
 
 /**
@@ -9,9 +8,8 @@ import lombok.Value;
  * address, city, capacity, and surface type.
  */
 @Value
-@Getter
 @Builder
-public class StadiumResponse {
+public class StadiumByIdResponse {
   String name;
   String address;
   String city;

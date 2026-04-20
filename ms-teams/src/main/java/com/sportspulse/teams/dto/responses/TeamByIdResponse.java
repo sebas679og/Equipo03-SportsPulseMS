@@ -1,7 +1,6 @@
 package com.sportspulse.teams.dto.responses;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.Value;
 
 /**
@@ -10,14 +9,13 @@ import lombok.Value;
  * stadium.
  */
 @Value
-@Getter
 @Builder
-public class TeamResponse {
+public class TeamByIdResponse {
   int id;
   String name;
   String country;
   String logo;
   int founded;
   boolean national;
-  StadiumResponse stadium;
+  StadiumByIdResponse stadium;
 }

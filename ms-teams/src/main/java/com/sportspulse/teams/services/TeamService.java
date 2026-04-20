@@ -1,6 +1,6 @@
 package com.sportspulse.teams.services;
 
-import com.sportspulse.teams.dto.responses.TeamResponse;
+import com.sportspulse.teams.dto.responses.TeamByIdResponse;
 
 /**
  * TeamService Service interface that defines operations related to teams. Provides methods to
@@ -8,5 +8,5 @@ import com.sportspulse.teams.dto.responses.TeamResponse;
  */
 public interface TeamService {
 
-  TeamResponse getTeamById(int teamId);
+  TeamByIdResponse getTeamById(int teamId);
 }

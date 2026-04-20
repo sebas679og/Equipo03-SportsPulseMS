@@ -2,7 +2,7 @@ package com.sportspulse.teams.controller;
 
 import com.sportspulse.teams.config.constants.ApiPaths;
 import com.sportspulse.teams.dto.responses.ErrorResponse;
-import com.sportspulse.teams.dto.responses.TeamResponse;
+import com.sportspulse.teams.dto.responses.TeamByIdResponse;
 import com.sportspulse.teams.services.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -57,7 +57,7 @@ public class TeamController {
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = TeamResponse.class))),
+                schema = @Schema(implementation = TeamByIdResponse.class))),
     @ApiResponse(
         responseCode = "400",
         description = "Validation error - Invalid path parameter",
@@ -102,7 +102,7 @@ public class TeamController {
                 schema = @Schema(implementation = ErrorResponse.class))),
   })
   @GetMapping(ApiPaths.Teams.TEAM_BY_ID)
-  public ResponseEntity<TeamResponse> getTeamById(@PathVariable int teamId) {
+  public ResponseEntity<TeamByIdResponse> getTeamById(@PathVariable int teamId) {
     return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamById(teamId));
   }
 }

@@ -1,7 +1,7 @@
 package com.sportspulse.teams.utils.mappers;
 
-import com.sportspulse.teams.dto.responses.StadiumResponse;
-import com.sportspulse.teams.dto.responses.TeamResponse;
+import com.sportspulse.teams.dto.responses.StadiumByIdResponse;
+import com.sportspulse.teams.dto.responses.TeamByIdResponse;
 import com.sportspulse.teams.integration.football.dto.teamid.ApiResponseItem;
 import com.sportspulse.teams.integration.football.dto.teamid.ApiVenueResponse;
 import org.mapstruct.Mapper;
@@ -23,7 +23,7 @@ public interface TeamMapper {
   @Mapping(target = "logo", source = "team.logo")
   @Mapping(target = "founded", source = "team.founded")
   @Mapping(target = "national", source = "team.national")
-  TeamResponse toTeamResponse(ApiResponseItem item);
+  TeamByIdResponse toTeamResponse(ApiResponseItem item);
 
-  StadiumResponse toStadiumResponse(ApiVenueResponse venue);
+  StadiumByIdResponse toStadiumResponse(ApiVenueResponse venue);
 }
