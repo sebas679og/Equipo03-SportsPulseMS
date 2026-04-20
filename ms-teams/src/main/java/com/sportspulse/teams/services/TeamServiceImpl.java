@@ -19,8 +19,9 @@ import org.springframework.stereotype.Service;
  * TeamServiceImpl Implementation of the {@link TeamService} interface that retrieves team data from
  * an external football API via {@link FootballClient}.
  *
- * <p>Maps the API response into domain-specific {@link TeamByIdResponse} and {@link StadiumByIdResponse}
- * objects, ensuring that the application works with consistent and structured data models.
+ * <p>Maps the API response into domain-specific {@link TeamByIdResponse} and {@link
+ * StadiumByIdResponse} objects, ensuring that the application works with consistent and structured
+ * data models.
  */
 @Slf4j
 @Service
