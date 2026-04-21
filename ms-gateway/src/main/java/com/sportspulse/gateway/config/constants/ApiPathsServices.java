@@ -14,6 +14,17 @@ public final class ApiPathsServices {
   }
 
   /**
+   * Teams Defines constant API paths related to team operations.
+   *
+   * <p>Provides base and wildcard paths for team-related endpoints, ensuring centralized and
+   * consistent URL management across the application.
+   */
+  public static final class Teams {
+    public static final String BASE = "/api/teams";
+    public static final String ALL = String.join("", BASE, "/**");
+  }
+
+  /**
    * Health Defines constants related to health check endpoints. Provides the actuator health path
    * for monitoring service availability.
    */
