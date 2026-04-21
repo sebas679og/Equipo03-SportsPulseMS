@@ -1,5 +1,7 @@
 package com.sportspulse.teams.services;
 
+import com.sportspulse.teams.dto.requests.LeagueAndSeasonRequest;
+import com.sportspulse.teams.dto.responses.DataLeagueSeasonResponse;
 import com.sportspulse.teams.dto.responses.TeamByIdResponse;
 
 /**
@@ -9,4 +11,6 @@ import com.sportspulse.teams.dto.responses.TeamByIdResponse;
 public interface TeamService {
 
   TeamByIdResponse getTeamById(int teamId);
+
+  DataLeagueSeasonResponse getTeamLeagueSeasonByTeamId(LeagueAndSeasonRequest request);
 }

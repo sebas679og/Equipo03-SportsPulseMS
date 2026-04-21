@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 public class CacheConfig {
 
   private static final String TEAMS_CACHE = "teams";
+  private static final String TEAMS_BY_LEAGUE_AND_SEASON_CACHE = "teamsByLeagueAndSeason";
 
   private final TeamsCacheProperties properties;
 
@@ -41,14 +42,13 @@ public class CacheConfig {
       return new NoOpCacheManager();
     }
 
-    CaffeineCache teamsCache = buildTeamsCache();
-
     SimpleCacheManager manager = new SimpleCacheManager();
-    manager.setCaches(List.of(teamsCache));
+    manager.setCaches(
+        List.of(buildCache(TEAMS_CACHE), buildCache(TEAMS_BY_LEAGUE_AND_SEASON_CACHE)));
     return manager;
   }
 
-  private CaffeineCache buildTeamsCache() {
+  private CaffeineCache buildCache(String name) {
     Cache<Object, Object> cache =
         Caffeine.newBuilder()
             .expireAfterWrite(properties.getTtlMinutes(), TimeUnit.MINUTES)
@@ -56,6 +56,6 @@ public class CacheConfig {
             .recordStats()
             .build();
 
-    return new CaffeineCache(TEAMS_CACHE, cache);
+    return new CaffeineCache(name, cache);
   }
 }

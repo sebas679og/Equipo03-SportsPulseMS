@@ -1,7 +1,9 @@
 package com.sportspulse.teams.utils.mappers;
 
 import com.sportspulse.teams.dto.responses.StadiumByIdResponse;
+import com.sportspulse.teams.dto.responses.StadiumLeagueSeasonResponse;
 import com.sportspulse.teams.dto.responses.TeamByIdResponse;
+import com.sportspulse.teams.dto.responses.TeamLeagueSeasonResponse;
 import com.sportspulse.teams.integration.football.dto.teamid.ApiResponseItem;
 import com.sportspulse.teams.integration.football.dto.teamid.ApiVenueResponse;
 import org.mapstruct.Mapper;
@@ -26,4 +28,14 @@ public interface TeamMapper {
   TeamByIdResponse toTeamResponse(ApiResponseItem item);
 
   StadiumByIdResponse toStadiumResponse(ApiVenueResponse venue);
+
+  @Mapping(target = "stadium", source = "venue")
+  @Mapping(target = "id", source = "team.id")
+  @Mapping(target = "name", source = "team.name")
+  @Mapping(target = "country", source = "team.country")
+  @Mapping(target = "logo", source = "team.logo")
+  @Mapping(target = "founded", source = "team.founded")
+  TeamLeagueSeasonResponse toTeamLeagueSeasonResponse(ApiResponseItem item);
+
+  StadiumLeagueSeasonResponse toStadiumLeagueSeasonResponse(ApiVenueResponse venue);
 }

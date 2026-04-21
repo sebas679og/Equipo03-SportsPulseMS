@@ -1,5 +1,7 @@
 package com.sportspulse.teams.services;
 
+import com.sportspulse.teams.dto.requests.LeagueAndSeasonRequest;
+import com.sportspulse.teams.dto.responses.DataLeagueSeasonResponse;
 import com.sportspulse.teams.dto.responses.StadiumByIdResponse;
 import com.sportspulse.teams.dto.responses.TeamByIdResponse;
 import com.sportspulse.teams.exceptions.CustomBadGatewayException;
@@ -10,6 +12,7 @@ import com.sportspulse.teams.integration.football.FootballClient;
 import com.sportspulse.teams.integration.football.dto.teamid.ApiFootballTeamResponse;
 import com.sportspulse.teams.integration.football.dto.teamid.ApiResponseItem;
 import com.sportspulse.teams.utils.mappers.TeamMapper;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +55,26 @@ public class TeamServiceImpl implements TeamService {
     return teamMapper.toTeamResponse(item);
   }
 
+  @Override
+  public DataLeagueSeasonResponse getTeamLeagueSeasonByTeamId(LeagueAndSeasonRequest request) {
+    int seasonInt = Integer.parseInt(request.getSeason());
+
+    ApiFootballTeamResponse api =
+        footballClient.getApiFootballTeamByLeagueAndSeason(request.getLeague(), seasonInt);
+    handleApiFootballErrors(api);
+
+    List<ApiResponseItem> items = api.response();
+
+    if (items == null || items.isEmpty()) {
+      throw new CustomNotFoundException(
+          "The requested league and season were not found in Api-Football.");
+    }
+
+    return DataLeagueSeasonResponse.builder()
+        .data(items.stream().map(teamMapper::toTeamLeagueSeasonResponse).toList())
+        .build();
+  }
+
   private void handleApiFootballErrors(ApiFootballTeamResponse api) {
     if (api.errors() == null || api.errors().isEmpty()) {
       return;
@@ -68,6 +91,13 @@ public class TeamServiceImpl implements TeamService {
       throw new CustomTooManyRequestsException(
           "The daily request limit to Api-Football has been "
               + "reached, please try again tomorrow");
+    } else if (errorDetail.containsKey("plan")) {
+      String planMessage = (String) errorDetail.get("plan");
+      log.warn(
+          "Api-Football, the request limit per season has been exceeded. "
+              + "Available requests have been exhausted. Body: {}",
+          planMessage);
+      throw new CustomTooManyRequestsException(planMessage);
     } else {
       log.error("Api-Football returned errors in the response. Body: {}", errorDetail);
       throw new CustomBadGatewayException(
