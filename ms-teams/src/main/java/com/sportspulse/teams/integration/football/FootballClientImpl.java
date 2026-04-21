@@ -30,11 +30,27 @@ public class FootballClientImpl implements FootballClient {
             .get()
             .uri(uriBuilder -> uriBuilder.path("/teams").queryParam("id", teamId).build());
 
-    return executeRequest(request, ApiFootballTeamResponse.class, teamId);
+    return executeRequest(request, String.valueOf(teamId));
   }
 
-  private <T> T executeRequest(
-      WebClient.RequestHeadersSpec<?> request, Class<T> responseType, int teamId) {
+  @Override
+  @Cacheable(value = "teamsByLeagueAndSeason", key = "#leagueId + '-' + #season")
+  public ApiFootballTeamResponse getApiFootballTeamByLeagueAndSeason(int leagueId, int season) {
+    WebClient.RequestHeadersSpec<?> request =
+        apiFootballWebClient
+            .get()
+            .uri(
+                uriBuilder ->
+                    uriBuilder
+                        .path("/teams")
+                        .queryParam("league", leagueId)
+                        .queryParam("season", season)
+                        .build());
+    return executeRequest(request, leagueId + "-" + season);
+  }
+
+  private ApiFootballTeamResponse executeRequest(
+      WebClient.RequestHeadersSpec<?> request, String teamId) {
     return request
         .retrieve()
         .onStatus(
@@ -72,7 +88,7 @@ public class FootballClientImpl implements FootballClient {
                               new CustomServiceUnavailableException(
                                   "Api-Football is not currently available, please try again"));
                         }))
-        .bodyToMono(responseType)
+        .bodyToMono(ApiFootballTeamResponse.class)
         .blockOptional()
         .orElseThrow(
             () -> {

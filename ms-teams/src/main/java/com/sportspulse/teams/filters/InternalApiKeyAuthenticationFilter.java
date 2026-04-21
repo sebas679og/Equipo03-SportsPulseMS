@@ -61,7 +61,7 @@ public class InternalApiKeyAuthenticationFilter extends OncePerRequestFilter {
 
     UsernamePasswordAuthenticationToken authentication =
         new UsernamePasswordAuthenticationToken(
-            "internal-service", null, List.of(new SimpleGrantedAuthority("ROLE_INTERNAL")));
+            "internal-service", null, List.of(new SimpleGrantedAuthority("AUTH_INTERNAL")));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
     filterChain.doFilter(request, response);

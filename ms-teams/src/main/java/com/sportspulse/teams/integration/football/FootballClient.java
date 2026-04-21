@@ -15,4 +15,14 @@ public interface FootballClient {
    * @return an {@link ApiFootballTeamResponse} containing the team details
    */
   ApiFootballTeamResponse getApiFootballTeamById(int teamId);
+
+  /**
+   * Retrieves team information from the external football API based on a specific league and
+   * season.
+   *
+   * @param leagueId the unique identifier of the league
+   * @param season the season year to query
+   * @return an {@link ApiFootballTeamResponse} containing the teams' details
+   */
+  ApiFootballTeamResponse getApiFootballTeamByLeagueAndSeason(int leagueId, int season);
 }

@@ -51,20 +51,25 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
 
     String token = authHeader.substring(BEARER_PREFIX.length());
 
-    UserResponse user = authClient.isTokenValid(token);
-
     try {
+
+      UserResponse user = authClient.isTokenValid(token);
+
       UsernamePasswordAuthenticationToken authentication =
           new UsernamePasswordAuthenticationToken(
               user,
               null,
-              List.of(new SimpleGrantedAuthority(String.join("", "ROLE_", user.role()))));
+              List.of(
+                  new SimpleGrantedAuthority(String.join("", "ROLE_", user.role())),
+                  new SimpleGrantedAuthority("AUTH_JWT")));
 
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
       SecurityContextHolder.getContext().setAuthentication(authentication);
-      filterChain.doFilter(request, response);
+
     } catch (CustomUnauthorizedException ignored) {
+      SecurityContextHolder.clearContext();
     }
+
+    filterChain.doFilter(request, response);
   }
 }
