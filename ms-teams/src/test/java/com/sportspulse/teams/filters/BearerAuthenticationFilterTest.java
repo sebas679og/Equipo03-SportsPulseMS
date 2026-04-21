@@ -136,7 +136,7 @@ class BearerAuthenticationFilterTest {
   }
 
   @Test
-  @DisplayName("doFilterInternal() assigns ROLE_USER authority for a user with role USER")
+  @DisplayName("doFilterInternal() assigns ROLE_USER and AUTH_JWT authority for a user with role USER")
   void doFilterInternal_whenRoleIsUser_assignsRoleUserAuthority() throws Exception {
     UserResponse user = new UserResponse(true, UUID.randomUUID(), "test-user", "USER");
     given(request.getHeader(HttpHeaders.AUTHORIZATION)).willReturn("Bearer token");
@@ -147,11 +147,11 @@ class BearerAuthenticationFilterTest {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     assertThat(auth.getAuthorities())
         .extracting(GrantedAuthority::getAuthority)
-        .containsExactly("ROLE_USER");
+        .containsExactly("ROLE_USER", "AUTH_JWT");
   }
 
   @Test
-  @DisplayName("doFilterInternal() assigns ROLE_ADMIN authority for a user with role ADMIN")
+  @DisplayName("doFilterInternal() assigns ROLE_ADMIN and AUTH_JWT authority for a user with role ADMIN")
   void doFilterInternal_whenRoleIsAdmin_assignsRoleAdminAuthority() throws Exception {
     UserResponse user = new UserResponse(true, UUID.randomUUID(), "test-user", "ADMIN");
     given(request.getHeader(HttpHeaders.AUTHORIZATION)).willReturn("Bearer admin-token");
@@ -162,7 +162,7 @@ class BearerAuthenticationFilterTest {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     assertThat(auth.getAuthorities())
         .extracting(GrantedAuthority::getAuthority)
-        .containsExactly("ROLE_ADMIN");
+        .containsExactly("ROLE_ADMIN", "AUTH_JWT");
   }
 
   @Test

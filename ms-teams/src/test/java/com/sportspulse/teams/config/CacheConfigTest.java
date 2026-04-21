@@ -78,7 +78,7 @@ class CacheConfigTest {
   void cacheManager_whenCachingEnabled_registersTeamsCache() {
     CacheManager result = buildEnabledCacheManager(10L, 100L);
 
-    assertThat(result.getCacheNames()).containsExactly("teams");
+    assertThat(result.getCacheNames()).containsExactly("teams", "teamsByLeagueAndSeason");
   }
 
   @Test
@@ -94,7 +94,7 @@ class CacheConfigTest {
   void cacheManager_whenCachingEnabled_registersExactlyOneCache() {
     CacheManager result = buildEnabledCacheManager(10L, 100L);
 
-    assertThat(result.getCacheNames()).hasSize(1);
+    assertThat(result.getCacheNames()).hasSize(2);
   }
 
   // -------------------------------------------------------------------------

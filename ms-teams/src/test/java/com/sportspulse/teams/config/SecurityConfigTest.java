@@ -32,10 +32,6 @@ class SecurityConfigTest {
 
   @Mock private JsonWriter writer;
 
-  @Mock private AuthClient authClient;
-
-  @Mock private MsAuthProperties securityProperties;
-
   @InjectMocks private SecurityConfig securityConfig;
 
   // -------------------------------------------------------------------------

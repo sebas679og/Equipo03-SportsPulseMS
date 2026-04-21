@@ -174,7 +174,7 @@ class InternalApiKeyAuthenticationFilterTest {
   }
 
   @Test
-  @DisplayName("doFilterInternal() grants ROLE_INTERNAL authority for a valid API key")
+  @DisplayName("doFilterInternal() grants AUTH_INTERNAL authority for a valid API key")
   void doFilterInternal_whenApiKeyValid_grantsRoleInternalAuthority() throws Exception {
     given(request.getHeader(InternalHeaders.MsAuth.MS_AUTH_KEY)).willReturn(VALID_API_KEY);
     given(securityProperties.getApiKey()).willReturn(VALID_API_KEY);
@@ -184,7 +184,7 @@ class InternalApiKeyAuthenticationFilterTest {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     assertThat(auth.getAuthorities())
         .extracting(GrantedAuthority::getAuthority)
-        .containsExactly("ROLE_INTERNAL");
+        .containsExactly("AUTH_INTERNAL");
   }
 
   @Test
