@@ -2,6 +2,7 @@ package com.sportspulse.teams.security.filter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,6 +12,7 @@ import com.sportspulse.teams.constants.Errors;
 import com.sportspulse.teams.constants.HttpHeaders;
 import com.sportspulse.teams.dto.internal.ValidateResponse;
 import com.sportspulse.teams.security.writer.ErrorWriter;
+import feign.FeignException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -129,7 +131,7 @@ class JwtAuthenticationFilterTest {
 
     String token = "Bearer valid.token";
     when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(token);
-    when(authClient.validate(token)).thenThrow(new RuntimeException("Connection refused"));
+    when(authClient.validate(token)).thenThrow(mock(FeignException.class));
 
     filter.doFilterInternal(request, response, filterChain);
 
