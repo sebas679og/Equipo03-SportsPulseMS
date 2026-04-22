@@ -33,16 +33,25 @@ public class GatewayRoutesConfig {
         .routes()
         .route(
             "ms-auth-login",
-            r ->
-                r.path(ApiPathsServices.Auth.LOGIN)
+            predicateSpec ->
+                predicateSpec
+                    .path(ApiPathsServices.Auth.LOGIN)
                     .filters(routeFactory.applyBruteForceFilters("ms-auth"))
                     .uri(services.getAuth()))
         .route(
             "ms-auth",
-            r ->
-                r.path(ApiPathsServices.Auth.ALL)
+            predicateSpec ->
+                predicateSpec
+                    .path(ApiPathsServices.Auth.ALL)
                     .filters(routeFactory.applyStandardFilters("ms-auth"))
                     .uri(services.getAuth()))
+        .route(
+            "ms-teams",
+            predicateSpec ->
+                predicateSpec
+                    .path(ApiPathsServices.Teams.ALL)
+                    .filters(routeFactory.applyStandardFilters("ms-teams"))
+                    .uri(services.getTeams()))
         .build();
   }
 

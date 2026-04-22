@@ -155,10 +155,10 @@ public interface TeamClient {
 
 | Variable | Description                            | Example |
 |---|----------------------------------------|---|
-| `FOOTBALL_API_KEY` | API key for RapidAPI                   | `your_api_key_here` |
+| `SPORTS_PULSE_API_FOOTBALL_KEY` | API key for RapidAPI                   | `your_api_key_here` |
 | `JWT_SECRET` | Shared JWT secret for token validation | `sportpulse-secret-key-2025` |
 | `TEAMS_SERVICE_URL` | URL for ms-teams                       | `http://ms-teams:8083` |
-| `SPORT_PULSE_API_BASE_URL` | Base endpoint for the football API     | `https://v3.football.api-sports.io` |
+| `SPORTS_PULSE_API_FOOTBALL_BASE_URL` | Base endpoint for the football API     | `https://v3.football.api-sports.io` |
 ---
 
 ## Notes

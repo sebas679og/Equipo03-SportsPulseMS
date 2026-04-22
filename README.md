@@ -12,7 +12,7 @@ Each team must design, implement, document, and deploy the complete system in th
 |---|---|
 | **Project Name** | SportPulse — Football Analysis Platform |
 | **Type** | Backend with microservices architecture connected to an external API |
-| **External API** | API-Football (RapidAPI) — https://rapidapi.com/apisports/api/api-football |
+| **External API** | API-Football — https://v3.football.api-sports.io |
 | **Duration** | 2 weeks (1 sprint) |
 | **Mode** | Each team builds the complete system independently |
 
@@ -20,20 +20,20 @@ Each team must design, implement, document, and deploy the complete system in th
 
 ## 🛠️ Technologies & Tools
 
-| Category | Technology                                                  |
-|---|-------------------------------------------------------------|
-| **Language** | Java 21                                                     |
-| **Framework** | Spring Boot 3.5.x                                           |
-| **Security** | Spring Security + JWT                                       |
+| Category | Technology                                   |
+|---|----------------------------------------------|
+| **Language** | Java 21                                      |
+| **Framework** | Spring Boot 3.5.x                            |
+| **Security** | Spring Security + JWT                        |
 | **Database** | PostgreSQL (one DB per microservice, only where applicable) |
-| **External API** | API-Football via RapidAPI                                   |
-| **Inter-service Communication** | OpenFeign / RestTemplate                                    |
-| **Documentation** | Swagger UI / OpenAPI 3.1                                    |
-| **Testing** | JUnit 5 + Mockito + Postman                                 |
-| **Mappers** | MapStruct                                                   |
-| **Utilities** | Lombok                                                      |
-| **Containerization** | Docker + Docker Compose                                     |
-| **Build Tool** | Maven or Gradle                                             |
+| **External API** | API-Football                                 |
+| **Inter-service Communication** | Webclient                                    |
+| **Documentation** | Swagger UI / OpenAPI 3.1                     |
+| **Testing** | JUnit 5 + Mockito + Postman                  |
+| **Mappers** | MapStruct                                    |
+| **Utilities** | Lombok                                       |
+| **Containerization** | Docker + Docker Compose                      |
+| **Build Tool** | Maven or Gradle                              |
 
 ---
 
@@ -69,16 +69,16 @@ All domain services → validate JWT issued by ms-auth
 
 ### **Configuration Details:**
 
-- **Base URL:** Managed via `SPORT_PULSE_API_BASE_URL` (`https://v3.football.api-sports.io`)
+- **Base URL:** Managed via `SPORTS_PULSE_API_FOOTBALL_BASE_URL` (`https://v3.football.api-sports.io`)
 
-- **Authentication:** Managed via `RAPIDAPI_KEY` (Injected as `x-apisports-Key` header).
+- **Authentication:** Managed via `SPORTS_PULSE_API_FOOTBALL_KEY` (Injected as `x-apisports-key` header).
 
 ### ⚙️ **Environment Variables**
 
 | Variable                   | Description | Value                         |
 |----------------------------|-------------|-------------------------------|
-| `SPORT_PULSE_API_BASE_URL` | Base endpoint for the football API | `https://v3.football.api-sports.io` |
-| `FOOTBALL_API_KEY`             | Your private secret key from RapidAPI | `YOUR_API_KEY`|
+| `SPORTS_PULSE_API_FOOTBALL_BASE_URL` | Base endpoint for the football API | `https://v3.football.api-sports.io` |
+| `SPORTS_PULSE_API_FOOTBALL_KEY`             | Your private secret key from RapidAPI | `YOUR_API_KEY`|
 
 ### **Endpoint Mapping**
 
