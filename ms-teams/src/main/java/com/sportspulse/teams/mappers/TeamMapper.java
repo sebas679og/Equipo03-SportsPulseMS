@@ -7,6 +7,7 @@ import com.sportspulse.teams.dto.response.VenueResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+/** Maps team-related entities and DTOs between internal and external representations. */
 @Mapper(componentModel = "spring")
 public interface TeamMapper {
   /**

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
+/** Handles writing and formatting error responses for the security layer. */
 @Component
 @RequiredArgsConstructor
 public class ErrorWriter {
