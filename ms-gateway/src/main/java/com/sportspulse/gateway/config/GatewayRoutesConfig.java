@@ -52,6 +52,13 @@ public class GatewayRoutesConfig {
                     .path(ApiPathsServices.Teams.ALL)
                     .filters(routeFactory.applyStandardFilters("ms-teams"))
                     .uri(services.getTeams()))
+        .route(
+            "ms-standings",
+            predicateSpec ->
+                predicateSpec
+                    .path(ApiPathsServices.Standings.ALL)
+                    .filters(routeFactory.applyStandardFilters("ms-standings"))
+                    .uri(services.getStandings()))
         .build();
   }
 
