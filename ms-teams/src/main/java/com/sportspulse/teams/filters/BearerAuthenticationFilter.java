@@ -1,5 +1,6 @@
 package com.sportspulse.teams.filters;
 
+import com.sportspulse.teams.exceptions.CustomBadGatewayException;
 import com.sportspulse.teams.exceptions.CustomUnauthorizedException;
 import com.sportspulse.teams.integration.msauth.AuthClient;
 import com.sportspulse.teams.integration.msauth.dto.UserResponse;
@@ -66,7 +67,7 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
       SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    } catch (CustomUnauthorizedException ignored) {
+    } catch (CustomUnauthorizedException | CustomBadGatewayException ignored) {
       SecurityContextHolder.clearContext();
     }
 

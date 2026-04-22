@@ -136,7 +136,8 @@ class BearerAuthenticationFilterTest {
   }
 
   @Test
-  @DisplayName("doFilterInternal() assigns ROLE_USER and AUTH_JWT authority for a user with role USER")
+  @DisplayName(
+      "doFilterInternal() assigns ROLE_USER and AUTH_JWT authority for a user with role USER")
   void doFilterInternal_whenRoleIsUser_assignsRoleUserAuthority() throws Exception {
     UserResponse user = new UserResponse(true, UUID.randomUUID(), "test-user", "USER");
     given(request.getHeader(HttpHeaders.AUTHORIZATION)).willReturn("Bearer token");
@@ -151,7 +152,8 @@ class BearerAuthenticationFilterTest {
   }
 
   @Test
-  @DisplayName("doFilterInternal() assigns ROLE_ADMIN and AUTH_JWT authority for a user with role ADMIN")
+  @DisplayName(
+      "doFilterInternal() assigns ROLE_ADMIN and AUTH_JWT authority for a user with role ADMIN")
   void doFilterInternal_whenRoleIsAdmin_assignsRoleAdminAuthority() throws Exception {
     UserResponse user = new UserResponse(true, UUID.randomUUID(), "test-user", "ADMIN");
     given(request.getHeader(HttpHeaders.AUTHORIZATION)).willReturn("Bearer admin-token");

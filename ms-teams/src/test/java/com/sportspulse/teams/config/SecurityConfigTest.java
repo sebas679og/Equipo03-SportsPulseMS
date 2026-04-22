@@ -6,11 +6,9 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 
 import com.sportspulse.teams.config.constants.InternalHeaders;
-import com.sportspulse.teams.config.properties.MsAuthProperties;
 import com.sportspulse.teams.exceptions.JsonWriter;
 import com.sportspulse.teams.filters.BearerAuthenticationFilter;
 import com.sportspulse.teams.filters.InternalApiKeyAuthenticationFilter;
-import com.sportspulse.teams.integration.msauth.AuthClient;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
