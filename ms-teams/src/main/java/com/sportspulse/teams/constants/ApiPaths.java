@@ -3,6 +3,9 @@ package com.sportspulse.teams.constants;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Contains ApiPaths constants used across the teams module.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiPaths {
 

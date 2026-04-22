@@ -4,6 +4,9 @@ import com.sportspulse.teams.dto.response.ErrorResponse;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Error constants used across the teams module.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Errors {
 

@@ -3,6 +3,9 @@ package com.sportspulse.teams.constants;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Constants related to HTTP headers.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HttpHeaders {
   public static final String AUTHORIZATION = "Authorization";
