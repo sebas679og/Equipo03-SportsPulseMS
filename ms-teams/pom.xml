@@ -36,6 +36,13 @@
 		<jacoco.version>0.8.14</jacoco.version>
 		<spotless.version>3.4.0</spotless.version>
 		<google-java-format.version>1.35.0</google-java-format.version>
+		<spring-cloud.version>2025.0.2</spring-cloud.version>
+		<tomcat.version>11.0.21</tomcat.version>
+		<jjwt.version>0.13.0</jjwt.version>
+		<spring-web.version>6.2.18</spring-web.version>
+		<spring-webflux.version>6.2.18</spring-webflux.version>
+		<bouncycastle.version>1.84</bouncycastle.version>
+		<spring-webmvc.version>6.2.18</spring-webmvc.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -44,6 +51,53 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>${commons-lang3.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<!--CVE-2026-34483 7.5 force secure version 10.1.54 -->
+			<dependency>
+				<groupId>org.apache.tomcat.embed</groupId>
+				<artifactId>tomcat-embed-core</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>
+
+			<!-- Security override - patched Spring Framework version -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring-web.version}</version>
+			</dependency>
+
+			<!-- Security update - BouncyCastle provider -->
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk18on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+
+			<!-- Security update - BouncyCastle PKIX -->
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcpkix-jdk18on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+
+			<!-- Security override - patched Spring Framework version -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webflux</artifactId>
+				<version>${spring-webflux.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring-webmvc.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -55,6 +109,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
