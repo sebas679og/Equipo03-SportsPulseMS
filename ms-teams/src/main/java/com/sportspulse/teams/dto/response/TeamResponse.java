@@ -4,11 +4,4 @@ import lombok.Builder;
 
 @Builder
 public record TeamResponse(
-        Integer id,
-        String name,
-        String country,
-        String logo,
-        Integer founded,
-        VenueResponse venue
-) {
-}
+    Integer id, String name, String country, String logo, Integer founded, VenueResponse venue) {}

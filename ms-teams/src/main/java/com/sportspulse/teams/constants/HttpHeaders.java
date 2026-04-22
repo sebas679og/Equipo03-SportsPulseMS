@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HttpHeaders {
-    public static final String AUTHORIZATION = "Authorization";
-    public static final String X_API_SPORTS_KEY = "x-apisports-key";
-    public static final String X_INTERNAL_API_KEY = "X-Internal-API-Key";
+  public static final String AUTHORIZATION = "Authorization";
+  public static final String X_API_SPORTS_KEY = "x-apisports-key";
+  public static final String X_INTERNAL_API_KEY = "X-Internal-API-Key";
 }

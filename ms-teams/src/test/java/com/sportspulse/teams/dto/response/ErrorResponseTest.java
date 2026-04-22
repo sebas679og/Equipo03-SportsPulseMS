@@ -1,41 +1,41 @@
 package com.sportspulse.teams.dto.response;
 
-import com.sportspulse.teams.constants.Errors;
-import org.junit.jupiter.api.Test;
-import java.time.Instant;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.sportspulse.teams.constants.Errors;
+import java.time.Instant;
+import org.junit.jupiter.api.Test;
 
 class ErrorResponseTest {
 
-    @Test
-    void of_shouldSetAllFieldsCorrectly() {
+  @Test
+  void of_shouldSetAllFieldsCorrectly() {
 
-        String error = Errors.Code.MISSING_TOKEN;
-        String message = Errors.Message.MISSING_TOKEN;
+    String error = Errors.Code.MISSING_TOKEN;
+    String message = Errors.Message.MISSING_TOKEN;
 
-        ErrorResponse response = ErrorResponse.of(error, message);
+    ErrorResponse response = ErrorResponse.of(error, message);
 
-        assertThat(response.error()).isEqualTo(error);
-        assertThat(response.message()).isEqualTo(message);
-        assertThat(response.timestamp()).isNotNull();
-        assertThat(response.timestamp()).isBeforeOrEqualTo(Instant.now());
-    }
+    assertThat(response.error()).isEqualTo(error);
+    assertThat(response.message()).isEqualTo(message);
+    assertThat(response.timestamp()).isNotNull();
+    assertThat(response.timestamp()).isBeforeOrEqualTo(Instant.now());
+  }
 
-    @Test
-    void of_shouldTruncateTimestampToMillis() {
-        ErrorResponse response = ErrorResponse.of("ERROR", "message");
+  @Test
+  void of_shouldTruncateTimestampToMillis() {
+    ErrorResponse response = ErrorResponse.of("ERROR", "message");
 
-        assertThat(response.timestamp().getNano() % 1_000_000).isZero();
-    }
+    assertThat(response.timestamp().getNano() % 1_000_000).isZero();
+  }
 
-    @Test
-    void of_twoCallsShouldHaveDifferentTimestamps() throws InterruptedException {
+  @Test
+  void of_twoCallsShouldHaveDifferentTimestamps() throws InterruptedException {
 
-        ErrorResponse first = ErrorResponse.of("ERROR", "message");
-        Thread.sleep(10);
-        ErrorResponse second = ErrorResponse.of("ERROR", "message");
+    ErrorResponse first = ErrorResponse.of("ERROR", "message");
+    Thread.sleep(10);
+    ErrorResponse second = ErrorResponse.of("ERROR", "message");
 
-        assertThat(first.timestamp()).isBefore(second.timestamp());
-    }
+    assertThat(first.timestamp()).isBefore(second.timestamp());
+  }
 }

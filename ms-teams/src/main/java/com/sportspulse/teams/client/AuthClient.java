@@ -9,21 +9,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
- * Feign client for communicating with the authentication microservice.
- * Responsible for delegating JWT token validation and role retrieval.
+ * Feign client for communicating with the authentication microservice. Responsible for delegating
+ * JWT token validation and role retrieval.
  */
 @FeignClient(
-        name = "${auth.service.name}",
-        url = "${auth.service.url}",
-        configuration = FeignConfig.class
-)
+    name = "${auth.service.name}",
+    url = "${auth.service.url}",
+    configuration = FeignConfig.class)
 public interface AuthClient {
-    /**
-     * Validates a JWT token against the identity service.
-     *
-     * @param token The authorization token in ‘Bearer {jwt}’ format.
-     * @return ValidateResponse containing the validation status, username and roles.
-     */
-    @PostMapping(ApiPaths.Auth.VALIDATE)
-    ValidateResponse validate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token);
+  /**
+   * Validates a JWT token against the identity service.
+   *
+   * @param token The authorization token in ‘Bearer {jwt}’ format.
+   * @return ValidateResponse containing the validation status, username and roles.
+   */
+  @PostMapping(ApiPaths.Auth.VALIDATE)
+  ValidateResponse validate(@RequestHeader(HttpHeaders.AUTHORIZATION) String token);
 }
