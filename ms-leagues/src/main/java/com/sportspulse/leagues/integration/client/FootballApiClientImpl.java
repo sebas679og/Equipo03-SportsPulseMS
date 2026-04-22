@@ -1,106 +1,99 @@
 package com.sportspulse.leagues.integration.client;
 
+import com.sportspulse.leagues.config.constants.InternalHeaders;
+import com.sportspulse.leagues.config.properties.FootballApiProperties;
 import com.sportspulse.leagues.exceptions.ExternalApiException;
 import com.sportspulse.leagues.integration.dto.ApiFootballLeagueWrapper;
 import com.sportspulse.leagues.integration.dto.ApiFootballLeaguesEnvelope;
+import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-/** WebClient implementation for API-Football calls. */
+/** RestTemplate implementation for API-Football calls. */
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class FootballApiClientImpl implements FootballApiClient {
 
-  @Qualifier("apiFootballWebClient")
-  private final WebClient apiFootballWebClient;
-
+  private final RestTemplate restTemplate;
+  private final FootballApiProperties footballApiProperties;
 
   @Override
-  @Cacheable(
-      value = "leagues",
-      key = "T(String).valueOf(#country) + ':' + T(String).valueOf(#season) + ':' + T(String).valueOf(#leagueId)"
-  )
-  public List<ApiFootballLeagueWrapper> getLeagues(
-      String country, Integer season, Integer leagueId) {
-    try {
-      ApiFootballLeaguesEnvelope response =
-          apiFootballWebClient
-              .get()
-              .uri(
-                  uriBuilder -> {
-                    uriBuilder.path("/leagues");
-                    if (country != null && !country.isBlank()) {
-                      uriBuilder.queryParam("country", country);
-                    }
-                    if (season != null) {
-                      uriBuilder.queryParam("season", season);
-                    }
-                    if (leagueId != null) {
-                      uriBuilder.queryParam("id", leagueId);
-                    }
-                    return uriBuilder.build();
-                  })
-              .accept(MediaType.APPLICATION_JSON)
-              .retrieve()
-              .onStatus(
-                  status -> !status.equals(HttpStatus.OK),
-                  clientResponse ->
-                      clientResponse
-                          .bodyToMono(String.class)
-                          .defaultIfEmpty("No body")
-                          .flatMap(
-                              body ->
-                                  Mono.error(
-                                      new ExternalApiException(
-                                          "Error HTTP al consultar API-Football: "
-                                              + clientResponse.statusCode().value(),
-                                          new IllegalStateException(body)))))
-              .bodyToMono(ApiFootballLeaguesEnvelope.class)
-              .blockOptional()
-              .orElseThrow(
-                  () ->
-                      new ExternalApiException(
-                          "API-Football devolvió body vacío",
-                          new IllegalStateException("Empty response body")));
+  public List<ApiFootballLeagueWrapper> getLeagues(String country, Integer season, Integer leagueId) {
+    URI uri = buildLeaguesUri(country, season, leagueId);
+    HttpEntity<Void> request = new HttpEntity<>(buildHeaders());
 
-      return mapLeaguesResponse(response);
-    } catch (ExternalApiException ex) {
-      throw ex;
-    } catch (Exception ex) {
-      if (log.isErrorEnabled()) {
-        log.error(
-            "API-Football request failed - country='{}' season='{}' leagueId='{}' - error='{}'",
+    try {
+      if (log.isInfoEnabled()) {
+        log.info(
+            "Calling API-Football leagues endpoint - uri='{}' country='{}' season='{}' leagueId='{}'",
+            uri,
             country,
             season,
-            leagueId,
-            ex.getMessage(),
-            ex);
+            leagueId);
+      }
+
+      ResponseEntity<ApiFootballLeaguesEnvelope> response =
+          restTemplate.exchange(uri, HttpMethod.GET, request, ApiFootballLeaguesEnvelope.class);
+
+      return mapLeaguesResponse(response, uri);
+    } catch (RestClientException ex) {
+      if (log.isErrorEnabled()) {
+        log.error("API-Football request failed - uri='{}' - error='{}'", uri, ex.getMessage(), ex);
       }
       throw new ExternalApiException("Error al consultar API-Football", ex);
     }
   }
 
-  private List<ApiFootballLeagueWrapper> mapLeaguesResponse(ApiFootballLeaguesEnvelope body) {
-    if (body.getResponse() == null) {
+  private List<ApiFootballLeagueWrapper> mapLeaguesResponse(
+      ResponseEntity<ApiFootballLeaguesEnvelope> response, URI uri) {
+    ApiFootballLeaguesEnvelope body = response.getBody();
+
+    if (body == null || body.getResponse() == null) {
       if (log.isWarnEnabled()) {
-        log.warn("API-Football returned response list as null");
+        log.warn("API-Football returned empty body or response list - uri='{}'", uri);
       }
       return List.of();
     }
 
     if (log.isInfoEnabled()) {
-      log.info("API-Football leagues retrieved successfully - size={}", body.getResponse().size());
+      log.info("API-Football leagues retrieved successfully - uri='{}' size={}", uri, body.getResponse().size());
     }
 
     return body.getResponse();
+  }
+
+  private URI buildLeaguesUri(String country, Integer season, Integer leagueId) {
+    UriComponentsBuilder builder =
+      UriComponentsBuilder.fromUriString(footballApiProperties.getBaseUrl()).path("/leagues");
+
+    if (StringUtils.hasText(country)) {
+      builder.queryParam("country", country);
+    }
+    if (season != null) {
+      builder.queryParam("season", season);
+    }
+    if (leagueId != null) {
+      builder.queryParam("id", leagueId);
+    }
+    return builder.build(true).toUri();
+  }
+
+  private HttpHeaders buildHeaders() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+    headers.set(InternalHeaders.API_SPORTS_KEY, footballApiProperties.getKey());
+    return headers;
   }
 }

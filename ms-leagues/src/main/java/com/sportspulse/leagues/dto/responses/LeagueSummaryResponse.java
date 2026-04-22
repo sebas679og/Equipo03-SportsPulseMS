@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LeagueSummaryResponse {
 
-  private Integer id;
-  private String name;
-  private String type;
-  private String country;
-  private String logo;
-  private Integer currentSeason;
-  private String startDate;
-  private String endDate;
+    private Integer id;
+    private String name;
+    private String type;
+    private String country;
+    private String logo;
+    private Integer currentSeason;
+    private String startDate;
+    private String endDate;
 }

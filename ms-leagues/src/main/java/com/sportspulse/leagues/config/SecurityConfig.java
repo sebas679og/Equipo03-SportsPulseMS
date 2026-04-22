@@ -2,8 +2,13 @@ package com.sportspulse.leagues.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sportspulse.leagues.config.constants.ApiPaths;
+import com.sportspulse.leagues.config.properties.JwtProperties;
 import com.sportspulse.leagues.dto.responses.LeagueErrorResponse;
-import com.sportspulse.leagues.utils.security.filter.AuthValidationFilter;
+import com.sportspulse.leagues.utils.security.filter.JwtAuthenticationFilter;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import java.time.Instant;
+import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,13 +22,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/** Security configuration for the application. */
+/** Security configuration for the application */
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final AuthValidationFilter authValidationFilter;
+  private final JwtProperties jwtProperties;
+  private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ObjectMapper objectMapper;
 
   @Bean
@@ -53,15 +59,20 @@ public class SecurityConfig {
                       response.setStatus(HttpStatus.UNAUTHORIZED.value());
                       response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                       LeagueErrorResponse body =
-                          LeagueErrorResponse.builder()
-                              .code(HttpStatus.UNAUTHORIZED.value())
-                              .name(HttpStatus.UNAUTHORIZED.getReasonPhrase())
-                              .description("Authentication required")
-                              .build();
+                          new LeagueErrorResponse(
+                              "UNAUTHORIZED",
+                              "Token JWT inválido o ausente",
+                              Instant.now());
                       response.getWriter().write(objectMapper.writeValueAsString(body));
                     }))
-        .addFilterBefore(authValidationFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
+  }
+
+  @Bean
+  public SecretKey signingKey() {
+    byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
+    return Keys.hmacShaKeyFor(keyBytes);
   }
 }

@@ -30,25 +30,26 @@ public class LeaguesController {
 
   private final LeaguesService leaguesService;
 
-  @Operation(
+    @Operation(
       summary = "List leagues",
-      description = "Returns available leagues. Optional filters: country and season.")
-  @ApiResponses({
+      description =
+        "Returns available leagues. Optional filters: country and season.")
+    @ApiResponses({
     @ApiResponse(
-        responseCode = "200",
-        description = "Leagues returned successfully",
-        content =
-            @Content(
-                mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = LeagueSummaryResponse.class))),
+      responseCode = "200",
+      description = "Leagues returned successfully",
+      content =
+        @Content(
+          mediaType = MediaType.APPLICATION_JSON_VALUE,
+          schema = @Schema(implementation = LeagueSummaryResponse.class))),
     @ApiResponse(
-        responseCode = "401",
-        description = "Unauthorized - Missing or invalid JWT token",
-        content =
-            @Content(
-                mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = LeagueErrorResponse.class)))
-  })
+      responseCode = "401",
+      description = "Unauthorized - Missing or invalid JWT token",
+      content =
+        @Content(
+          mediaType = MediaType.APPLICATION_JSON_VALUE,
+          schema = @Schema(implementation = LeagueErrorResponse.class)))
+    })
   @GetMapping
   public ResponseEntity<List<LeagueSummaryResponse>> getLeagues(
       @RequestParam(required = false) String country,
@@ -56,34 +57,33 @@ public class LeaguesController {
     return ResponseEntity.ok(leaguesService.getLeagues(country, season));
   }
 
-  @Operation(
+    @Operation(
       summary = "Get league details by ID",
       description =
-          "Returns detailed information for a league including available seasons and "
-              + "current season.")
-  @ApiResponses({
+        "Returns detailed information for a league including available seasons and current season.")
+    @ApiResponses({
     @ApiResponse(
-        responseCode = "200",
-        description = "League details returned successfully",
-        content =
-            @Content(
-                mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = LeagueDetailResponse.class))),
+      responseCode = "200",
+      description = "League details returned successfully",
+      content =
+        @Content(
+          mediaType = MediaType.APPLICATION_JSON_VALUE,
+          schema = @Schema(implementation = LeagueDetailResponse.class))),
     @ApiResponse(
-        responseCode = "401",
-        description = "Unauthorized - Missing or invalid JWT token",
-        content =
-            @Content(
-                mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = LeagueErrorResponse.class))),
+      responseCode = "401",
+      description = "Unauthorized - Missing or invalid JWT token",
+      content =
+        @Content(
+          mediaType = MediaType.APPLICATION_JSON_VALUE,
+          schema = @Schema(implementation = LeagueErrorResponse.class))),
     @ApiResponse(
-        responseCode = "404",
-        description = "League not found",
-        content =
-            @Content(
-                mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = LeagueErrorResponse.class)))
-  })
+      responseCode = "404",
+      description = "League not found",
+      content =
+        @Content(
+          mediaType = MediaType.APPLICATION_JSON_VALUE,
+          schema = @Schema(implementation = LeagueErrorResponse.class)))
+    })
   @GetMapping("/{leagueId}")
   public ResponseEntity<LeagueDetailResponse> getLeagueById(@PathVariable Integer leagueId) {
     return ResponseEntity.ok(leaguesService.getLeagueById(leagueId));

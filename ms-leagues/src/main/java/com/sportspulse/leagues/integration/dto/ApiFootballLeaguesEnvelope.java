@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ApiFootballLeaguesEnvelope {
 
-  private List<ApiFootballLeagueWrapper> response;
+	private List<ApiFootballLeagueWrapper> response;
 }

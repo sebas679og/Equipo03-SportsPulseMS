@@ -6,13 +6,14 @@ import org.springframework.stereotype.Component;
 import lombok.Getter;
 import lombok.Setter;
 
-/** External API-Football configuration. */
+/** JWT settings*/
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "sports-pulse.api")
-public class FootballApiProperties{
-    private String baseUrl;
-    private String key;
+@ConfigurationProperties(prefix = "app.jwt")
 
+public class JwtProperties{
+
+    private String secret;
+    private String tokenType;
 }

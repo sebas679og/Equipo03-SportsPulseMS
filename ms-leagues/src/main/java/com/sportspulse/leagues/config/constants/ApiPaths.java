@@ -1,6 +1,6 @@
 package com.sportspulse.leagues.config.constants;
 
-/** API route constants used by the leagues service. */
+ 
 public final class ApiPaths {
 
   private ApiPaths() {}
@@ -16,10 +16,12 @@ public final class ApiPaths {
   public static final class Docs {
     public static final String SWAGGER_UI = "/swagger-ui/**";
     public static final String API_DOCS = "/v3/api-docs/**";
+ 
   }
 
   /** Actuator endpoints for monitoring and health checks. */
   public static final class State {
     public static final String HEALTH = "/actuator/health";
+ 
   }
 }

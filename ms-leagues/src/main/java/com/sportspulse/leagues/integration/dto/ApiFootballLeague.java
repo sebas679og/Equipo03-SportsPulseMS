@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ApiFootballLeague {
 
-  private Integer id;
-  private String name;
-  private String type;
-  private String logo;
+	private Integer id;
+	private String name;
+	private String type;
+	private String logo;
 }
