@@ -6,6 +6,7 @@ import com.sportspulse.teams.constants.HttpHeaders;
 import com.sportspulse.teams.dto.internal.ValidateResponse;
 import com.sportspulse.teams.dto.response.ErrorResponse;
 import com.sportspulse.teams.security.writer.ErrorWriter;
+import feign.FeignException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
@@ -86,7 +88,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       SecurityContextHolder.getContext().setAuthentication(authentication);
       filterChain.doFilter(request, response);
 
-    } catch (Exception e) {
+    } catch (FeignException | HttpClientErrorException e) {
       errorWriter.write(
           response,
           HttpStatus.UNAUTHORIZED,
