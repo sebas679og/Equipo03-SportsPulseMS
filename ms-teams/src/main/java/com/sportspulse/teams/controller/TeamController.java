@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -172,7 +173,7 @@ public class TeamController {
   })
   @GetMapping(ApiPaths.Teams.TEAMS)
   public ResponseEntity<DataLeagueSeasonResponse> getTeamsByLeagueAndSeason(
-      @Valid @ModelAttribute LeagueAndSeasonRequest request) {
+      @ParameterObject @Valid @ModelAttribute LeagueAndSeasonRequest request) {
     return ResponseEntity.status(HttpStatus.OK)
         .body(teamService.getTeamLeagueSeasonByTeamId(request));
   }
