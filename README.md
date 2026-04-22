@@ -20,20 +20,20 @@ Each team must design, implement, document, and deploy the complete system in th
 
 ## 🛠️ Technologies & Tools
 
-| Category | Technology                                                  |
-|---|-------------------------------------------------------------|
-| **Language** | Java 21                                                     |
-| **Framework** | Spring Boot 3.5.x                                           |
-| **Security** | Spring Security + JWT                                       |
+| Category | Technology                                   |
+|---|----------------------------------------------|
+| **Language** | Java 21                                      |
+| **Framework** | Spring Boot 3.5.x                            |
+| **Security** | Spring Security + JWT                        |
 | **Database** | PostgreSQL (one DB per microservice, only where applicable) |
-| **External API** | API-Football via RapidAPI                                   |
-| **Inter-service Communication** | OpenFeign / RestTemplate                                    |
-| **Documentation** | Swagger UI / OpenAPI 3.1                                    |
-| **Testing** | JUnit 5 + Mockito + Postman                                 |
-| **Mappers** | MapStruct                                                   |
-| **Utilities** | Lombok                                                      |
-| **Containerization** | Docker + Docker Compose                                     |
-| **Build Tool** | Maven or Gradle                                             |
+| **External API** | API-Football                                 |
+| **Inter-service Communication** | Webclient                                    |
+| **Documentation** | Swagger UI / OpenAPI 3.1                     |
+| **Testing** | JUnit 5 + Mockito + Postman                  |
+| **Mappers** | MapStruct                                    |
+| **Utilities** | Lombok                                       |
+| **Containerization** | Docker + Docker Compose                      |
+| **Build Tool** | Maven or Gradle                              |
 
 ---
 
