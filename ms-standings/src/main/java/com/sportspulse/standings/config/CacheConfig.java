@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class CacheConfig {
 
-  private static final String STANDINGS_CACHE = "standings";
+  private static final String STANDINGS_CACHE = "standingsLeagueAndSeason";
 
   private final TeamsCacheProperties properties;
 

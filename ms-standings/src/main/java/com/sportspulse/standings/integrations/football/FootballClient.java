@@ -1,5 +1,7 @@
 package com.sportspulse.standings.integrations.football;
 
+import com.sportspulse.standings.integrations.football.dto.StandingsResponse;
+
 /**
  * FootballClient Interface representing a client for interacting with external football-related
  * APIs.
@@ -8,4 +10,7 @@ package com.sportspulse.standings.integrations.football;
  * and standings. Implementations of this interface are responsible for handling API communication
  * and data mapping.
  */
-public interface FootballClient {}
+public interface FootballClient {
+
+  StandingsResponse getStandingsForLeagueAndSeason(int leagueId, int season);
+}
