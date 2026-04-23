@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestClientConfig {
 
+  /** Builds a RestTemplate with sensible timeouts for external API calls. */
   @Bean
   public RestTemplate restTemplate(RestTemplateBuilder builder) {
     return builder

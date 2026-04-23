@@ -59,7 +59,8 @@ public class LeaguesController {
   @Operation(
       summary = "Get league details by ID",
       description =
-          "Returns detailed information for a league including available seasons and current season.")
+          "Returns detailed information for a league including available seasons and "
+              + "current season.")
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",

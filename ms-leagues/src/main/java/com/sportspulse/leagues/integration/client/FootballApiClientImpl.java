@@ -38,7 +38,8 @@ public class FootballApiClientImpl implements FootballApiClient {
     try {
       if (log.isInfoEnabled()) {
         log.info(
-            "Calling API-Football leagues endpoint - uri='{}' country='{}' season='{}' leagueId='{}'",
+            "Calling API-Football leagues endpoint - uri='{}' country='{}' season='{}' "
+                + "leagueId='{}'",
             uri,
             country,
             season,
@@ -51,7 +52,8 @@ public class FootballApiClientImpl implements FootballApiClient {
       return mapLeaguesResponse(response, uri);
     } catch (RestClientException ex) {
       if (log.isErrorEnabled()) {
-        log.error("API-Football request failed - uri='{}' - error='{}'", uri, ex.getMessage(), ex);
+        log.error(
+            "API-Football request failed - uri='{}' - error='{}'", uri, ex.getMessage(), ex);
       }
       throw new ExternalApiException("Error al consultar API-Football", ex);
     }

@@ -17,6 +17,7 @@ public class CacheConfig {
   public static final String LEAGUES_BY_FILTERS_CACHE = "leaguesByFilters";
   public static final String LEAGUE_BY_ID_CACHE = "leagueById";
 
+  /** Creates the cache manager with configured caches and eviction policy. */
   @Bean
   public CacheManager cacheManager() {
     CaffeineCacheManager manager = new CaffeineCacheManager();
