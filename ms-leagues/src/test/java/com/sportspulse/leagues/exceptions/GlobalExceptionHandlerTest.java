@@ -2,9 +2,9 @@ package com.sportspulse.leagues.exceptions;
 
 import com.sportspulse.leagues.dto.responses.LeagueErrorResponse;
 import io.jsonwebtoken.JwtException;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.assertj.core.api.Assertions;
 import org.mockito.Mockito;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,8 @@ class GlobalExceptionHandlerTest {
   @DisplayName("handleExternalApiError should return 502")
   void handleExternalApiError_shouldReturnBadGateway() {
     ResponseEntity<LeagueErrorResponse> response =
-        handler.handleExternalApiError(new ExternalApiException("fail", new RuntimeException("cause")));
+        handler.handleExternalApiError(
+            new ExternalApiException("fail", new RuntimeException("cause")));
 
     Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_GATEWAY);
     Assertions.assertThat(response.getBody()).isNotNull();
@@ -53,7 +54,8 @@ class GlobalExceptionHandlerTest {
   @DisplayName("handleMissingHeader should return 401")
   void handleMissingHeader_shouldReturnUnauthorized() {
     MethodParameter parameter = Mockito.mock(MethodParameter.class);
-    MissingRequestHeaderException ex = new MissingRequestHeaderException("Authorization", parameter);
+    MissingRequestHeaderException ex =
+        new MissingRequestHeaderException("Authorization", parameter);
 
     ResponseEntity<LeagueErrorResponse> response = handler.handleMissingHeader(ex);
 

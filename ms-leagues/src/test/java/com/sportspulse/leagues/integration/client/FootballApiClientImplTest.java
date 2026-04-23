@@ -10,8 +10,8 @@ import static org.mockito.Mockito.when;
 import com.sportspulse.leagues.LeaguesTestDataProvider;
 import com.sportspulse.leagues.config.properties.FootballApiProperties;
 import com.sportspulse.leagues.exceptions.ExternalApiException;
-import com.sportspulse.leagues.integration.dto.ApiFootballLeaguesEnvelope;
 import com.sportspulse.leagues.integration.dto.ApiFootballLeagueWrapper;
+import com.sportspulse.leagues.integration.dto.ApiFootballLeaguesEnvelope;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -45,14 +45,22 @@ class FootballApiClientImplTest {
 
     when(footballApiProperties.getBaseUrl()).thenReturn("https://v3.football.api-sports.io");
     when(footballApiProperties.getKey()).thenReturn("test-api-key");
-    when(restTemplate.exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class), eq(ApiFootballLeaguesEnvelope.class)))
+    when(restTemplate.exchange(
+            any(URI.class),
+            eq(HttpMethod.GET),
+            any(HttpEntity.class),
+            eq(ApiFootballLeaguesEnvelope.class)))
         .thenReturn(ResponseEntity.ok(envelope));
 
     List<ApiFootballLeagueWrapper> response = footballApiClient.getLeagues("Spain", 2024, 140);
 
     ArgumentCaptor<URI> uriCaptor = ArgumentCaptor.forClass(URI.class);
     verify(restTemplate)
-        .exchange(uriCaptor.capture(), eq(HttpMethod.GET), any(HttpEntity.class), eq(ApiFootballLeaguesEnvelope.class));
+        .exchange(
+            uriCaptor.capture(),
+            eq(HttpMethod.GET),
+            any(HttpEntity.class),
+            eq(ApiFootballLeaguesEnvelope.class));
 
     assertThat(uriCaptor.getValue().toString())
         .contains("/leagues")
@@ -68,7 +76,11 @@ class FootballApiClientImplTest {
   void getLeagues_shouldThrowExternalApiException() {
     when(footballApiProperties.getBaseUrl()).thenReturn("https://v3.football.api-sports.io");
     when(footballApiProperties.getKey()).thenReturn("test-api-key");
-    when(restTemplate.exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class), eq(ApiFootballLeaguesEnvelope.class)))
+    when(restTemplate.exchange(
+            any(URI.class),
+            eq(HttpMethod.GET),
+            any(HttpEntity.class),
+            eq(ApiFootballLeaguesEnvelope.class)))
         .thenThrow(new RestClientException("boom"));
 
     assertThatThrownBy(() -> footballApiClient.getLeagues("Spain", 2024, null))

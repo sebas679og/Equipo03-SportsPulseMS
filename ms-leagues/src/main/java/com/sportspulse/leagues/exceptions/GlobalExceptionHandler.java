@@ -25,7 +25,10 @@ public class GlobalExceptionHandler {
     return badGateway("EXTERNAL_API_ERROR", "Error al consultar API-Football");
   }
 
-  @ExceptionHandler({MethodArgumentTypeMismatchException.class, MethodArgumentNotValidException.class})
+  @ExceptionHandler({
+    MethodArgumentTypeMismatchException.class,
+    MethodArgumentNotValidException.class
+  })
   public ResponseEntity<LeagueErrorResponse> handleBadRequest(Exception ex) {
     return badRequest("BAD_REQUEST", "Parámetros de solicitud inválidos");
   }

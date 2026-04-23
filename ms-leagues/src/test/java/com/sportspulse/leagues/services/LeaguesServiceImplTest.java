@@ -38,7 +38,8 @@ class LeaguesServiceImplTest {
     assertThat(response).hasSize(1);
     assertThat(response.getFirst().getId()).isEqualTo(LeaguesTestDataProvider.LEAGUE_ID);
     assertThat(response.getFirst().getCountry()).isEqualTo(LeaguesTestDataProvider.COUNTRY);
-    assertThat(response.getFirst().getCurrentSeason()).isEqualTo(LeaguesTestDataProvider.CURRENT_SEASON);
+    assertThat(response.getFirst().getCurrentSeason())
+        .isEqualTo(LeaguesTestDataProvider.CURRENT_SEASON);
     verify(footballApiClient).getLeagues("Spain", 2024, null);
   }
 

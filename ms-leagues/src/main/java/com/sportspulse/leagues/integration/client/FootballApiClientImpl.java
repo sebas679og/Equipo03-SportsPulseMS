@@ -30,7 +30,8 @@ public class FootballApiClientImpl implements FootballApiClient {
   private final FootballApiProperties footballApiProperties;
 
   @Override
-  public List<ApiFootballLeagueWrapper> getLeagues(String country, Integer season, Integer leagueId) {
+  public List<ApiFootballLeagueWrapper> getLeagues(
+      String country, Integer season, Integer leagueId) {
     URI uri = buildLeaguesUri(country, season, leagueId);
     HttpEntity<Void> request = new HttpEntity<>(buildHeaders());
 
@@ -68,7 +69,10 @@ public class FootballApiClientImpl implements FootballApiClient {
     }
 
     if (log.isInfoEnabled()) {
-      log.info("API-Football leagues retrieved successfully - uri='{}' size={}", uri, body.getResponse().size());
+      log.info(
+          "API-Football leagues retrieved successfully - uri='{}' size={}",
+          uri,
+          body.getResponse().size());
     }
 
     return body.getResponse();
@@ -76,7 +80,7 @@ public class FootballApiClientImpl implements FootballApiClient {
 
   private URI buildLeaguesUri(String country, Integer season, Integer leagueId) {
     UriComponentsBuilder builder =
-      UriComponentsBuilder.fromUriString(footballApiProperties.getBaseUrl()).path("/leagues");
+        UriComponentsBuilder.fromUriString(footballApiProperties.getBaseUrl()).path("/leagues");
 
     if (StringUtils.hasText(country)) {
       builder.queryParam("country", country);

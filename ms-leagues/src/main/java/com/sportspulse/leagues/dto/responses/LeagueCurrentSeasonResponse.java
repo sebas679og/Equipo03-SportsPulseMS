@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LeagueCurrentSeasonResponse {
 
-    private Integer year;
-    private String startDate;
-    private String endDate;
-    private Boolean current;
+  private Integer year;
+  private String startDate;
+  private String endDate;
+  private Boolean current;
 }
