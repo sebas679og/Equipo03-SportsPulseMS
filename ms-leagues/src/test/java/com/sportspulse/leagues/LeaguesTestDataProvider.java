@@ -19,7 +19,6 @@ public final class LeaguesTestDataProvider {
 
   private LeaguesTestDataProvider() {}
 
-  /** Builds a representative API-Football wrapper payload used by service tests. */
   public static ApiFootballLeagueWrapper apiLeagueWrapper() {
     ApiFootballLeague league =
         new ApiFootballLeague(LEAGUE_ID, LEAGUE_NAME, "League", "https://logo.test/140.png");
@@ -32,7 +31,6 @@ public final class LeaguesTestDataProvider {
     return new ApiFootballLeagueWrapper(league, country, seasons);
   }
 
-  /** Builds a summary response fixture used by controller and service tests. */
   public static LeagueSummaryResponse summaryResponse() {
     return new LeagueSummaryResponse(
         LEAGUE_ID,
@@ -45,7 +43,6 @@ public final class LeaguesTestDataProvider {
         "2025-05-25");
   }
 
-  /** Builds a detail response fixture with seasons and current season metadata. */
   public static LeagueDetailResponse detailResponse() {
     return new LeagueDetailResponse(
         LEAGUE_ID,

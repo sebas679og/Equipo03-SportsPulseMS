@@ -31,8 +31,7 @@ class LeaguesControllerTest {
     List<LeagueSummaryResponse> expected = List.of(LeaguesTestDataProvider.summaryResponse());
     when(leaguesService.getLeagues("Spain", 2024)).thenReturn(expected);
 
-    ResponseEntity<List<LeagueSummaryResponse>> response =
-        leaguesController.getLeagues("Spain", 2024);
+    ResponseEntity<List<LeagueSummaryResponse>> response = leaguesController.getLeagues("Spain", 2024);
 
     assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
     assertThat(response.getBody()).isEqualTo(expected);
