@@ -6,7 +6,6 @@ import com.sportspulse.teams.exceptions.CustomBadGatewayException;
 import com.sportspulse.teams.exceptions.CustomServiceUnavailableException;
 import com.sportspulse.teams.exceptions.CustomUnauthorizedException;
 import com.sportspulse.teams.integration.msauth.dto.UserResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
@@ -21,11 +20,13 @@ import reactor.core.publisher.Mono;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class AuthClientImpl implements AuthClient {
 
-  @Qualifier("msAuthWebClient")
   private final WebClient authWebClient;
+
+  public AuthClientImpl(@Qualifier("msAuthWebClient") WebClient authWebClient) {
+    this.authWebClient = authWebClient;
+  }
 
   @Override
   public UserResponse isTokenValid(String token) {
@@ -37,10 +38,10 @@ public class AuthClientImpl implements AuthClient {
                 HttpHeaders.AUTHORIZATION,
                 String.join(" ", InternalHeaders.MsAuth.TYPE_TOKEN, token));
 
-    return executeRequest(request, UserResponse.class);
+    return executeRequest(request);
   }
 
-  private <T> T executeRequest(WebClient.RequestHeadersSpec<?> request, Class<T> responseType) {
+  private UserResponse executeRequest(WebClient.RequestHeadersSpec<?> request) {
     return request
         .retrieve()
         .onStatus(
@@ -90,7 +91,7 @@ public class AuthClientImpl implements AuthClient {
                               new CustomServiceUnavailableException(
                                   "Session validation service is not available at this time"));
                         }))
-        .bodyToMono(responseType)
+        .bodyToMono(UserResponse.class)
         .blockOptional()
         .orElseThrow(
             () -> {
