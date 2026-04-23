@@ -2,7 +2,6 @@ package com.sportspulse.standings.integrations.football;
 
 import com.sportspulse.standings.exceptions.CustomServiceUnavailableException;
 import com.sportspulse.standings.integrations.football.dto.ApiStandingsResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,11 +18,13 @@ import reactor.core.publisher.Mono;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class FootballClientImpl implements FootballClient {
 
-  @Qualifier("apiFootballWebClient")
   private final WebClient apiFootballWebClient;
+
+  public FootballClientImpl(@Qualifier("apiFootballWebClient") WebClient apiFootballWebClient) {
+    this.apiFootballWebClient = apiFootballWebClient;
+  }
 
   @Override
   @Cacheable(value = "standingsLeagueAndSeason", key = "#leagueId + '-' + #season")

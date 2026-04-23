@@ -1,12 +1,11 @@
-package com.sportspulse.standings.integrations.msauth.dto;
+package com.sportspulse.standings.integrations.msauth;
 
 import com.sportspulse.standings.config.constants.ApiPaths;
 import com.sportspulse.standings.config.constants.InternalHeaders;
 import com.sportspulse.standings.exceptions.CustomBadGatewayException;
 import com.sportspulse.standings.exceptions.CustomServiceUnavailableException;
 import com.sportspulse.standings.exceptions.CustomUnauthorizedException;
-import com.sportspulse.standings.integrations.msauth.AuthClient;
-import lombok.RequiredArgsConstructor;
+import com.sportspulse.standings.integrations.msauth.dto.UserResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
@@ -21,11 +20,13 @@ import reactor.core.publisher.Mono;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class AuthClientImpl implements AuthClient {
 
-  @Qualifier("msAuthWebClient")
   private final WebClient authWebClient;
+
+  public AuthClientImpl(@Qualifier("msAuthWebClient") WebClient authWebClient) {
+    this.authWebClient = authWebClient;
+  }
 
   @Override
   public UserResponse isTokenValid(String token) {
