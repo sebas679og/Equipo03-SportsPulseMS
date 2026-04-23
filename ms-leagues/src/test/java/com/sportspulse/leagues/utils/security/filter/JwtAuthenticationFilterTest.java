@@ -70,7 +70,7 @@ class JwtAuthenticationFilterTest {
   @Test
   @DisplayName("doFilterInternal should authenticate and continue chain for valid token")
   void doFilterInternal_shouldAuthenticateWhenTokenIsValid() throws Exception {
-    JwtAuthenticationFilter filter =
+    final JwtAuthenticationFilter filter =
         new JwtAuthenticationFilter(jwtTokenService, jwtProperties, testObjectMapper());
 
     when(jwtProperties.getTokenType()).thenReturn("Bearer");
