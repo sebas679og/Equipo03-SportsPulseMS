@@ -55,14 +55,14 @@ class GatewayRoutesConfigTest {
   }
 
   @Test
-  @DisplayName("routes() registers exactly two routes: ms-auth-login and ms-auth")
+  @DisplayName("routes() registers exactly two routes: ms-auth-login, ms-auth and ms-teams")
   void routes_registersBothRouteIds() {
     List<String> registeredIds = new ArrayList<>();
     RouteLocatorBuilder builder = builderCapturingRouteIds(registeredIds);
 
     gatewayRoutesConfig.routes(builder);
 
-    assertThat(registeredIds).containsExactly("ms-auth-login", "ms-auth");
+    assertThat(registeredIds).containsExactly("ms-auth-login", "ms-auth", "ms-teams");
   }
 
   @Test

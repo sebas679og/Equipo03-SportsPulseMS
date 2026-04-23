@@ -9,6 +9,30 @@
   },
   "item": [
     {
+      "name": "ms-gateway  — Gateway Service",
+      "item": [
+        {
+          "name": "Get Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_MS_GATEWAY}}/health",
+              "host": [
+                "{{URL_MS_GATEWAY}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "# ❤️ System Health Check\n\n## 📌 Endpoint\n\n**GET**  \n`/health`\n\n---\n\n## 📖 Description\n\nReturns the **operational status of the API Gateway and all downstream microservices**.\n\nThis endpoint aggregates the health status of each service by querying their respective **Actuator endpoints**, providing a centralized view of system availability.\n\n- `gateway` reflects the status of the API Gateway itself\n    \n- `dependencies` reflects the overall status of all downstream services\n    \n- `services` contains the individual status of each microservice\n    \n\nIf all services are operational, `dependencies` will return `UP`. Otherwise, it will return `DOWN`.\n\n---\n\n# 🔐 Access\n\n**Public endpoint**  \nNo authentication required.\n\n---\n\n# 📥 Request\n\nNo request parameters are required.\n\n---\n\n### Example Request\n\n`GET /health`\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nThe system health status was successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"gateway\": \"UP\",\n  \"timestamp\": \"2025-01-15T10:30:000Z\",\n  \"dependencies\": \"UP\",\n  \"services\": {\n    \"ms-auth\": \"UP\",\n    \"ms-leagues\": \"UP\",\n    \"ms-teams\": \"UP\",\n    \"ms-fixtures\": \"UP\",\n    \"ms-standings\": \"UP\",\n    \"ms-notifications\": \"UP\",\n    \"ms-dashboard\": \"UP\"\n  }\n}\n\n ```\n\n---\n\n## ⚠️ Possible Values\n\n| Field | Description |\n| --- | --- |\n| gateway | Status of the API Gateway (`UP` / `DOWN`) |\n| dependencies | Aggregated status of all services (`UP` / `DOWN`) |\n| services | Individual status of each microservice |\n\n---\n\n## ❌ 500 Internal Server Error\n\nAn unexpected error occurred while retrieving the system health status.\n\nPossible Causes:\n\n- Failure while calling one or more downstream services\n    \n- Timeout or network issues\n    \n- Internal processing error in the gateway\n    \n\n---\n\n💡 **Tip (architecture level 🔥):**  \nThis endpoint is a key component for **observability and monitoring** in microservices architectures:\n\n- Enables quick detection of failing services\n    \n- Centralizes health checks in the API Gateway\n    \n- Can be integrated with monitoring tools (e.g., Prometheus, Grafana, Kubernetes probes)"
+          },
+          "response": []
+        }
+      ],
+      "description": "The `ms-gateway` is the single entry point for the entire SportPulse platform. It acts as a reverse proxy, redirecting every incoming request to the appropriate downstream microservice. It also enforces global rate limiting to protect the system from abuse.\n"
+    },
+    {
       "name": "ms-auth — Authentication Service",
       "item": [
         {
@@ -79,7 +103,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{JWT_TOKEN}}",
+                "value": "Bearer {{jwt}}",
                 "description": "Token to validate",
                 "type": "text"
               },
@@ -111,6 +135,88 @@
         }
       ],
       "description": "**Port:** `8081`  \n**Database:** PostgreSQL (`auth_db`)\n\nThe `ms-auth` service manages user registration and authentication. It is responsible for issuing JWT tokens that all other domain microservices must validate on every protected request.\n\n---"
+    },
+    {
+      "name": "ms-teams  — Team Service",
+      "item": [
+        {
+          "name": "Team By Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Internal-API-Key",
+                "value": "{{API_KEY}}",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "{{URL_MS_TEAMS}}/api/teams/{{teamId}}",
+              "host": [
+                "{{URL_MS_TEAMS}}"
+              ],
+              "path": [
+                "api",
+                "teams",
+                "{{teamId}}"
+              ]
+            },
+            "description": "# ⚽ Get Team Details\n\n## 📌 Endpoint\n\n**GET**  \n`/api/teams/{teamId}`\n\n---\n\n## 📖 Description\n\nRetrieves the **complete details of a specific team** by its ID.\n\nThis endpoint is used both by:\n\n- **Authenticated users** (external access)\n    \n- **Internal microservices** (`ms-standings`, `ms-fixtures`, `ms-dashboard`) to enrich their data with team information\n    \n\nThe response includes general team data along with **stadium details**.\n\n---\n\n# 🔐 Access\n\nThis endpoint supports **two authentication mechanisms** (only one is required per request):\n\n### External Access\n\n- **JWT Authentication**\n    \n- Authorization: Bearer {{jwt_token}}\n    \n- Role required: `USER`\n    \n\n### Internal Access\n\n- **API Key Authentication**\n    \n- X-Internal-API-Key: {{internal_key}}\n    \n\n⚠️ Only **one authentication method** must be used per request.\n\n---\n\n# 📥 Request\n\n## Path Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| teamId | Integer | ✅ Yes | API-Football team ID |\n\n---\n\n### Example Request (JWT)\n\n``` http\nGET /api/teams/529\nAuthorization: Bearer {{jwt_token}}\n\n ```\n\n---\n\n### Example Request (Internal API Key)\n\n``` http\nGET /api/teams/529\nX-Internal-API-Key: {{internal_key}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nThe team details were successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"id\": 529,\n  \"name\": \"FC Barcelona\",\n  \"country\": \"Spain\",\n  \"logo\": \"https://media.api-sports.io/football/teams/529.png\",\n  \"founded\": 1899,\n  \"national\": false,\n  \"stadium\": {\n    \"name\": \"Camp Nou\",\n    \"address\": \"C/ d'Arístides Maillol, s/n\",\n    \"city\": \"Barcelona\",\n    \"capacity\": 99354,\n    \"surface\": \"grass\"\n  }\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nNo team was found with the provided ID.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"code\": 404,\n  \"name\": \"Not Found\",\n  \"description\": \"No team found with the provided ID\",\n  \"timestamp\": \"2025-01-15T10:30:00Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\nPossible Causes:\n\n- Missing JWT token\n    \n- Invalid or expired JWT\n    \n- Missing API Key for internal access\n    \n\n---\n\n## ⛔ 403 Forbidden\n\nThe request is authenticated but not authorized.\n\nPossible Causes:\n\n- Invalid role (`USER` required for JWT access)\n    \n- Invalid internal API key\n    \n- Attempt to use both authentication methods simultaneously"
+          },
+          "response": []
+        },
+        {
+          "name": "Teams By Season and Leagues",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_MS_TEAMS}}/api/teams?league=&season=",
+              "host": [
+                "{{URL_MS_TEAMS}}"
+              ],
+              "path": [
+                "api",
+                "teams"
+              ],
+              "query": [
+                {
+                  "key": "league",
+                  "value": ""
+                },
+                {
+                  "key": "season",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "# ⚽ Get Teams by League and Season\n\n## 📌 Endpoint\n\n**GET**  \n`/api/teams?league=&season=`\n\n---\n\n## 📖 Description\n\nRetrieves a **list of football teams** filtered by **league and season**.\n\nBoth query parameters are **required**. The endpoint returns basic team information along with simplified stadium details.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n**Allowed roles:**\n\n- `USER`\n    \n\n> \n\n⚠️ Only **JWT authentication** is supported. No internal API keys are allowed.\n\n \n  \n\n---\n\n# 📥 Request\n\n## Query Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| league | Integer | ✅ Yes | League ID (e.g. `140` for La Liga) |\n| season | Integer | ✅ Yes | Season year (e.g. `2024`) |\n\n---\n\n### Example Request\n\n``` http\nGET /api/teams?league=140&season=2024\nAuthorization: Bearer {{jwt_token}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nThe list of teams was successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n[\n  {\n    \"id\": 529,\n    \"name\": \"FC Barcelona\",\n    \"country\": \"Spain\",\n    \"logo\": \"https://media.api-sports.io/football/teams/529.png\",\n    \"founded\": 1899,\n    \"stadium\": {\n      \"name\": \"Camp Nou\",\n      \"city\": \"Barcelona\",\n      \"capacity\": 99354\n    }\n  },\n  {\n    \"id\": 541,\n    \"name\": \"Real Madrid\",\n    \"country\": \"Spain\",\n    \"logo\": \"https://media.api-sports.io/football/teams/541.png\",\n    \"founded\": 1902,\n    \"stadium\": {\n      \"name\": \"Estadio Santiago Bernabéu\",\n      \"city\": \"Madrid\",\n      \"capacity\": 81044\n    }\n  }\n]\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nNo data was found for the given league and season.\n\nPossible Causes:\n\n- The `league` ID does not exist\n    \n- The `season` is not available for the given league\n    \n- No teams are registered for the provided filters\n    \n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\nPossible Causes:\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⛔ 403 Forbidden\n\nThe authenticated user does not have permission to access this resource.\n\nPossible Causes:\n\n- User does not have the required role (`USER`)\n    \n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid query parameters.\n\nPossible Causes:\n\n- Missing required parameters (`league` or `season`)\n    \n- Invalid parameter types (non-integer values)\n    \n- Malformed query string"
+          },
+          "response": []
+        }
+      ],
+      "description": "The `ms-teams` service manages football team information including team name, crest, country of origin, founding year, and stadium details. It is a **core dependency** for several other services — `ms-fixtures`, `ms-standings`, and `ms-dashboard` all call this service to enrich their own responses with team data.\n"
     }
   ],
   "event": [
@@ -143,14 +249,26 @@
       "value": "http://localhost:8081"
     },
     {
-      "key": "JWT_TOKEN",
+      "key": "jwt",
       "value": "",
       "description": "Token to validate"
     },
     {
       "key": "API_KEY",
-      "value": "b7dc94658f191e32a5f0228b6776f313e34dc4ca048961ce5d408f9553cb0c11",
+      "value": "",
       "description": "Communication key between services"
+    },
+    {
+      "key": "URL_MS_TEAMS",
+      "value": "http://localhost:8083"
+    },
+    {
+      "key": "URL_MS_GATEWAY",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "teamId",
+      "value": ""
     }
   ]
 }
