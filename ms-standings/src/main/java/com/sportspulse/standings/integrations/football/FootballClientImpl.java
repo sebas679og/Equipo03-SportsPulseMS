@@ -1,7 +1,7 @@
 package com.sportspulse.standings.integrations.football;
 
 import com.sportspulse.standings.exceptions.CustomServiceUnavailableException;
-import com.sportspulse.standings.integrations.football.dto.StandingsResponse;
+import com.sportspulse.standings.integrations.football.dto.ApiStandingsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,7 +27,7 @@ public class FootballClientImpl implements FootballClient {
 
   @Override
   @Cacheable(value = "standingsLeagueAndSeason", key = "#leagueId + '-' + #season")
-  public StandingsResponse getStandingsForLeagueAndSeason(int leagueId, int season) {
+  public ApiStandingsResponse getStandingsForLeagueAndSeason(int leagueId, int season) {
     WebClient.RequestHeadersSpec<?> request =
         apiFootballWebClient
             .get()
@@ -41,7 +41,7 @@ public class FootballClientImpl implements FootballClient {
     return executeRequest(request, leagueId + "-" + season);
   }
 
-  private StandingsResponse executeRequest(
+  private ApiStandingsResponse executeRequest(
       WebClient.RequestHeadersSpec<?> request, String standingKey) {
     return request
         .retrieve()
@@ -81,7 +81,7 @@ public class FootballClientImpl implements FootballClient {
                               new CustomServiceUnavailableException(
                                   "Api-Football is not currently available, please try again"));
                         }))
-        .bodyToMono(StandingsResponse.class)
+        .bodyToMono(ApiStandingsResponse.class)
         .blockOptional()
         .orElseThrow(
             () -> {

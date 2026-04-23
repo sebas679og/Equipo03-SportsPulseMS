@@ -1,6 +1,6 @@
 package com.sportspulse.standings.integrations.football;
 
-import com.sportspulse.standings.integrations.football.dto.StandingsResponse;
+import com.sportspulse.standings.integrations.football.dto.ApiStandingsResponse;
 
 /**
  * FootballClient Interface representing a client for interacting with external football-related
@@ -12,5 +12,5 @@ import com.sportspulse.standings.integrations.football.dto.StandingsResponse;
  */
 public interface FootballClient {
 
-  StandingsResponse getStandingsForLeagueAndSeason(int leagueId, int season);
+  ApiStandingsResponse getStandingsForLeagueAndSeason(int leagueId, int season);
 }
