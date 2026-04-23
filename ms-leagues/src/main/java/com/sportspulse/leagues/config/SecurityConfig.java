@@ -2,14 +2,11 @@ package com.sportspulse.leagues.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sportspulse.leagues.config.constants.ApiPaths;
-import com.sportspulse.leagues.config.properties.JwtProperties;
 import com.sportspulse.leagues.dto.responses.LeagueErrorResponse;
 import com.sportspulse.leagues.utils.security.filter.JwtAuthenticationFilter;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import java.time.Instant;
-import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -28,7 +25,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final JwtProperties jwtProperties;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ObjectMapper objectMapper;
 
@@ -68,11 +64,5 @@ public class SecurityConfig {
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
-  }
-
-  @Bean
-  public SecretKey signingKey() {
-    byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
-    return Keys.hmacShaKeyFor(keyBytes);
   }
 }
