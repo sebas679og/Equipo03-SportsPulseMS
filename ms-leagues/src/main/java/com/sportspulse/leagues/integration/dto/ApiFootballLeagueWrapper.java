@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ApiFootballLeagueWrapper {
 
-    private ApiFootballLeague league;
-    private ApiFootballCountry country;
-    private List<ApiFootballSeason> seasons;
+  private ApiFootballLeague league;
+  private ApiFootballCountry country;
+  private List<ApiFootballSeason> seasons;
 }

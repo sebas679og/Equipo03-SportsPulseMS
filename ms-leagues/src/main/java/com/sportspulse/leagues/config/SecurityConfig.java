@@ -6,7 +6,6 @@ import com.sportspulse.leagues.dto.responses.LeagueErrorResponse;
 import com.sportspulse.leagues.utils.security.filter.JwtAuthenticationFilter;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -56,9 +55,7 @@ public class SecurityConfig {
                       response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                       LeagueErrorResponse body =
                           new LeagueErrorResponse(
-                              "UNAUTHORIZED",
-                              "Token JWT inválido o ausente",
-                              Instant.now());
+                              "UNAUTHORIZED", "Token JWT inválido o ausente", Instant.now());
                       response.getWriter().write(objectMapper.writeValueAsString(body));
                     }))
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

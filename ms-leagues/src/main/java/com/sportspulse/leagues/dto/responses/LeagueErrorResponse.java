@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LeagueErrorResponse {
 
-	private String error;
-	private String message;
-	private Instant timestamp;
+  private String error;
+  private String message;
+  private Instant timestamp;
 }

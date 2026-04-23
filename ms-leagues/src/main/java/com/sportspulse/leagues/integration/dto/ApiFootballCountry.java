@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ApiFootballCountry {
 
-	private String name;
+  private String name;
 }
