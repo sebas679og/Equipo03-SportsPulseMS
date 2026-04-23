@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ApiFootballSeason {
 
-	private Integer year;
-	private String start;
-	private String end;
-	private Boolean current;
+  private Integer year;
+  private String start;
+  private String end;
+  private Boolean current;
 }

@@ -15,7 +15,8 @@ import org.junit.jupiter.api.Test;
 class JwtTokenServiceTest {
 
   private static final SecretKey SIGNING_KEY =
-      Keys.hmacShaKeyFor("this-is-a-test-secret-key-with-enough-length-1234".getBytes(StandardCharsets.UTF_8));
+      Keys.hmacShaKeyFor(
+          "this-is-a-test-secret-key-with-enough-length-1234".getBytes(StandardCharsets.UTF_8));
 
   private final JwtTokenService jwtTokenService = new JwtTokenService(SIGNING_KEY);
 
@@ -23,7 +24,11 @@ class JwtTokenServiceTest {
   @DisplayName("validateAndExtract should return claims for a valid token")
   void validateAndExtract_shouldReturnClaims() {
     String token =
-        Jwts.builder().claim("username", "ana").claim("role", "USER").signWith(SIGNING_KEY).compact();
+        Jwts.builder()
+            .claim("username", "ana")
+            .claim("role", "USER")
+            .signWith(SIGNING_KEY)
+            .compact();
 
     Claims claims = jwtTokenService.validateAndExtract(token);
 

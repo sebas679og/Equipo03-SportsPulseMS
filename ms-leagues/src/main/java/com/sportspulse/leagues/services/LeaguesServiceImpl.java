@@ -41,7 +41,7 @@ public class LeaguesServiceImpl implements LeaguesService {
   @Cacheable(value = CacheConfig.LEAGUE_BY_ID_CACHE, key = "#leagueId")
   public LeagueDetailResponse getLeagueById(Integer leagueId) {
     return footballApiClient.getLeagues(null, null, leagueId).stream()
-      .filter(item -> Objects.equals(item.getLeague().getId(), leagueId))
+        .filter(item -> Objects.equals(item.getLeague().getId(), leagueId))
         .findFirst()
         .map(this::toDetailResponse)
         .orElseThrow(LeagueNotFoundException::new);
@@ -50,20 +50,20 @@ public class LeaguesServiceImpl implements LeaguesService {
   private LeagueSummaryResponse toSummaryResponse(ApiFootballLeagueWrapper item, Integer season) {
     ApiFootballSeason targetSeason = resolveSeason(item.getSeasons(), season);
     return new LeagueSummaryResponse(
-      item.getLeague().getId(),
-      item.getLeague().getName(),
-      item.getLeague().getType(),
-      item.getCountry() != null ? item.getCountry().getName() : null,
-      item.getLeague().getLogo(),
-      targetSeason != null ? targetSeason.getYear() : null,
-      targetSeason != null ? targetSeason.getStart() : null,
-      targetSeason != null ? targetSeason.getEnd() : null);
+        item.getLeague().getId(),
+        item.getLeague().getName(),
+        item.getLeague().getType(),
+        item.getCountry() != null ? item.getCountry().getName() : null,
+        item.getLeague().getLogo(),
+        targetSeason != null ? targetSeason.getYear() : null,
+        targetSeason != null ? targetSeason.getStart() : null,
+        targetSeason != null ? targetSeason.getEnd() : null);
   }
 
   private LeagueDetailResponse toDetailResponse(ApiFootballLeagueWrapper item) {
     List<Integer> seasons =
-      Optional.ofNullable(item.getSeasons()).orElse(List.of()).stream()
-        .map(ApiFootballSeason::getYear)
+        Optional.ofNullable(item.getSeasons()).orElse(List.of()).stream()
+            .map(ApiFootballSeason::getYear)
             .filter(Objects::nonNull)
             .sorted()
             .collect(Collectors.toList());
@@ -73,14 +73,14 @@ public class LeaguesServiceImpl implements LeaguesService {
         current == null
             ? null
             : new LeagueCurrentSeasonResponse(
-          current.getYear(), current.getStart(), current.getEnd(), current.getCurrent());
+                current.getYear(), current.getStart(), current.getEnd(), current.getCurrent());
 
     return new LeagueDetailResponse(
-      item.getLeague().getId(),
-      item.getLeague().getName(),
-      item.getLeague().getType(),
-      item.getCountry() != null ? item.getCountry().getName() : null,
-      item.getLeague().getLogo(),
+        item.getLeague().getId(),
+        item.getLeague().getName(),
+        item.getLeague().getType(),
+        item.getCountry() != null ? item.getCountry().getName() : null,
+        item.getLeague().getLogo(),
         seasons,
         currentSeason);
   }

@@ -21,8 +21,7 @@ public class CacheConfig {
   public CacheManager cacheManager() {
     CaffeineCacheManager manager = new CaffeineCacheManager();
     manager.setCacheNames(List.of(LEAGUES_BY_FILTERS_CACHE, LEAGUE_BY_ID_CACHE));
-    manager.setCaffeine(
-        Caffeine.newBuilder().expireAfterWrite(6, TimeUnit.HOURS).maximumSize(512));
+    manager.setCaffeine(Caffeine.newBuilder().expireAfterWrite(6, TimeUnit.HOURS).maximumSize(512));
     return manager;
   }
 }
