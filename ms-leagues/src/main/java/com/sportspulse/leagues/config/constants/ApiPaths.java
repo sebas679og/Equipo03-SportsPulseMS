@@ -1,5 +1,6 @@
 package com.sportspulse.leagues.config.constants;
 
+/** API route constants used by the leagues service. */
 public final class ApiPaths {
 
   private ApiPaths() {}
