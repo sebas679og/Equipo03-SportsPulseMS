@@ -6,4 +6,4 @@ package com.sportspulse.standings.integrations.football.dto;
  * <p>Contains the league identifier and the season year used to filter or retrieve specific data
  * from the API.
  */
-public record Parameters(String league, String season) {}
+public record ApiParameters(String league, String season) {}

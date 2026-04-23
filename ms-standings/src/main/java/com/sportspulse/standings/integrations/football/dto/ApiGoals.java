@@ -8,4 +8,4 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * <p>Contains the number of goals scored ("for") and goals conceded ("against"). Mapped from JSON
  * properties to ensure proper deserialization.
  */
-public record Goals(@JsonProperty("for") int goalsFor, int against) {}
+public record ApiGoals(@JsonProperty("for") int goalsFor, int against) {}
