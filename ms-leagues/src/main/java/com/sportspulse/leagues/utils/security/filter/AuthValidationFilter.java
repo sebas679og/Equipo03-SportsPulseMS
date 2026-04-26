@@ -3,17 +3,16 @@ package com.sportspulse.leagues.utils.security.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sportspulse.leagues.config.constants.ApiPaths;
 import com.sportspulse.leagues.config.constants.InternalHeaders;
-import com.sportspulse.leagues.config.properties.JwtProperties;
 import com.sportspulse.leagues.dto.responses.LeagueErrorResponse;
-import com.sportspulse.leagues.services.components.JwtTokenService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
+import com.sportspulse.leagues.exceptions.CustomServiceUnavailableException;
+import com.sportspulse.leagues.exceptions.CustomUnauthorizedException;
+import com.sportspulse.leagues.integration.msauth.AuthClient;
+import com.sportspulse.leagues.integration.msauth.dto.UserResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,13 +25,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-/** Filter that validates incoming JWT tokens. */
 @Component
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class AuthValidationFilter extends OncePerRequestFilter {
 
-  private final JwtTokenService jwtTokenService;
-  private final JwtProperties jwtProperties;
+  private final AuthClient authClient;
   private final ObjectMapper objectMapper;
   private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
@@ -41,28 +38,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
-    String authorization = request.getHeader(InternalHeaders.AUTHORIZATION);
-    if (authorization == null || !authorization.startsWith(jwtProperties.getTokenType() + " ")) {
-      writeUnauthorized(response);
+    String authorization = request.getHeader(InternalHeaders.MsAuth.BEARER_HEADER);
+    if (authorization == null
+        || !authorization.startsWith(InternalHeaders.MsAuth.TYPE_TOKEN + " ")) {
+      writeError(response, HttpStatus.UNAUTHORIZED, "Authorization header es requerido");
       return;
     }
 
-    String token = authorization.substring(jwtProperties.getTokenType().length() + 1);
-
     try {
-      Claims claims = jwtTokenService.validateAndExtract(token);
-      String username = claims.get("username", String.class);
-      String role = claims.get("role", String.class);
+      String token = authorization.substring(InternalHeaders.MsAuth.TYPE_TOKEN.length() + 1);
+      UserResponse validationResponse = authClient.isTokenValid(token);
 
       UsernamePasswordAuthenticationToken authentication =
           new UsernamePasswordAuthenticationToken(
-              username, null, List.of(new SimpleGrantedAuthority("ROLE_" + role)));
+            validationResponse.username(),
+              null,
+            List.of(new SimpleGrantedAuthority("ROLE_" + validationResponse.role())));
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
       SecurityContextHolder.getContext().setAuthentication(authentication);
+
       filterChain.doFilter(request, response);
-    } catch (JwtException | IllegalArgumentException ex) {
+    } catch (CustomUnauthorizedException ex) {
       SecurityContextHolder.clearContext();
-      writeUnauthorized(response);
+      writeError(
+          response,
+          HttpStatus.UNAUTHORIZED,
+          "Token de autenticación inválido o ausente");
+    } catch (CustomServiceUnavailableException ex) {
+      SecurityContextHolder.clearContext();
+      writeError(
+          response,
+          HttpStatus.SERVICE_UNAVAILABLE,
+          "No se pudo validar el token con ms-auth");
     }
   }
 
@@ -75,11 +82,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         || antPathMatcher.match("/error", path);
   }
 
-  private void writeUnauthorized(HttpServletResponse response) throws IOException {
-    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+  private void writeError(HttpServletResponse response, HttpStatus status, String description)
+      throws IOException {
+    response.setStatus(status.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     LeagueErrorResponse body =
-        new LeagueErrorResponse("UNAUTHORIZED", "Token JWT inválido o ausente", Instant.now());
+        LeagueErrorResponse.builder()
+            .code(status.value())
+            .name(status.getReasonPhrase())
+            .description(description)
+            .build();
     response.getWriter().write(objectMapper.writeValueAsString(body));
   }
 }
