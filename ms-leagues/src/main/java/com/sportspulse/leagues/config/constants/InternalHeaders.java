@@ -5,6 +5,19 @@ public final class InternalHeaders {
 
   private InternalHeaders() {}
 
-  public static final String API_SPORTS_KEY = "x-apisports-key";
-  public static final String AUTHORIZATION = "Authorization";
+  /** Header constants for the API-Football integration. */
+  public static final class ApiFootball {
+    public static final String API_FOOTBALL_KEY = "x-apisports-key";
+
+    private ApiFootball() {}
+  }
+
+  /** Header constants for the ms-auth integration. */
+  public static final class MsAuth {
+    public static final String MS_AUTH_KEY = "X-Internal-API-Key";
+    public static final String BEARER_HEADER = "Authorization";
+    public static final String TYPE_TOKEN = "Bearer";
+
+    private MsAuth() {}
+  }
 }

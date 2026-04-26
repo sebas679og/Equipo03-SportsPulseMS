@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "sports-pulse.api")
+@ConfigurationProperties(prefix = "sportspulse.leagues.api.football")
 public class FootballApiProperties {
   private String baseUrl;
-  private String key;
+  private String apiKey;
 }

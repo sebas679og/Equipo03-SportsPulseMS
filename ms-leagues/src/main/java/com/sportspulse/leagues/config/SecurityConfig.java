@@ -3,8 +3,7 @@ package com.sportspulse.leagues.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sportspulse.leagues.config.constants.ApiPaths;
 import com.sportspulse.leagues.dto.responses.LeagueErrorResponse;
-import com.sportspulse.leagues.utils.security.filter.JwtAuthenticationFilter;
-import java.time.Instant;
+import com.sportspulse.leagues.utils.security.filter.AuthValidationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthValidationFilter authValidationFilter;
   private final ObjectMapper objectMapper;
 
   @Bean
@@ -54,11 +53,14 @@ public class SecurityConfig {
                       response.setStatus(HttpStatus.UNAUTHORIZED.value());
                       response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                       LeagueErrorResponse body =
-                          new LeagueErrorResponse(
-                              "UNAUTHORIZED", "Token JWT inválido o ausente", Instant.now());
+                          LeagueErrorResponse.builder()
+                              .code(HttpStatus.UNAUTHORIZED.value())
+                              .name(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                              .description("Authentication required")
+                              .build();
                       response.getWriter().write(objectMapper.writeValueAsString(body));
                     }))
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(authValidationFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
