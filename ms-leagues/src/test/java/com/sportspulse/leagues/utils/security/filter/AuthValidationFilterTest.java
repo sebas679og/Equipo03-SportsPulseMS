@@ -1,15 +1,16 @@
 package com.sportspulse.leagues.utils.security.filter;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.sportspulse.leagues.config.properties.JwtProperties;
-import com.sportspulse.leagues.services.components.JwtTokenService;
-import io.jsonwebtoken.Claims;
+import com.sportspulse.leagues.exceptions.CustomServiceUnavailableException;
+import com.sportspulse.leagues.integration.msauth.AuthClient;
+import com.sportspulse.leagues.integration.msauth.dto.UserResponse;
 import jakarta.servlet.FilterChain;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,13 +23,11 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("JwtAuthenticationFilter Tests")
-class JwtAuthenticationFilterTest {
+@DisplayName("AuthValidationFilter Tests")
+class AuthValidationFilterTest {
 
-  @Mock private JwtTokenService jwtTokenService;
-  @Mock private JwtProperties jwtProperties;
+  @Mock private AuthClient authClient;
   @Mock private FilterChain filterChain;
-  @Mock private Claims claims;
 
   @AfterEach
   void tearDown() {
@@ -42,8 +41,7 @@ class JwtAuthenticationFilterTest {
   @Test
   @DisplayName("shouldNotFilter should skip docs path")
   void shouldNotFilter_shouldSkipSwaggerPath() {
-    JwtAuthenticationFilter filter =
-        new JwtAuthenticationFilter(jwtTokenService, jwtProperties, testObjectMapper());
+    AuthValidationFilter filter = new AuthValidationFilter(authClient, testObjectMapper());
 
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setRequestURI("/swagger-ui/index.html");
@@ -54,8 +52,7 @@ class JwtAuthenticationFilterTest {
   @Test
   @DisplayName("doFilterInternal should return 401 when token is missing")
   void doFilterInternal_shouldReturnUnauthorizedWhenTokenMissing() throws Exception {
-    JwtAuthenticationFilter filter =
-        new JwtAuthenticationFilter(jwtTokenService, jwtProperties, testObjectMapper());
+    AuthValidationFilter filter = new AuthValidationFilter(authClient, testObjectMapper());
 
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setRequestURI("/api/leagues");
@@ -70,13 +67,11 @@ class JwtAuthenticationFilterTest {
   @Test
   @DisplayName("doFilterInternal should authenticate and continue chain for valid token")
   void doFilterInternal_shouldAuthenticateWhenTokenIsValid() throws Exception {
-    final JwtAuthenticationFilter filter =
-        new JwtAuthenticationFilter(jwtTokenService, jwtProperties, testObjectMapper());
+    AuthValidationFilter filter = new AuthValidationFilter(authClient, testObjectMapper());
 
-    when(jwtProperties.getTokenType()).thenReturn("Bearer");
-    when(jwtTokenService.validateAndExtract("valid-token")).thenReturn(claims);
-    when(claims.get("username", String.class)).thenReturn("javier");
-    when(claims.get("role", String.class)).thenReturn("USER");
+    when(authClient.isTokenValid(anyString()))
+        .thenReturn(
+        new UserResponse(true, null, "javier", "USER"));
 
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setRequestURI("/api/leagues");
@@ -87,5 +82,24 @@ class JwtAuthenticationFilterTest {
 
     assertThat(SecurityContextHolder.getContext().getAuthentication()).isNotNull();
     verify(filterChain).doFilter(request, response);
+  }
+
+  @Test
+  @DisplayName("doFilterInternal should return 503 when auth service is unavailable")
+  void doFilterInternal_shouldReturnServiceUnavailableWhenAuthFails() throws Exception {
+    AuthValidationFilter filter = new AuthValidationFilter(authClient, testObjectMapper());
+
+    when(authClient.isTokenValid(anyString()))
+      .thenThrow(new CustomServiceUnavailableException("down"));
+
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    request.setRequestURI("/api/leagues");
+    request.addHeader("Authorization", "Bearer valid-token");
+    MockHttpServletResponse response = new MockHttpServletResponse();
+
+    filter.doFilterInternal(request, response, filterChain);
+
+    assertThat(response.getStatus()).isEqualTo(503);
+    verify(filterChain, never()).doFilter(request, response);
   }
 }

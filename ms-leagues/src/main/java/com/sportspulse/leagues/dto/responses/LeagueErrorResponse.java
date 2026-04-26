@@ -1,17 +1,20 @@
 package com.sportspulse.leagues.dto.responses;
 
 import java.time.Instant;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.temporal.ChronoUnit;
+import lombok.Builder;
+import lombok.Value;
 
 /** Standard API error response for leagues service. */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Value
+@Builder
 public class LeagueErrorResponse {
 
-  private String error;
-  private String message;
-  private Instant timestamp;
+  int code;
+
+  String name;
+
+  String description;
+
+  @Builder.Default Instant timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 }
