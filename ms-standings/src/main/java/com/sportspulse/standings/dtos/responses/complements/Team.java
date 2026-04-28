@@ -1,4 +1,4 @@
-package com.sportspulse.standings.dtos.responses;
+package com.sportspulse.standings.dtos.responses.complements;
 
 import lombok.Builder;
 import lombok.Value;

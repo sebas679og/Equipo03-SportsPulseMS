@@ -1,9 +1,9 @@
 package com.sportspulse.standings.utils.mappers;
 
-import com.sportspulse.standings.dtos.responses.League;
-import com.sportspulse.standings.dtos.responses.Standing;
 import com.sportspulse.standings.dtos.responses.StandingsLeagueAndSeasonResponse;
-import com.sportspulse.standings.dtos.responses.Team;
+import com.sportspulse.standings.dtos.responses.complements.League;
+import com.sportspulse.standings.dtos.responses.complements.Standing;
+import com.sportspulse.standings.dtos.responses.complements.Team;
 import com.sportspulse.standings.integrations.football.dto.ApiLeague;
 import com.sportspulse.standings.integrations.football.dto.ApiStanding;
 import com.sportspulse.standings.integrations.football.dto.ApiTeam;

@@ -93,16 +93,17 @@ public class AuthClientImpl implements AuthClient {
                                   "Session validation service is not available at this time"));
                         }))
         .bodyToMono(UserResponse.class)
-            .onErrorMap(
-                    WebClientRequestException.class,
-                    ex -> {
-                        log.error(
-                                "Auth Service is unreachable. Cause: {} - {}",
-                                ex.getClass().getSimpleName(),
-                                ex.getMessage());
-                        return new CustomBadGatewayException(
-                                "Session validation service is unreachable");
-                    })
+        .onErrorMap(
+            WebClientRequestException.class,
+            ex -> {
+              if (log.isErrorEnabled()) {
+                log.error(
+                    "Auth Service is unreachable. Cause: {} - {}",
+                    ex.getClass().getSimpleName(),
+                    ex.getMessage());
+              }
+              return new CustomBadGatewayException("Session validation service is unreachable");
+            })
         .blockOptional()
         .orElseThrow(
             () -> {

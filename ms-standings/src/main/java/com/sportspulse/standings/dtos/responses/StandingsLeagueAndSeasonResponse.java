@@ -1,5 +1,7 @@
 package com.sportspulse.standings.dtos.responses;
 
+import com.sportspulse.standings.dtos.responses.complements.League;
+import com.sportspulse.standings.dtos.responses.complements.Standing;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
