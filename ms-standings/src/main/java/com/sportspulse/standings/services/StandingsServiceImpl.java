@@ -1,10 +1,12 @@
 package com.sportspulse.standings.services;
 
+import com.sportspulse.standings.dtos.request.LeagueAndSeasonRequest;
 import com.sportspulse.standings.dtos.responses.StandingsLeagueAndSeasonResponse;
 import com.sportspulse.standings.exceptions.CustomBadGatewayException;
 import com.sportspulse.standings.exceptions.CustomNotFoundException;
 import com.sportspulse.standings.exceptions.CustomTooManyRequestsException;
 import com.sportspulse.standings.integrations.football.FootballClient;
+import com.sportspulse.standings.integrations.football.dto.ApiLeague;
 import com.sportspulse.standings.integrations.football.dto.ApiStandingsResponse;
 import com.sportspulse.standings.utils.mappers.StandingsMapper;
 import java.util.Map;
@@ -30,18 +32,25 @@ public class StandingsServiceImpl implements StandingsService {
   private final StandingsMapper standingsMapper;
 
   @Override
-  public StandingsLeagueAndSeasonResponse getStandingsByLeagueAndSeason(int league, int season) {
+  public StandingsLeagueAndSeasonResponse getStandingsByLeagueAndSeason(
+      LeagueAndSeasonRequest request) {
 
-    ApiStandingsResponse api = footballClient.getStandingsForLeagueAndSeason(league, season);
+    ApiStandingsResponse api =
+        footballClient.getStandingsForLeagueAndSeason(
+            request.getLeague(), Integer.parseInt(request.getSeason()));
 
     handleApiFootballErrors(api);
 
     if (api.response() == null || api.response().isEmpty()) {
       throw new CustomNotFoundException(
-          String.format("No standings found for league %d and season %d", league, season));
+          String.format(
+              "No standings found for league %d and season %s",
+              request.getLeague(), request.getSeason()));
     }
 
-    return standingsMapper.toResponse(api);
+    ApiLeague apiLeague = api.response().getFirst().league();
+
+    return standingsMapper.toResponseFromLeague(apiLeague);
   }
 
   private void handleApiFootballErrors(ApiStandingsResponse api) {

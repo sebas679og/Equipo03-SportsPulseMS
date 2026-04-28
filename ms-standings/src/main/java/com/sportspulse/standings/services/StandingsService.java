@@ -1,5 +1,6 @@
 package com.sportspulse.standings.services;
 
+import com.sportspulse.standings.dtos.request.LeagueAndSeasonRequest;
 import com.sportspulse.standings.dtos.responses.StandingsLeagueAndSeasonResponse;
 
 /**
@@ -10,5 +11,5 @@ import com.sportspulse.standings.dtos.responses.StandingsLeagueAndSeasonResponse
  */
 public interface StandingsService {
 
-  StandingsLeagueAndSeasonResponse getStandingsByLeagueAndSeason(int league, int season);
+  StandingsLeagueAndSeasonResponse getStandingsByLeagueAndSeason(LeagueAndSeasonRequest request);
 }

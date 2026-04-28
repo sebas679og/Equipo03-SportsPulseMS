@@ -6,7 +6,6 @@ import com.sportspulse.standings.dtos.responses.StandingsLeagueAndSeasonResponse
 import com.sportspulse.standings.dtos.responses.Team;
 import com.sportspulse.standings.integrations.football.dto.ApiLeague;
 import com.sportspulse.standings.integrations.football.dto.ApiStanding;
-import com.sportspulse.standings.integrations.football.dto.ApiStandingsResponse;
 import com.sportspulse.standings.integrations.football.dto.ApiTeam;
 import java.util.Collections;
 import java.util.List;
@@ -28,13 +27,14 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface StandingsMapper {
 
-  @Mapping(target = "league", source = "response[0].league")
-  @Mapping(
-      target = "standings",
-      source = "response[0].league.standings",
-      qualifiedByName = "mapStandings")
-  StandingsLeagueAndSeasonResponse toResponse(ApiStandingsResponse apiResponse);
+  @Mapping(target = "league", source = ".")
+  @Mapping(target = "standings", source = "standings", qualifiedByName = "mapStandings")
+  StandingsLeagueAndSeasonResponse toResponseFromLeague(ApiLeague apiLeague);
 
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "name", source = "name")
+  @Mapping(target = "country", source = "country")
+  @Mapping(target = "season", source = "season")
   League toLeague(ApiLeague apiLeague);
 
   Team toTeam(ApiTeam apiTeam);
