@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 import reactor.core.publisher.Mono;
 
 /**
@@ -92,6 +93,16 @@ public class AuthClientImpl implements AuthClient {
                                   "Session validation service is not available at this time"));
                         }))
         .bodyToMono(UserResponse.class)
+            .onErrorMap(
+                    WebClientRequestException.class,
+                    ex -> {
+                        log.error(
+                                "Auth Service is unreachable. Cause: {} - {}",
+                                ex.getClass().getSimpleName(),
+                                ex.getMessage());
+                        return new CustomBadGatewayException(
+                                "Session validation service is unreachable");
+                    })
         .blockOptional()
         .orElseThrow(
             () -> {

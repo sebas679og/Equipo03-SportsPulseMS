@@ -102,10 +102,8 @@ public class SecurityConfig {
           @NonNull HttpServletResponse response,
           @NonNull FilterChain filterChain)
           throws ServletException, IOException {
-
         boolean hasBearer = request.getHeader(InternalHeaders.MsAuth.BEARER_HEADER) != null;
-
-        if (hasBearer) {
+        if (!hasBearer) {
           writer.sendError(
               response, HttpStatus.UNAUTHORIZED, "Authentication could not be obtained");
           return;
