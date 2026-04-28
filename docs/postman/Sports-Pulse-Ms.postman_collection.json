@@ -217,6 +217,92 @@
         }
       ],
       "description": "The `ms-teams` service manages football team information including team name, crest, country of origin, founding year, and stadium details. It is a **core dependency** for several other services — `ms-fixtures`, `ms-standings`, and `ms-dashboard` all call this service to enrich their own responses with team data.\n"
+    },
+    {
+      "name": "ms-standings  — Standings Service",
+      "item": [
+        {
+          "name": "Standings By League in Season",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_MS_STANDINGS}}/api/standings?league=39&season=2022",
+              "host": [
+                "{{URL_MS_STANDINGS}}"
+              ],
+              "path": [
+                "api",
+                "standings"
+              ],
+              "query": [
+                {
+                  "key": "league",
+                  "value": "39"
+                },
+                {
+                  "key": "season",
+                  "value": "2022"
+                }
+              ]
+            },
+            "description": "# 📊 Get League Standings\n\n## 📌 Endpoint\n\n**GET**  \n`/api/standings?league=&season=`\n\n---\n\n## 📖 Description\n\nRetrieves the **full standings table** for a given league and season.\n\nThis endpoint provides detailed ranking information including team performance statistics such as points, matches played, wins, draws, losses, and goal metrics.\n\nThe data is sourced from an external provider (**API-Football**) and normalized for consistent internal usage.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n**Allowed roles:**\n\n- `USER`\n    \n\n---\n\n# 📥 Request\n\n## Query Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| league | Integer | ✅ Yes | League ID (e.g. `140` for La Liga) |\n| season | Integer | ✅ Yes | Season year (e.g. `2024`) |\n\n---\n\n### Example Request\n\n``` http\nGET /api/standings?league=140&season=2024\nAuthorization: Bearer {{jwt_token}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nThe standings were successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"league\": {\n    \"id\": 140,\n    \"name\": \"La Liga\",\n    \"country\": \"Spain\",\n    \"season\": 2024\n  },\n  \"standings\": [\n    {\n      \"rank\": 1,\n      \"team\": {\n        \"id\": 529,\n        \"name\": \"FC Barcelona\",\n        \"logo\": \"https://media.api-sports.io/football/teams/529.png\"\n      },\n      \"points\": 48,\n      \"played\": 20,\n      \"won\": 15,\n      \"drawn\": 3,\n      \"lost\": 2,\n      \"goalsFor\": 52,\n      \"goalsAgainst\": 18,\n      \"goalDifference\": 34,\n      \"form\": \"WWWDW\"\n    },\n    {\n      \"rank\": 2,\n      \"team\": {\n        \"id\": 541,\n        \"name\": \"Real Madrid\",\n        \"logo\": \"https://media.api-sports.io/football/teams/541.png\"\n      },\n      \"points\": 44,\n      \"played\": 20,\n      \"won\": 13,\n      \"drawn\": 5,\n      \"lost\": 2,\n      \"goalsFor\": 44,\n      \"goalsAgainst\": 20,\n      \"goalDifference\": 24,\n      \"form\": \"WDWWW\"\n    }\n  ]\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid query parameters.\n\nPossible Causes:\n\n- Missing required parameters (`league` or `season`)\n    \n- Invalid parameter types (non-integer values)\n    \n- Malformed query string\n    \n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\nPossible Causes:\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nNo standings data was found for the given league and season.\n\nPossible Causes:\n\n- The `league` ID does not exist\n    \n- The `season` is not available for the given league\n    \n- No standings data available\n    \n\n---\n\n## 🚫 429 Too Many Requests\n\nRate limit exceeded from **API-Football** external service.\n\nPossible Causes:\n\n- Too many requests in a short period\n    \n- External API quota exceeded"
+          },
+          "response": []
+        },
+        {
+          "name": "Team Standing By League in Season",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_MS_STANDINGS}}/api/standings/team/{{teamId}}?league=39&season=2022",
+              "host": [
+                "{{URL_MS_STANDINGS}}"
+              ],
+              "path": [
+                "api",
+                "standings",
+                "team",
+                "{{teamId}}"
+              ],
+              "query": [
+                {
+                  "key": "league",
+                  "value": "39"
+                },
+                {
+                  "key": "season",
+                  "value": "2022"
+                }
+              ]
+            },
+            "description": "# 📊 Get Team Standing Position\n\n## 📌 Endpoint\n\n**GET**  \n`/api/standings/team/{teamId}?league=&season=`\n\n---\n\n## 📖 Description\n\nRetrieves the **specific standing position of a single team** within a league for a given season.\n\nThis endpoint returns a summarized view of the team’s performance, including ranking, points, matches played, and current form.\n\nThe data is sourced from **API-Football** and processed to provide a simplified and focused response.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n**Allowed roles:**\n\n- `USER`\n    \n\n---\n\n# 📥 Request\n\n## Path Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| teamId | Integer | ✅ Yes | API-Football team ID |\n\n---\n\n## Query Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| league | Integer | ✅ Yes | League ID |\n| season | Integer | ✅ Yes | Season year |\n\n---\n\n### Example Request\n\n``` http\nGET /api/standings/team/529?league=140&season=2024\nAuthorization: Bearer {{jwt_token}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nThe team standing position was successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"team\": {\n    \"id\": 529,\n    \"name\": \"FC Barcelona\"\n  },\n  \"league\": {\n    \"id\": 140,\n    \"name\": \"La Liga\"\n  },\n  \"season\": 2024,\n  \"rank\": 1,\n  \"points\": 48,\n  \"played\": 20,\n  \"form\": \"WWWDW\",\n  \"description\": \"Promotion - Champions League (Group Stage)\"\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid parameters.\n\nPossible Causes:\n\n- Missing required query parameters (`league`, `season`)\n    \n- Invalid parameter types (non-integer values)\n    \n- Malformed request format\n    \n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\nPossible Causes:\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nNo data was found for the given team, league, and season.\n\nPossible Causes:\n\n- The `teamId` does not exist\n    \n- The team is not part of the specified league/season\n    \n- No standings data available\n    \n\n---\n\n## 🚫 429 Too Many Requests\n\nRate limit exceeded from **API-Football** external service.\n\nPossible Causes:\n\n- Too many requests in a short period\n    \n- External API quota exceeded"
+          },
+          "response": []
+        }
+      ],
+      "description": "The `ms-standings` service generates and exposes the up-to-date classification table for any league and season. It consumes `ms-teams` to enrich each team entry in the standings with full team details (logo, stadium, etc.)."
     }
   ],
   "event": [
@@ -268,6 +354,10 @@
     },
     {
       "key": "teamId",
+      "value": ""
+    },
+    {
+      "key": "URL_MS_STANDINGS",
       "value": ""
     }
   ]

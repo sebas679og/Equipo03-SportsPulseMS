@@ -46,12 +46,47 @@ public class GatewayRoutesConfig {
                     .filters(routeFactory.applyStandardFilters("ms-auth"))
                     .uri(services.getAuth()))
         .route(
+            "ms-leagues",
+            predicateSpec ->
+                predicateSpec
+                    .path(ApiPathsServices.Leagues.ALL)
+                    .filters(routeFactory.applyStandardFilters("ms-leagues"))
+                    .uri(services.getLeagues()))
+        .route(
             "ms-teams",
             predicateSpec ->
                 predicateSpec
                     .path(ApiPathsServices.Teams.ALL)
                     .filters(routeFactory.applyStandardFilters("ms-teams"))
                     .uri(services.getTeams()))
+        .route(
+            "ms-fixtures",
+            predicateSpec ->
+                predicateSpec
+                    .path(ApiPathsServices.Fixtures.ALL)
+                    .filters(routeFactory.applyStandardFilters("ms-fixtures"))
+                    .uri(services.getFixtures()))
+        .route(
+            "ms-standings",
+            predicateSpec ->
+                predicateSpec
+                    .path(ApiPathsServices.Standings.ALL)
+                    .filters(routeFactory.applyStandardFilters("ms-standings"))
+                    .uri(services.getStandings()))
+        .route(
+            "ms-notifications",
+            predicateSpec ->
+                predicateSpec
+                    .path(ApiPathsServices.Notifications.ALL)
+                    .filters(routeFactory.applyStandardFilters("ms-notifications"))
+                    .uri(services.getNotifications()))
+        .route(
+            "ms-dashboard",
+            predicateSpec ->
+                predicateSpec
+                    .path(ApiPathsServices.Dashboard.ALL)
+                    .filters(routeFactory.applyStandardFilters("ms-dashboard"))
+                    .uri(services.getDashboard()))
         .build();
   }
 
