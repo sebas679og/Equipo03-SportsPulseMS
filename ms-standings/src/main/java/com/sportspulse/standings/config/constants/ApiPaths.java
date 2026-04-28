@@ -19,6 +19,8 @@ public final class ApiPaths {
   /** Standings Defines API endpoint paths related to standings services. */
   public static final class Standings {
     public static final String ACTUATOR_HEALTH = "/actuator/health";
+    public static final String CLASSIFICATION_LEAGUE_IN_A_SEASON = "/api/standings";
+    public static final String POSITION_TEAM_IN_THE_STANDINGS = "/api/standings/team/{teamId}";
   }
 
   /** API documentation endpoints. */
