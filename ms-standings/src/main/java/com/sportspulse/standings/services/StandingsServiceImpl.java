@@ -2,14 +2,16 @@ package com.sportspulse.standings.services;
 
 import com.sportspulse.standings.dtos.request.LeagueAndSeasonRequest;
 import com.sportspulse.standings.dtos.responses.StandingsLeagueAndSeasonResponse;
-import com.sportspulse.standings.exceptions.CustomBadGatewayException;
+import com.sportspulse.standings.dtos.responses.TeamStandingLeagueAndSeasonResponse;
+import com.sportspulse.standings.exceptions.CustomBadRequestException;
 import com.sportspulse.standings.exceptions.CustomNotFoundException;
-import com.sportspulse.standings.exceptions.CustomTooManyRequestsException;
-import com.sportspulse.standings.integrations.football.FootballClient;
 import com.sportspulse.standings.integrations.football.dto.ApiLeague;
+import com.sportspulse.standings.integrations.football.dto.ApiStanding;
 import com.sportspulse.standings.integrations.football.dto.ApiStandingsResponse;
+import com.sportspulse.standings.services.complements.ApiFootballStandingsFetcher;
 import com.sportspulse.standings.utils.mappers.StandingsMapper;
-import java.util.Map;
+import com.sportspulse.standings.utils.mappers.TeamStandingMapper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,59 +30,48 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StandingsServiceImpl implements StandingsService {
 
-  private final FootballClient footballClient;
+  private final ApiFootballStandingsFetcher apiFootballStandingsFetcher;
   private final StandingsMapper standingsMapper;
+  private final TeamStandingMapper teamStandingMapper;
 
   @Override
   public StandingsLeagueAndSeasonResponse getStandingsByLeagueAndSeason(
       LeagueAndSeasonRequest request) {
 
     ApiStandingsResponse api =
-        footballClient.getStandingsForLeagueAndSeason(
+        apiFootballStandingsFetcher.fetchValidatedStandings(
             request.getLeague(), Integer.parseInt(request.getSeason()));
-
-    handleApiFootballErrors(api);
-
-    if (api.response() == null || api.response().isEmpty()) {
-      throw new CustomNotFoundException(
-          String.format(
-              "No standings found for league %d and season %s",
-              request.getLeague(), request.getSeason()));
-    }
 
     ApiLeague apiLeague = api.response().getFirst().league();
 
     return standingsMapper.toResponseFromLeague(apiLeague);
   }
 
-  private void handleApiFootballErrors(ApiStandingsResponse api) {
-    if (api.errors() == null || api.errors().isEmpty()) {
-      return;
+  @Override
+  public TeamStandingLeagueAndSeasonResponse getTeamStandingsByLeagueAndSeason(
+      LeagueAndSeasonRequest request, int teamId) {
+    if (teamId <= 0) {
+      throw new CustomBadRequestException("teamId must be a positive number greater than 0.");
     }
 
-    @SuppressWarnings("unchecked")
-    Map<String, Object> errorDetail = (Map<String, Object>) api.errors().getFirst();
+    ApiStandingsResponse api =
+        apiFootballStandingsFetcher.fetchValidatedStandings(
+            request.getLeague(), Integer.parseInt(request.getSeason()));
 
-    if (errorDetail.containsKey("requests")) {
-      log.warn(
-          "Api-Football 429 Rate Limit exceeded. "
-              + "Available requests have been exhausted. Body: {}",
-          errorDetail);
-      throw new CustomTooManyRequestsException(
-          "The daily request limit to Api-Football has been "
-              + "reached, please try again tomorrow");
-    } else if (errorDetail.containsKey("plan")) {
-      String planMessage = (String) errorDetail.get("plan");
-      log.warn(
-          "Api-Football, the request limit per season has been exceeded. "
-              + "Available requests have been exhausted. Body: {}",
-          planMessage);
-      throw new CustomTooManyRequestsException(planMessage);
-    } else {
-      log.error("Api-Football returned errors in the response. Body: {}", errorDetail);
-      throw new CustomBadGatewayException(
-          "An error occurred while processing the request to Api-Football. "
-              + "Please try again later.");
-    }
+    ApiLeague apiLeague = api.response().getFirst().league();
+
+    ApiStanding apiStanding =
+        apiLeague.standings().stream()
+            .flatMap(List::stream)
+            .filter(s -> s.team().id() == teamId)
+            .findFirst()
+            .orElseThrow(
+                () ->
+                    new CustomNotFoundException(
+                        String.format(
+                            "Team %d not found in standings for league %d and season %s",
+                            teamId, request.getLeague(), request.getSeason())));
+
+    return teamStandingMapper.toResponse(apiStanding, apiLeague);
   }
 }

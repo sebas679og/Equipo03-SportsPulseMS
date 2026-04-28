@@ -101,6 +101,12 @@ public class GlobalExceptionHandler {
     return badRequest(message);
   }
 
+  @ExceptionHandler(CustomBadRequestException.class)
+  public ResponseEntity<ErrorResponse> handlerCustomBadRequestException(
+      CustomBadRequestException ex) {
+    return badRequest(ex.getMessage());
+  }
+
   private ResponseEntity<ErrorResponse> badRequest(String description) {
     return buildErrorResponse(HttpStatus.BAD_REQUEST, description);
   }
