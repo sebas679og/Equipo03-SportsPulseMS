@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "sportspulse.standings.cache")
-public class TeamsCacheProperties {
+public class StandingsCacheProperties {
   private boolean enabled;
   private long ttlMinutes;
   private long maxSize;
