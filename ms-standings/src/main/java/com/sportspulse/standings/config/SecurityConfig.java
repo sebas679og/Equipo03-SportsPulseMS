@@ -1,16 +1,9 @@
 package com.sportspulse.standings.config;
 
 import com.sportspulse.standings.config.constants.ApiPaths;
-import com.sportspulse.standings.config.constants.InternalHeaders;
 import com.sportspulse.standings.exceptions.JsonWriter;
 import com.sportspulse.standings.filters.BearerAuthenticationFilter;
 import com.sportspulse.standings.integrations.msauth.AuthClient;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +17,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
  * SecurityConfig Configures application-level security settings. Enables method-level security with
@@ -73,45 +65,13 @@ public class SecurityConfig {
                     .hasAuthority("AUTH_JWT")
                     .anyRequest()
                     .authenticated())
-        .addFilterBefore(dualHeaderGuardFilter(), UsernamePasswordAuthenticationFilter.class)
-        .addFilterAfter(bearerAuthenticationFilter(), dualHeaderGuardFilter().getClass())
+        .addFilterAfter(bearerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(
             ex ->
                 ex.authenticationEntryPoint(unauthorizedEntryPoint())
                     .accessDeniedHandler(accessDeniedHandler()));
 
     return http.build();
-  }
-
-  /**
-   * Creates a filter that guards against requests containing both internal and bearer
-   * authentication headers.
-   *
-   * <p>This filter checks for the presence of the internal bearer header defined in {@link
-   * InternalHeaders.MsAuth#BEARER_HEADER}. If found, the request is rejected with an {@link
-   * HttpStatus#UNAUTHORIZED} response. Otherwise, the request continues through the filter chain.
-   *
-   * @return a {@link OncePerRequestFilter} enforcing dual-header guard logic
-   */
-  @Bean
-  public OncePerRequestFilter dualHeaderGuardFilter() {
-    return new OncePerRequestFilter() {
-      @Override
-      protected void doFilterInternal(
-          @NonNull HttpServletRequest request,
-          @NonNull HttpServletResponse response,
-          @NonNull FilterChain filterChain)
-          throws ServletException, IOException {
-        boolean hasBearer = request.getHeader(InternalHeaders.MsAuth.BEARER_HEADER) != null;
-        if (!hasBearer) {
-          writer.sendError(
-              response, HttpStatus.UNAUTHORIZED, "Authentication could not be obtained");
-          return;
-        }
-
-        filterChain.doFilter(request, response);
-      }
-    };
   }
 
   @Bean
