@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Query parameters to filter teams by league and season")
 public class LeagueAndSeasonRequest {
 
   @NotNull(message = "League is required")
