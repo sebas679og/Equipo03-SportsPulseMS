@@ -63,7 +63,15 @@ class GatewayRoutesConfigTest {
     gatewayRoutesConfig.routes(builder);
 
     assertThat(registeredIds)
-        .containsExactly("ms-auth-login", "ms-auth", "ms-teams", "ms-standings");
+        .containsExactly(
+            "ms-auth-login",
+            "ms-auth",
+            "ms-leagues",
+            "ms-teams",
+            "ms-fixtures",
+            "ms-standings",
+            "ms-notifications",
+            "ms-dashboard");
   }
 
   @Test
