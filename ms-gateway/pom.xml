@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.13</version>
+		<version>3.5.14</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sportspulse</groupId>
 	<artifactId>gateway</artifactId>
-	<version>0.5.0</version>
+	<version>0.5.1</version>
 	<name/>
 	<description/>
 	<url/>
