@@ -2,7 +2,7 @@ package com.sportspulse.leagues.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sportspulse.leagues.config.constants.ApiPaths;
-import com.sportspulse.leagues.dto.responses.LeagueErrorResponse;
+import com.sportspulse.leagues.dto.responses.ErrorResponse;
 import com.sportspulse.leagues.utils.security.filter.AuthValidationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -52,8 +52,8 @@ public class SecurityConfig {
                     (request, response, ex) -> {
                       response.setStatus(HttpStatus.UNAUTHORIZED.value());
                       response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                      LeagueErrorResponse body =
-                          LeagueErrorResponse.builder()
+                      ErrorResponse body =
+                          ErrorResponse.builder()
                               .code(HttpStatus.UNAUTHORIZED.value())
                               .name(HttpStatus.UNAUTHORIZED.getReasonPhrase())
                               .description("Authentication required")

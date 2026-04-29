@@ -3,7 +3,7 @@ package com.sportspulse.leagues.utils.security.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sportspulse.leagues.config.constants.ApiPaths;
 import com.sportspulse.leagues.config.constants.InternalHeaders;
-import com.sportspulse.leagues.dto.responses.LeagueErrorResponse;
+import com.sportspulse.leagues.dto.responses.ErrorResponse;
 import com.sportspulse.leagues.exceptions.CustomServiceUnavailableException;
 import com.sportspulse.leagues.exceptions.CustomUnauthorizedException;
 import com.sportspulse.leagues.integration.msauth.AuthClient;
@@ -81,8 +81,8 @@ public class AuthValidationFilter extends OncePerRequestFilter {
       throws IOException {
     response.setStatus(status.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    LeagueErrorResponse body =
-        LeagueErrorResponse.builder()
+    ErrorResponse body =
+        ErrorResponse.builder()
             .code(status.value())
             .name(status.getReasonPhrase())
             .description(description)

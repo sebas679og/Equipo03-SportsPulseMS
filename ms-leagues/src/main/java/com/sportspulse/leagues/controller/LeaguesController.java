@@ -1,8 +1,8 @@
 package com.sportspulse.leagues.controller;
 
 import com.sportspulse.leagues.config.constants.ApiPaths;
+import com.sportspulse.leagues.dto.responses.ErrorResponse;
 import com.sportspulse.leagues.dto.responses.LeagueDetailResponse;
-import com.sportspulse.leagues.dto.responses.LeagueErrorResponse;
 import com.sportspulse.leagues.dto.responses.LeagueSummaryResponse;
 import com.sportspulse.leagues.services.LeaguesService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +47,7 @@ public class LeaguesController {
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = LeagueErrorResponse.class)))
+                schema = @Schema(implementation = ErrorResponse.class)))
   })
   @GetMapping
   public ResponseEntity<List<LeagueSummaryResponse>> getLeagues(
@@ -75,14 +75,14 @@ public class LeaguesController {
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = LeagueErrorResponse.class))),
+                schema = @Schema(implementation = ErrorResponse.class))),
     @ApiResponse(
         responseCode = "404",
         description = "League not found",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = LeagueErrorResponse.class)))
+                schema = @Schema(implementation = ErrorResponse.class)))
   })
   @GetMapping("/{leagueId}")
   public ResponseEntity<LeagueDetailResponse> getLeagueById(@PathVariable Integer leagueId) {
