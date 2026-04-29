@@ -3,7 +3,7 @@ package com.sportspulse.leagues.services;
 import com.sportspulse.leagues.dto.responses.LeagueDetailResponse;
 import com.sportspulse.leagues.dto.responses.LeagueSummaryResponse;
 import com.sportspulse.leagues.exceptions.LeagueNotFoundException;
-import com.sportspulse.leagues.integration.client.FootballApiClient;
+import com.sportspulse.leagues.integration.football.FootballApiClient;
 import com.sportspulse.leagues.utils.mappers.LeaguesMapper;
 import java.util.List;
 import java.util.Objects;
