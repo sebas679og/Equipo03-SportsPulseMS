@@ -15,8 +15,8 @@ import org.mapstruct.Mapping;
 /**
  * LeaguesMapper Mapper interface for converting API-Football payloads into leagues DTOs.
  *
- * <p>Uses MapStruct to generate mapping code and keeps season-selection logic centralized in
- * helper methods.
+ * <p>Uses MapStruct to generate mapping code and keeps season-selection logic centralized in helper
+ * methods.
  */
 @Mapper(componentModel = "spring")
 public interface LeaguesMapper {

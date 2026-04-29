@@ -51,25 +51,20 @@ public class AuthValidationFilter extends OncePerRequestFilter {
 
       UsernamePasswordAuthenticationToken authentication =
           new UsernamePasswordAuthenticationToken(
-            validationResponse.username(),
+              validationResponse.username(),
               null,
-            List.of(new SimpleGrantedAuthority("ROLE_" + validationResponse.role())));
+              List.of(new SimpleGrantedAuthority("ROLE_" + validationResponse.role())));
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
       SecurityContextHolder.getContext().setAuthentication(authentication);
 
       filterChain.doFilter(request, response);
     } catch (CustomUnauthorizedException ex) {
       SecurityContextHolder.clearContext();
-      writeError(
-          response,
-          HttpStatus.UNAUTHORIZED,
-          "Token de autenticación inválido o ausente");
+      writeError(response, HttpStatus.UNAUTHORIZED, "Token de autenticación inválido o ausente");
     } catch (CustomServiceUnavailableException ex) {
       SecurityContextHolder.clearContext();
       writeError(
-          response,
-          HttpStatus.SERVICE_UNAVAILABLE,
-          "No se pudo validar el token con ms-auth");
+          response, HttpStatus.SERVICE_UNAVAILABLE, "No se pudo validar el token con ms-auth");
     }
   }
 
