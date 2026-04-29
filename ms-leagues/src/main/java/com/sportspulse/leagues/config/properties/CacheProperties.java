@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "sportspulse.leagues.cache")
 public class CacheProperties {
-    private boolean enabled;
-    private int maxSize;
-    private int ttlMinutes;
+  private boolean enabled;
+  private int maxSize;
+  private int ttlMinutes;
 }

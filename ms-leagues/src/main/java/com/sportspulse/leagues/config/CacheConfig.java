@@ -1,6 +1,5 @@
 package com.sportspulse.leagues.config;
 
-import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.sportspulse.leagues.config.properties.CacheProperties;
 import java.util.List;
@@ -24,24 +23,24 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class CacheConfig {
 
-    private static final String LEAGUES_CACHE = "leagues";
-    private static final String LEAGUES_BY_FILTERS_CACHE = "leaguesByFilters";
+  private static final String LEAGUES_CACHE = "leagues";
+  private static final String LEAGUES_BY_FILTERS_CACHE = "leaguesByFilters";
 
-    private final CacheProperties cacheProperties;
+  private final CacheProperties cacheProperties;
 
-    @Bean
-    public CacheManager cacheManager() {
-        if (!cacheProperties.isEnabled()) {
-            return new NoOpCacheManager();
-        }
-
-        CaffeineCacheManager manager = new CaffeineCacheManager();
-        manager.setCacheNames(List.of(LEAGUES_CACHE, LEAGUES_BY_FILTERS_CACHE));
-        manager.setCaffeine(
-                Caffeine.newBuilder()
-                        .expireAfterWrite(cacheProperties.getTtlMinutes(), TimeUnit.MINUTES)
-                        .maximumSize(cacheProperties.getMaxSize())
-                        .recordStats());
-        return manager;
+  @Bean
+  public CacheManager cacheManager() {
+    if (!cacheProperties.isEnabled()) {
+      return new NoOpCacheManager();
     }
+
+    CaffeineCacheManager manager = new CaffeineCacheManager();
+    manager.setCacheNames(List.of(LEAGUES_CACHE, LEAGUES_BY_FILTERS_CACHE));
+    manager.setCaffeine(
+        Caffeine.newBuilder()
+            .expireAfterWrite(cacheProperties.getTtlMinutes(), TimeUnit.MINUTES)
+            .maximumSize(cacheProperties.getMaxSize())
+            .recordStats());
+    return manager;
+  }
 }

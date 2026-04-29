@@ -70,8 +70,7 @@ class AuthValidationFilterTest {
     AuthValidationFilter filter = new AuthValidationFilter(authClient, testObjectMapper());
 
     when(authClient.isTokenValid(anyString()))
-        .thenReturn(
-        new UserResponse(true, null, "javier", "USER"));
+        .thenReturn(new UserResponse(true, null, "javier", "USER"));
 
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setRequestURI("/api/leagues");
@@ -90,7 +89,7 @@ class AuthValidationFilterTest {
     AuthValidationFilter filter = new AuthValidationFilter(authClient, testObjectMapper());
 
     when(authClient.isTokenValid(anyString()))
-      .thenThrow(new CustomServiceUnavailableException("down"));
+        .thenThrow(new CustomServiceUnavailableException("down"));
 
     MockHttpServletRequest request = new MockHttpServletRequest();
     request.setRequestURI("/api/leagues");

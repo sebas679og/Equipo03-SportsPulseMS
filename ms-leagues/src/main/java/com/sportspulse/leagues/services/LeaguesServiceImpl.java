@@ -24,7 +24,7 @@ public class LeaguesServiceImpl implements LeaguesService {
     String normalizedCountry = StringUtils.hasText(country) ? country.trim() : null;
 
     return footballApiClient.getLeagues(normalizedCountry, season, null).stream()
-      .map(league -> leaguesMapper.toLeagueSummaryResponse(league, season))
+        .map(league -> leaguesMapper.toLeagueSummaryResponse(league, season))
         .toList();
   }
 

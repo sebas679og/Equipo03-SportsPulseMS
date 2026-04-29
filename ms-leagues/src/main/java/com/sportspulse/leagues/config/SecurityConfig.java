@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final AuthValidationFilter authValidationFilter;
+  private final AuthValidationFilter authValidationFilter;
   private final ObjectMapper objectMapper;
 
   @Bean

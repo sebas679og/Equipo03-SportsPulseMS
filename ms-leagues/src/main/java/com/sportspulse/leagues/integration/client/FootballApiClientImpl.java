@@ -23,12 +23,11 @@ public class FootballApiClientImpl implements FootballApiClient {
   @Qualifier("apiFootballWebClient")
   private final WebClient apiFootballWebClient;
 
-
   @Override
   @Cacheable(
       value = "leagues",
-      key = "T(String).valueOf(#country) + ':' + T(String).valueOf(#season) + ':' + T(String).valueOf(#leagueId)"
-  )
+      key =
+          "T(String).valueOf(#country) + ':' + T(String).valueOf(#season) + ':' + T(String).valueOf(#leagueId)")
   public List<ApiFootballLeagueWrapper> getLeagues(
       String country, Integer season, Integer leagueId) {
     try {
