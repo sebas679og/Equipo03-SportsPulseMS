@@ -8,12 +8,10 @@ import lombok.Value;
 /** Standard API error response for leagues service. */
 @Value
 @Builder
-public class LeagueErrorResponse {
+public class ErrorResponse {
 
   int code;
-
   String name;
-
   String description;
 
   @Builder.Default Instant timestamp = Instant.now().truncatedTo(ChronoUnit.MILLIS);
