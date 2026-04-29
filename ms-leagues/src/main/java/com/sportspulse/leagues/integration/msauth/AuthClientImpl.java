@@ -1,58 +1,115 @@
 package com.sportspulse.leagues.integration.msauth;
 
+import com.sportspulse.leagues.config.constants.ApiPaths;
 import com.sportspulse.leagues.config.constants.InternalHeaders;
-import com.sportspulse.leagues.config.properties.MsAuthProperties;
+import com.sportspulse.leagues.exceptions.CustomBadGatewayException;
 import com.sportspulse.leagues.exceptions.CustomServiceUnavailableException;
 import com.sportspulse.leagues.exceptions.CustomUnauthorizedException;
 import com.sportspulse.leagues.integration.msauth.dto.UserResponse;
-import java.net.URI;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import reactor.core.publisher.Mono;
 
+/**
+ * AuthClientImpl Implementation of the {@link AuthClient} interface. Provides methods to interact
+ * with the authentication service and validate user tokens.
+ */
+@Slf4j
 @Component
-@RequiredArgsConstructor
 public class AuthClientImpl implements AuthClient {
 
-  private final RestTemplate restTemplate;
-  private final MsAuthProperties msAuthProperties;
+  private final WebClient authWebClient;
+
+  public AuthClientImpl(@Qualifier("msAuthWebClient") WebClient authWebClient) {
+    this.authWebClient = authWebClient;
+  }
 
   @Override
   public UserResponse isTokenValid(String token) {
-    URI uri =
-        UriComponentsBuilder.fromUriString(msAuthProperties.getBaseUrl())
-            .path("/api/auth/validate")
-            .build(true)
-            .toUri();
+    WebClient.RequestHeadersSpec<?> request =
+        authWebClient
+            .get()
+            .uri(ApiPaths.AuthService.VALIDATE_TOKEN)
+            .header(
+                HttpHeaders.AUTHORIZATION,
+                String.join(" ", InternalHeaders.MsAuth.TYPE_TOKEN, token));
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.set(
-        InternalHeaders.MsAuth.BEARER_HEADER,
-        String.join(" ", InternalHeaders.MsAuth.TYPE_TOKEN, token));
-    headers.set(InternalHeaders.MsAuth.MS_AUTH_KEY, msAuthProperties.getApiKey());
+    return executeRequest(request);
+  }
 
-    try {
-      ResponseEntity<UserResponse> response =
-          restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), UserResponse.class);
-
-      UserResponse body = response.getBody();
-      if (body == null || !body.valid()) {
-        throw new CustomUnauthorizedException("Token inválido");
-      }
-      return body;
-    } catch (RestClientException ex) {
-      if (ex instanceof RestClientResponseException responseException
-          && responseException.getStatusCode().is4xxClientError()) {
-        throw new CustomUnauthorizedException("Token inválido");
-      }
-      throw new CustomServiceUnavailableException("No se pudo validar el token con ms-auth");
-    }
+  private UserResponse executeRequest(WebClient.RequestHeadersSpec<?> request) {
+    return request
+        .retrieve()
+        .onStatus(
+            status -> status.value() == 401,
+            response ->
+                response
+                    .bodyToMono(String.class)
+                    .defaultIfEmpty("No body")
+                    .flatMap(
+                        body -> {
+                          log.warn("Auth Service 401 Unauthorized. Body: {}", body);
+                          return Mono.error(
+                              new CustomUnauthorizedException(
+                                  "Invalid or expired token, please log in again"));
+                        }))
+        .onStatus(
+            status -> status.value() == 403,
+            response ->
+                response
+                    .bodyToMono(String.class)
+                    .defaultIfEmpty("No body")
+                    .flatMap(
+                        body -> {
+                          log.error(
+                              "Auth Service 403 Forbidden. Internal configuration error of the "
+                                  + "integration. Body: {}",
+                              body);
+                          return Mono.error(
+                              new CustomBadGatewayException(
+                                  "Session validation service rejected the request"));
+                        }))
+        .onStatus(
+            HttpStatusCode::is5xxServerError,
+            response ->
+                response
+                    .bodyToMono(String.class)
+                    .defaultIfEmpty("No body")
+                    .flatMap(
+                        body -> {
+                          if (log.isErrorEnabled()) {
+                            log.error(
+                                "Auth Service 5xx error. Status: {}, Body: {}",
+                                response.statusCode(),
+                                body);
+                          }
+                          return Mono.error(
+                              new CustomServiceUnavailableException(
+                                  "Session validation service is not available at this time"));
+                        }))
+        .bodyToMono(UserResponse.class)
+        .onErrorMap(
+            WebClientRequestException.class,
+            ex -> {
+              if (log.isErrorEnabled()) {
+                log.error(
+                    "Auth Service is unreachable. Cause: {} - {}",
+                    ex.getClass().getSimpleName(),
+                    ex.getMessage());
+              }
+              return new CustomBadGatewayException("Session validation service is unreachable");
+            })
+        .blockOptional()
+        .orElseThrow(
+            () -> {
+              log.error("Auth Service returned empty or null body when validating the token");
+              return new CustomServiceUnavailableException(
+                  "Session validation service is not available at this time");
+            });
   }
 }
