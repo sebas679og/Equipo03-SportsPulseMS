@@ -51,10 +51,24 @@ public class GlobalExceptionHandler {
     return buildError(HttpStatus.UNAUTHORIZED, ex.getMessage());
   }
 
+  /**
+   * Handles {@link ExternalDataInconsistencyException} occurrences within the application.
+   *
+   * <p>Logs the error message if error-level logging is enabled and returns a {@link
+   * ResponseEntity} with a {@link ErrorResponse} body and a "Bad Gateway" (HTTP 502) status code.
+   *
+   * <p>This handler is used to signal that the server, acting as a gateway or proxy, received
+   * inconsistent or invalid data from an external source.
+   *
+   * @param ex the exception representing the external data inconsistency
+   * @return a response entity with error details and HTTP 502 status
+   */
   @ExceptionHandler(ExternalDataInconsistencyException.class)
   public ResponseEntity<ErrorResponse> handleExternalDataInconsistency(
       ExternalDataInconsistencyException ex) {
-    log.error("External data inconsistency: {}", ex.getMessage());
+    if (log.isErrorEnabled()) {
+      log.error("External data inconsistency: {}", ex.getMessage());
+    }
     return badGateway(ex.getMessage());
   }
 

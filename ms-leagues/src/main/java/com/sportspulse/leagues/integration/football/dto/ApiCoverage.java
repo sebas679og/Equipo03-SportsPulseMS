@@ -1,5 +1,7 @@
 package com.sportspulse.leagues.integration.football.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * ApiCoverage Data transfer object (DTO) representing coverage details provided by the external
  * football API.
@@ -13,9 +15,9 @@ public record ApiCoverage(
     ApiFixtures fixtures,
     boolean standings,
     boolean players,
-    boolean top_scorers,
-    boolean top_assists,
-    boolean top_cards,
+    @JsonProperty("top_scorers") boolean topScorers,
+    @JsonProperty("top_assists") boolean topAssists,
+    @JsonProperty("top_cards") boolean topCards,
     boolean injuries,
     boolean predictions,
     boolean odds) {}

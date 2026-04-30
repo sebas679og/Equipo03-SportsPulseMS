@@ -1,5 +1,7 @@
 package com.sportspulse.leagues.integration.football.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * ApiFixtures Data transfer object (DTO) representing fixture-related configuration flags returned
  * by the external football API.
@@ -8,4 +10,7 @@ package com.sportspulse.leagues.integration.football.dto;
  * statistics are included in the API response.
  */
 public record ApiFixtures(
-    boolean events, boolean lineups, boolean statistics_fixtures, boolean statistics_players) {}
+    boolean events,
+    boolean lineups,
+    @JsonProperty("statistics_fixtures") boolean statisticsFixtures,
+    @JsonProperty("statistics_players") boolean statisticsPlayers) {}
