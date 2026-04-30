@@ -3,6 +3,7 @@ package com.sportspulse.leagues.utils.mappers;
 import com.sportspulse.leagues.dto.responses.LeagueCurrentSeason;
 import com.sportspulse.leagues.dto.responses.LeagueDetailResponse;
 import com.sportspulse.leagues.dto.responses.LeagueSummary;
+import com.sportspulse.leagues.exceptions.ExternalDataInconsistencyException;
 import com.sportspulse.leagues.integration.football.dto.ApiResponse;
 import com.sportspulse.leagues.integration.football.dto.ApiSeason;
 import java.util.List;
@@ -56,7 +57,7 @@ public interface LeaguesMapper {
         .findFirst()
         .orElseThrow(
             () ->
-                new IllegalStateException(
+                new ExternalDataInconsistencyException(
                     "No current season for league: " + response.league().id()));
   }
 
