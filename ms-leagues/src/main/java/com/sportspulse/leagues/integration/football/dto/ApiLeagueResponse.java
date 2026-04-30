@@ -1,5 +1,8 @@
 package com.sportspulse.leagues.integration.football.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.sportspulse.leagues.utils.deserializers.FlexibleErrorsDeserializer;
+
 import java.util.List;
 
 /**
@@ -12,8 +15,8 @@ import java.util.List;
  */
 public record ApiLeagueResponse(
     String get,
-    ApiParameters parameters,
-    List<Object> errors,
+    @JsonDeserialize(using = FlexibleErrorsDeserializer.class) List<Object> parameters,
+    @JsonDeserialize(using = FlexibleErrorsDeserializer.class) List<Object> errors,
     int results,
     ApiPaging paging,
     List<ApiResponse> response) {}
