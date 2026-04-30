@@ -15,7 +15,8 @@ public final class ApiPaths {
 
   /** Leagues API endpoints. */
   public static final class Leagues {
-    public static final String BASE = "/api/leagues";
+    public static final String LEAGUES_BY_FILTER = "/api/leagues";
+    public static final String LEAGUE_BY_ID = "/api/leagues/{leagueId}";
   }
 
   /** API documentation endpoints. */
