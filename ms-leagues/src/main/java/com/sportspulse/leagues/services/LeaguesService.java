@@ -1,13 +1,12 @@
 package com.sportspulse.leagues.services;
 
 import com.sportspulse.leagues.dto.responses.LeagueDetailResponse;
-import com.sportspulse.leagues.dto.responses.LeagueSummaryResponse;
-import java.util.List;
+import com.sportspulse.leagues.dto.responses.LeaguesResponse;
 
 /** Leagues service contract. */
 public interface LeaguesService {
 
-  List<LeagueSummaryResponse> getLeagues(String country, Integer season);
+  LeaguesResponse getLeagues(String country, String season);
 
-  LeagueDetailResponse getLeagueById(Integer leagueId);
+  LeagueDetailResponse getLeagueById(int leagueId);
 }

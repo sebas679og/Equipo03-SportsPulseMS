@@ -9,7 +9,6 @@ import lombok.Value;
 @Value
 @Builder
 public class ErrorResponse {
-
   int code;
   String name;
   String description;

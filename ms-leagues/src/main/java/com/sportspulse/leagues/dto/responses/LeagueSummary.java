@@ -1,18 +1,18 @@
 package com.sportspulse.leagues.dto.responses;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 
-/** Detailed response for GET /api/leagues/{leagueId}. */
+/** List item response for GET /api/leagues. */
 @Value
 @Builder
-public class LeagueDetailResponse {
+public class LeagueSummary {
   int id;
   String name;
   String type;
   String country;
   String logo;
-  List<Integer> seasons;
-  LeagueCurrentSeason currentSeason;
+  int currentSeason;
+  String startDate;
+  String endDate;
 }

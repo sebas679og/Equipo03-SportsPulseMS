@@ -4,18 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** List item response for GET /api/leagues. */
+/** Current season details in league detail response. */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LeagueSummaryResponse {
-
-  private Integer id;
-  private String name;
-  private String type;
-  private String country;
-  private String logo;
-  private Integer currentSeason;
+public class LeagueCurrentSeason {
+  private Integer year;
   private String startDate;
   private String endDate;
+  private Boolean current;
 }
