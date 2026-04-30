@@ -8,10 +8,12 @@ import com.sportspulse.leagues.dto.responses.LeagueSummary;
 import com.sportspulse.leagues.dto.responses.LeaguesResponse;
 import com.sportspulse.leagues.services.LeaguesService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +38,8 @@ public class LeaguesController {
 
   @Operation(
       summary = "List leagues",
-      description = "Returns available leagues. Optional filters: country and season.")
+      description = "Returns available leagues. Optional filters: country and season.",
+      security = {@SecurityRequirement(name = "BearerAuth")})
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
@@ -51,7 +54,35 @@ public class LeaguesController {
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = ErrorResponse.class)))
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "404",
+        description = "Not Found - team not found for the provided ID",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "429",
+        description = "Too Many Requests - API-Football rate limit exceeded",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "502",
+        description = "Bad Gateway - Error communicating with API-Football or ms-auth",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "503",
+        description = "Service Unavailable - API-Football or ms-auth service is down",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
   })
   @GetMapping(ApiPaths.Leagues.LEAGUES_BY_FILTER)
   public ResponseEntity<LeaguesResponse> getLeagues(
@@ -63,7 +94,8 @@ public class LeaguesController {
       summary = "Get league details by ID",
       description =
           "Returns detailed information for a league including available seasons and "
-              + "current season.")
+              + "current season.",
+      security = {@SecurityRequirement(name = "BearerAuth")})
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
@@ -85,10 +117,38 @@ public class LeaguesController {
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = ErrorResponse.class)))
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "429",
+        description = "Too Many Requests - API-Football rate limit exceeded",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "502",
+        description = "Bad Gateway - Error communicating with API-Football or ms-auth",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "503",
+        description = "Service Unavailable - API-Football or ms-auth service is down",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
   })
   @GetMapping(ApiPaths.Leagues.LEAGUE_BY_ID)
-  public ResponseEntity<LeagueDetailResponse> getLeagueById(@PathVariable int leagueId) {
+  public ResponseEntity<LeagueDetailResponse> getLeagueById(
+      @Parameter(
+              required = true,
+              name = "leagueId",
+              description = "Unique identifier of a league",
+              example = "33")
+          @PathVariable
+          int leagueId) {
     return ResponseEntity.ok(leaguesService.getLeagueById(leagueId));
   }
 }
