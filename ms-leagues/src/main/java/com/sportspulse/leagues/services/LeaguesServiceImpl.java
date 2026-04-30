@@ -1,5 +1,6 @@
 package com.sportspulse.leagues.services;
 
+import com.sportspulse.leagues.dto.requests.CountryAndSeasonRequest;
 import com.sportspulse.leagues.dto.responses.LeagueDetailResponse;
 import com.sportspulse.leagues.dto.responses.LeaguesResponse;
 import com.sportspulse.leagues.exceptions.CustomBadGatewayException;
@@ -24,15 +25,19 @@ public class LeaguesServiceImpl implements LeaguesService {
   private final LeaguesMapper leaguesMapper;
 
   @Override
-  public LeaguesResponse getLeagues(String country, String season) {
+  public LeaguesResponse getLeagues(CountryAndSeasonRequest request) {
 
     ApiLeagueResponse apiResponse =
-        footballApiClient.getLeaguesCountryAndSeason(country, Integer.parseInt(season));
+        footballApiClient.getLeaguesCountryAndSeason(
+            request.getCountry(),
+            request.getSeason() != null ? Integer.parseInt(request.getSeason()) : null);
     handleApiFootballErrors(apiResponse);
 
     if (apiResponse.response() == null || apiResponse.response().isEmpty()) {
       throw new CustomNotFoundException(
-          String.format("No leagues found for country '%s' and season '%s'", country, season));
+          String.format(
+              "No leagues found for country '%s' and season '%s'",
+              request.getCountry(), request.getSeason()));
     }
 
     return LeaguesResponse.builder()
