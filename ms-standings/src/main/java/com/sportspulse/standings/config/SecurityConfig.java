@@ -59,7 +59,7 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(
                         HttpMethod.GET, ApiPaths.Standings.CLASSIFICATION_LEAGUE_IN_A_SEASON)
-                    .hasAnyAuthority("AUTH_JWT", "AUTH_INTERNAL")
+                    .hasAuthority("AUTH_JWT")
                     .requestMatchers(
                         HttpMethod.GET, ApiPaths.Standings.POSITION_TEAM_IN_THE_STANDINGS)
                     .hasAuthority("AUTH_JWT")

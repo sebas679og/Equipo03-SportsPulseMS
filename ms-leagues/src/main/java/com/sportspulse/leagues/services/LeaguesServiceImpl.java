@@ -4,6 +4,7 @@ import com.sportspulse.leagues.dto.requests.CountryAndSeasonRequest;
 import com.sportspulse.leagues.dto.responses.LeagueDetailResponse;
 import com.sportspulse.leagues.dto.responses.LeaguesResponse;
 import com.sportspulse.leagues.exceptions.CustomBadGatewayException;
+import com.sportspulse.leagues.exceptions.CustomBadRequestException;
 import com.sportspulse.leagues.exceptions.CustomNotFoundException;
 import com.sportspulse.leagues.exceptions.CustomTooManyRequestsException;
 import com.sportspulse.leagues.integration.football.FootballApiClient;
@@ -26,6 +27,10 @@ public class LeaguesServiceImpl implements LeaguesService {
 
   @Override
   public LeaguesResponse getLeagues(CountryAndSeasonRequest request) {
+
+    if (request.getCountry() == null && request.getSeason() == null) {
+      throw new CustomBadRequestException("At least one filter is required: country or season");
+    }
 
     ApiLeagueResponse apiResponse =
         footballApiClient.getLeaguesCountryAndSeason(
