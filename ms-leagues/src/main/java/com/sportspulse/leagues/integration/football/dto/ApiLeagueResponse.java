@@ -2,7 +2,6 @@ package com.sportspulse.leagues.integration.football.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sportspulse.leagues.utils.deserializers.FlexibleErrorsDeserializer;
-
 import java.util.List;
 
 /**

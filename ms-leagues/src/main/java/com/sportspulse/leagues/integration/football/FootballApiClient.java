@@ -5,5 +5,7 @@ import com.sportspulse.leagues.integration.football.dto.ApiLeagueResponse;
 /** Client abstraction for API-Football leagues endpoint. */
 public interface FootballApiClient {
 
-  ApiLeagueResponse getLeagues(String country, int season, int leagueId);
+  ApiLeagueResponse getLeaguesCountryAndSeason(String country, Integer season);
+
+  ApiLeagueResponse getLeagueById(int leagueId);
 }
