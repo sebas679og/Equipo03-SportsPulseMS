@@ -19,6 +19,15 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface LeaguesMapper {
 
+  /**
+   * Converts a list of {@link ApiResponse} objects into a list of {@link LeagueSummary} instances.
+   *
+   * <p>Only includes responses that contain at least one current season. Each valid response is
+   * mapped to its corresponding summary representation using {@link #toSummary(ApiResponse)}.
+   *
+   * @param responses the list of API responses to process
+   * @return a list of league summaries for responses with a current season
+   */
   default List<LeagueSummary> toSummaryList(List<ApiResponse> responses) {
     return responses.stream()
         .filter(r -> r.seasons().stream().anyMatch(ApiSeason::current))
@@ -51,6 +60,18 @@ public interface LeaguesMapper {
   @Mapping(target = "endDate", source = "end")
   LeagueCurrentSeason toLeagueCurrentSeason(ApiSeason season);
 
+  /**
+   * Finds the current season from the given {@link ApiResponse}.
+   *
+   * <p>Searches through the list of {@link ApiSeason} objects associated with the response and
+   * returns the first one marked as current. If no current season is found, an {@link
+   * ExternalDataInconsistencyException} is thrown to indicate inconsistent or invalid external
+   * data.
+   *
+   * @param response the API response containing league and season information
+   * @return the current season associated with the league
+   * @throws ExternalDataInconsistencyException if no current season exists for the league
+   */
   default ApiSeason findCurrentSeason(ApiResponse response) {
     return response.seasons().stream()
         .filter(ApiSeason::current)

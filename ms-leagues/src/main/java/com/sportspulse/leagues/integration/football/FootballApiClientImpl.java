@@ -11,6 +11,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import reactor.core.publisher.Mono;
 
+/**
+ * FootballClientImpl Implementation of the {@link FootballApiClient} interface that interacts with
+ * the external football API using a configured {@link WebClient}.
+ *
+ * <p>Provides methods to retrieve league standings and other football-related data. Built as a
+ * Spring-managed component with dependency injection for the API client.
+ */
 @Slf4j
 @Service
 public class FootballApiClientImpl implements FootballApiClient {
