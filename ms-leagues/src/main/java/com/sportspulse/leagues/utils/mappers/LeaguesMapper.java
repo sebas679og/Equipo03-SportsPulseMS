@@ -1,14 +1,11 @@
 package com.sportspulse.leagues.utils.mappers;
 
-import com.sportspulse.leagues.dto.responses.LeagueCurrentSeasonResponse;
+import com.sportspulse.leagues.dto.responses.LeagueCurrentSeason;
 import com.sportspulse.leagues.dto.responses.LeagueDetailResponse;
-import com.sportspulse.leagues.dto.responses.LeagueSummaryResponse;
-import com.sportspulse.leagues.integration.dto.ApiFootballLeagueWrapper;
-import com.sportspulse.leagues.integration.dto.ApiFootballSeason;
-import java.util.Comparator;
+import com.sportspulse.leagues.dto.responses.LeagueSummary;
+import com.sportspulse.leagues.integration.football.dto.ApiResponse;
+import com.sportspulse.leagues.integration.football.dto.ApiSeason;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -21,81 +18,46 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface LeaguesMapper {
 
-  @Mapping(target = "id", source = "item.league.id")
-  @Mapping(target = "name", source = "item.league.name")
-  @Mapping(target = "type", source = "item.league.type")
-  @Mapping(target = "country", source = "item.country.name")
-  @Mapping(target = "logo", source = "item.league.logo")
-  @Mapping(target = "currentSeason", expression = "java(mapSeasonYear(item.getSeasons(), season))")
-  @Mapping(target = "startDate", expression = "java(mapSeasonStart(item.getSeasons(), season))")
-  @Mapping(target = "endDate", expression = "java(mapSeasonEnd(item.getSeasons(), season))")
-  LeagueSummaryResponse toLeagueSummaryResponse(ApiFootballLeagueWrapper item, Integer season);
-
-  @Mapping(target = "id", source = "item.league.id")
-  @Mapping(target = "name", source = "item.league.name")
-  @Mapping(target = "type", source = "item.league.type")
-  @Mapping(target = "country", source = "item.country.name")
-  @Mapping(target = "logo", source = "item.league.logo")
-  @Mapping(target = "seasons", expression = "java(mapSeasonYears(item.getSeasons()))")
-  @Mapping(target = "currentSeason", expression = "java(mapCurrentSeason(item.getSeasons()))")
-  LeagueDetailResponse toLeagueDetailResponse(ApiFootballLeagueWrapper item);
-
-  default LeagueCurrentSeasonResponse mapCurrentSeason(List<ApiFootballSeason> seasons) {
-    return toCurrentSeasonResponse(resolveSeason(seasons, null));
+  default List<LeagueSummary> toSummaryList(List<ApiResponse> responses) {
+    return responses.stream().map(this::toSummary).toList();
   }
 
-  default LeagueCurrentSeasonResponse toCurrentSeasonResponse(ApiFootballSeason season) {
-    if (season == null) {
-      return null;
-    }
-    return new LeagueCurrentSeasonResponse(
-        season.getYear(), season.getStart(), season.getEnd(), season.getCurrent());
-  }
+  @Mapping(target = "id", source = "league.id")
+  @Mapping(target = "name", source = "league.name")
+  @Mapping(target = "type", source = "league.type")
+  @Mapping(target = "country", source = "country.name")
+  @Mapping(target = "logo", source = "league.logo")
+  @Mapping(target = "currentSeason", expression = "java(findCurrentSeason(response).year())")
+  @Mapping(target = "startDate", expression = "java(findCurrentSeason(response).start())")
+  @Mapping(target = "endDate", expression = "java(findCurrentSeason(response).end())")
+  LeagueSummary toSummary(ApiResponse response);
 
-  default List<Integer> mapSeasonYears(List<ApiFootballSeason> seasons) {
-    return Optional.ofNullable(seasons).orElse(List.of()).stream()
-        .map(ApiFootballSeason::getYear)
-        .filter(Objects::nonNull)
-        .sorted()
-        .toList();
-  }
+  @Mapping(target = "id", source = "league.id")
+  @Mapping(target = "name", source = "league.name")
+  @Mapping(target = "type", source = "league.type")
+  @Mapping(target = "country", source = "country.name")
+  @Mapping(target = "logo", source = "league.logo")
+  @Mapping(target = "seasons", expression = "java(extractYears(response.seasons()))")
+  @Mapping(
+      target = "currentSeason",
+      expression = "java(toCurrentSeason(findCurrentSeason(response)))")
+  LeagueDetailResponse toDetail(ApiResponse response);
 
-  default Integer mapSeasonYear(List<ApiFootballSeason> seasons, Integer requestedYear) {
-    ApiFootballSeason season = resolveSeason(seasons, requestedYear);
-    return season != null ? season.getYear() : null;
-  }
+  @Mapping(target = "startDate", source = "start")
+  @Mapping(target = "endDate", source = "end")
+  LeagueCurrentSeason toCurrentSeason(ApiSeason season);
 
-  default String mapSeasonStart(List<ApiFootballSeason> seasons, Integer requestedYear) {
-    ApiFootballSeason season = resolveSeason(seasons, requestedYear);
-    return season != null ? season.getStart() : null;
-  }
-
-  default String mapSeasonEnd(List<ApiFootballSeason> seasons, Integer requestedYear) {
-    ApiFootballSeason season = resolveSeason(seasons, requestedYear);
-    return season != null ? season.getEnd() : null;
-  }
-
-  default ApiFootballSeason resolveSeason(List<ApiFootballSeason> seasons, Integer year) {
-    if (seasons == null || seasons.isEmpty()) {
-      return null;
-    }
-
-    if (year != null) {
-      Optional<ApiFootballSeason> selectedByYear =
-          seasons.stream().filter(season -> Objects.equals(season.getYear(), year)).findFirst();
-      if (selectedByYear.isPresent()) {
-        return selectedByYear.get();
-      }
-    }
-
-    return seasons.stream()
-        .filter(season -> Boolean.TRUE.equals(season.getCurrent()))
+  default ApiSeason findCurrentSeason(ApiResponse response) {
+    return response.seasons().stream()
+        .filter(ApiSeason::current)
         .findFirst()
-        .orElseGet(
+        .orElseThrow(
             () ->
-                seasons.stream()
-                    .filter(season -> season.getYear() != null)
-                    .max(Comparator.comparing(ApiFootballSeason::getYear))
-                    .orElse(null));
+                new IllegalStateException(
+                    "No current season for league: " + response.league().id()));
+  }
+
+  default List<Integer> extractYears(List<ApiSeason> seasons) {
+    return seasons.stream().map(ApiSeason::year).toList();
   }
 }
