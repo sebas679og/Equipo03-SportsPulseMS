@@ -19,7 +19,10 @@ import org.mapstruct.Mapping;
 public interface LeaguesMapper {
 
   default List<LeagueSummary> toSummaryList(List<ApiResponse> responses) {
-    return responses.stream().map(this::toSummary).toList();
+    return responses.stream()
+        .filter(r -> r.seasons().stream().anyMatch(ApiSeason::current))
+        .map(this::toSummary)
+        .toList();
   }
 
   @Mapping(target = "id", source = "league.id")
@@ -40,12 +43,12 @@ public interface LeaguesMapper {
   @Mapping(target = "seasons", expression = "java(extractYears(response.seasons()))")
   @Mapping(
       target = "currentSeason",
-      expression = "java(toCurrentSeason(findCurrentSeason(response)))")
+      expression = "java(toLeagueCurrentSeason(findCurrentSeason(response)))")
   LeagueDetailResponse toDetail(ApiResponse response);
 
   @Mapping(target = "startDate", source = "start")
   @Mapping(target = "endDate", source = "end")
-  LeagueCurrentSeason toCurrentSeason(ApiSeason season);
+  LeagueCurrentSeason toLeagueCurrentSeason(ApiSeason season);
 
   default ApiSeason findCurrentSeason(ApiResponse response) {
     return response.seasons().stream()

@@ -13,8 +13,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler(LeagueNotFoundException.class)
-  public ResponseEntity<ErrorResponse> handleLeagueNotFound(LeagueNotFoundException ex) {
+  @ExceptionHandler(CustomBadRequestException.class)
+  public ResponseEntity<ErrorResponse> handleLeagueNotFound(CustomBadRequestException ex) {
     return buildError(HttpStatus.NOT_FOUND, ex.getMessage());
   }
 

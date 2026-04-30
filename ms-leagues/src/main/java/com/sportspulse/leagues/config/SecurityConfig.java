@@ -1,20 +1,21 @@
 package com.sportspulse.leagues.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sportspulse.leagues.config.constants.ApiPaths;
-import com.sportspulse.leagues.dto.responses.ErrorResponse;
-import com.sportspulse.leagues.utils.security.filter.AuthValidationFilter;
+import com.sportspulse.leagues.exceptions.JsonWriter;
+import com.sportspulse.leagues.filters.BearerAuthenticationFilter;
+import com.sportspulse.leagues.integration.msauth.AuthClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /** Security configuration for the application. */
@@ -23,45 +24,64 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final AuthValidationFilter authValidationFilter;
-  private final ObjectMapper objectMapper;
+  private final JsonWriter writer;
+  private final AuthClient authClient;
 
+  /**
+   * Configures the application's security filter chain.
+   *
+   * <p>Defines security policies including CSRF disabling, stateless session management, request
+   * authorization rules, and custom authentication filters.
+   *
+   * <p>Permits access to Swagger UI and API documentation, as well as health checks. Restricts
+   * access to league classification and team position endpoints based on required authorities. Adds
+   * custom filters for dual-header guard and bearer authentication, and configures exception
+   * handling for unauthorized and access-denied scenarios.
+   *
+   * @param http the {@link HttpSecurity} to configure
+   * @return the built {@link SecurityFilterChain} enforcing application security rules
+   * @throws Exception if an error occurs during configuration
+   */
   @Bean
-  SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.sessionManagement(
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.csrf(AbstractHttpConfigurer::disable)
+        .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .csrf(AbstractHttpConfigurer::disable)
-        .headers(
-            headers ->
-                headers
-                    .contentTypeOptions(Customizer.withDefaults())
-                    .cacheControl(Customizer.withDefaults()))
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(ApiPaths.Docs.SWAGGER_UI, ApiPaths.Docs.API_DOCS)
                     .permitAll()
-                    .requestMatchers(ApiPaths.State.HEALTH)
+                    .requestMatchers(HttpMethod.GET, ApiPaths.State.HEALTH)
                     .permitAll()
-                    .requestMatchers(ApiPaths.Leagues.BASE + "/**")
-                    .hasAnyRole("USER", "ADMIN")
+                    .requestMatchers(HttpMethod.GET, ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                    .hasAuthority("AUTH_JWT")
+                    .requestMatchers(HttpMethod.GET, ApiPaths.Leagues.LEAGUE_BY_ID)
+                    .hasAuthority("AUTH_JWT")
                     .anyRequest()
                     .authenticated())
+        .addFilterAfter(bearerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(
-            exception ->
-                exception.authenticationEntryPoint(
-                    (request, response, ex) -> {
-                      response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                      response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                      ErrorResponse body =
-                          ErrorResponse.builder()
-                              .code(HttpStatus.UNAUTHORIZED.value())
-                              .name(HttpStatus.UNAUTHORIZED.getReasonPhrase())
-                              .description("Authentication required")
-                              .build();
-                      response.getWriter().write(objectMapper.writeValueAsString(body));
-                    }))
-        .addFilterBefore(authValidationFilter, UsernamePasswordAuthenticationFilter.class);
+            ex ->
+                ex.authenticationEntryPoint(unauthorizedEntryPoint())
+                    .accessDeniedHandler(accessDeniedHandler()));
 
     return http.build();
+  }
+
+  @Bean
+  public BearerAuthenticationFilter bearerAuthenticationFilter() {
+    return new BearerAuthenticationFilter(authClient);
+  }
+
+  @Bean
+  public AuthenticationEntryPoint unauthorizedEntryPoint() {
+    return (request, response, authException) ->
+        writer.sendError(response, HttpStatus.UNAUTHORIZED, "Authentication required");
+  }
+
+  @Bean
+  public AccessDeniedHandler accessDeniedHandler() {
+    return (request, response, ex) ->
+        writer.sendError(response, HttpStatus.NOT_FOUND, "The requested resource does not exist");
   }
 }

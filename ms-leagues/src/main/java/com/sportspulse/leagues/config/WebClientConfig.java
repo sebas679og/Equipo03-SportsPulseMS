@@ -24,6 +24,7 @@ public class WebClientConfig {
   public WebClient apiFootballWebClient(FootballApiProperties apiFootballProperties) {
     return WebClient.builder()
         .baseUrl(apiFootballProperties.getBaseUrl())
+        .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024))
         .filter(
             (request, next) -> {
               ClientRequest newRequest =
