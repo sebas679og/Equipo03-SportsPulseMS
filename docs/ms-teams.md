@@ -18,7 +18,8 @@ All endpoints require a valid JWT token issued by `ms-auth`, whether the request
 
 **Required Header:**
 ```
-Authorization: Bearer <token>
+Authorization: Bearer <token> (must be a valid JWT)
+X-Internal-API-Key: <internal_api_key> (for internal calls only)
 ```
 
 ---
@@ -113,28 +114,6 @@ Authorization: Bearer <token>
 
 ---
 
-## Feign Client Example
-
-Other services consume `ms-teams` using a Feign client:
-
-```java
-@FeignClient(name = "ms-teams", url = "${teams.service.url}")
-public interface TeamClient {
-
-    @GetMapping("/api/teams/{teamId}")
-    TeamResponse getTeam(@PathVariable Integer teamId);
-}
-```
-
-Configure the URL in `application.yml` or via environment variable:
-```yaml
-teams:
-  service:
-    url: ${TEAMS_SERVICE_URL:http://localhost:8083}
-```
-
----
-
 ## Caching Strategy
 
 Since this service is called by multiple other services, implementing caching is critical to avoid hitting the API-Football rate limit.
@@ -147,10 +126,20 @@ Since this service is called by multiple other services, implementing caching is
 
 ## Environment Variables
 
-| Variable | Description | Example |
-|---|---|---|
-| `RAPIDAPI_KEY` | API key for RapidAPI | `your_api_key_here` |
-| `JWT_SECRET` | Shared JWT secret for token validation | `sportpulse-secret-key-2025` |
+| Variable                               | Description                                            | Example                             |
+| -------------------------------------- | ------------------------------------------------------ | ----------------------------------- |
+| `SPRING_PROFILES_ACTIVE`               | Active Spring profile (e.g. dev, prod)                 | `prod`                              |
+| `SPORTS_PULSE_LEVEL_LOGIN`             | Logging level for the application                      | `INFO`                              |
+| `SWAGGER_UI_DOCUMENTATION_ENABLED`     | Enables or disables Swagger/OpenAPI documentation      | `false`                             |
+| `SPORTS_PULSE_API_FOOTBALL_BASE_URL`   | Base endpoint for the Api-Football service             | `https://v3.football.api-sports.io` |
+| `SPORTS_PULSE_API_FOOTBALL_KEY`        | API key for Api-Football (RapidAPI)                    | `your_api_key_here`                 |
+| `SPORTS_PULSE_AUTH_SERVICE_URL`        | Base URL for the authentication service                | `http://localhost:8080`             |
+| `SPORTS_PULSE_INTERNAL_API_KEY`        | Internal API key for service-to-service authentication | `internal-service-key`              |
+| `SPORTS_PULSE_CACHE_TEAMS_ENABLED`     | Enables or disables caching for teams                  | `true`                              |
+| `SPORTS_PULSE_CACHE_TEAMS_TTL_MINUTES` | Cache time-to-live in minutes                          | `60`                                |
+| `SPORTS_PULSE_CACHE_TEAMS_MAX_SIZE`    | Maximum number of entries in cache                     | `1000`                              |
+| `JWT_SECRET`                           | Shared JWT secret for token validation                 | `sportpulse-secret-key-2025`        |
+
 
 ---
 

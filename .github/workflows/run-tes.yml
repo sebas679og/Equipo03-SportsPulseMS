@@ -5,16 +5,62 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-tests:
+  ms-gateway-tests:
     runs-on: ubuntu-latest
 
+    services:
+      redis:
+        image: redis:8.6.2-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=5
+
+    defaults:
+      run:
+        working-directory: ms-gateway
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: maven
+
+      - name: Wait for Redis
+        run: |
+          for i in {1..15}; do
+            nc -z localhost 6379 && echo "Redis is up!" && exit 0
+            echo "Waiting for Redis..."
+            sleep 2
+          done
+          echo "Redis did not start in time" && exit 1
+
+      - name: Run tests (gateway)
+        run: mvn -B clean verify -Dspotless.check.skip=true -Dcheckstyle.skip=true -Dpmd.skip=true
+
+      - name: Upload JaCoCo report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report-ms-gateway
+          path: ms-gateway/target/site/jacoco/
+
+  run-tests:
+    needs: ms-gateway-tests
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         service:
           - ms-auth
           - ms-dashboard
           - ms-fixtures
-          - ms-gateway
           - ms-leagues
           - ms-notifications
           - ms-standings

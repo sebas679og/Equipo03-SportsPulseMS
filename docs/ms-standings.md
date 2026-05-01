@@ -124,28 +124,21 @@ Authorization: Bearer <token>
 
 ---
 
-## Inter-Service Communication
-
-This service calls `ms-teams` to enrich team data in standings responses:
-
-```java
-@FeignClient(name = "ms-teams", url = "${teams.service.url}")
-public interface TeamClient {
-
-    @GetMapping("/api/teams/{teamId}")
-    TeamResponse getTeam(@PathVariable Integer teamId);
-}
-```
-
----
-
 ## Environment Variables
 
-| Variable | Description | Example |
-|---|---|---|
-| `RAPIDAPI_KEY` | API key for RapidAPI | `your_api_key_here` |
-| `JWT_SECRET` | Shared JWT secret for token validation | `sportpulse-secret-key-2025` |
-| `TEAMS_SERVICE_URL` | URL for ms-teams | `http://ms-teams:8083` |
+| Variable                                   | Valor por defecto | Descripción                       |
+| ------------------------------------------ | ----------------- | --------------------------------- |
+| `SPRING_PROFILES_ACTIVE`                   | `prod`            | Perfil activo de Spring           |
+| `SPORTS_PULSE_LEVEL_LOGIN`                 | `INFO`            | Nivel de logging (Spring y root)  |
+| `SWAGGER_UI_DOCUMENTATION_ENABLED`         | `false`           | Habilita Swagger UI y API docs    |
+| `SPORTS_PULSE_API_FOOTBALL_BASE_URL`       | —                 | URL base de la API de fútbol      |
+| `SPORTS_PULSE_API_FOOTBALL_KEY`            | —                 | API Key de ApiFootball            |
+| `SPORTS_PULSE_AUTH_SERVICE_URL`            | —                 | URL del servicio de autenticación |
+| `SPORTS_PULSE_INTERNAL_API_KEY`            | —                 | API Key interna                   |
+| `SPORTS_PULSE_CACHE_STANDINGS_ENABLED`     | `true`            | Habilita caché                    |
+| `SPORTS_PULSE_CACHE_STANDINGS_TTL_MINUTES` | `1440`            | Tiempo de vida del caché          |
+| `SPORTS_PULSE_CACHE_STANDINGS_MAX_SIZE`    | `1000`            | Tamaño máximo del caché           |
+
 
 ---
 

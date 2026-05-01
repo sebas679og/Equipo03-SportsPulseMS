@@ -10,7 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sportspulse.auth.AbstractIntegrationTest;
 import com.sportspulse.auth.UserDataProvider;
-import com.sportspulse.auth.config.ApiPaths;
+import com.sportspulse.auth.config.constants.ApiPaths;
+import com.sportspulse.auth.config.properties.JwtProperties;
+import com.sportspulse.auth.dto.requests.LoginRequest;
 import com.sportspulse.auth.dto.requests.RegisterRequest;
 import com.sportspulse.auth.models.UserEntity;
 import com.sportspulse.auth.repositories.UserRepository;
@@ -21,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
@@ -31,13 +34,22 @@ public class AuthControllerTest extends AbstractIntegrationTest {
   @Autowired private UserRepository userRepository;
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
+  @Autowired private JwtProperties jwtProperties;
+  @Autowired private PasswordEncoder passwordEncoder;
 
   private UserEntity user;
 
   @BeforeEach
   void setUp() throws Exception {
     userRepository.deleteAll();
-    user = userRepository.save(UserDataProvider.createMockUser());
+    UserEntity rawUser =
+        UserEntity.builder()
+            .username(UserDataProvider.VALID_USERNAME)
+            .email(UserDataProvider.VALID_EMAIL)
+            .password(passwordEncoder.encode(UserDataProvider.VALID_PASSWORD))
+            .role(UserRole.USER)
+            .build();
+    user = userRepository.save(rawUser);
   }
 
   @Test
@@ -515,6 +527,314 @@ public class AuthControllerTest extends AbstractIntegrationTest {
     mockMvc
         .perform(
             post(ApiPaths.Auth.REGISTER)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  // ===============================================================
+  // User Login
+  // ===============================================================
+
+  @Test
+  public void shouldReturn200WhenValidCredentialsAreProvided() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder()
+            .email(UserDataProvider.VALID_EMAIL)
+            .password(UserDataProvider.VALID_PASSWORD)
+            .build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.token").exists())
+        .andExpect(jsonPath("$.tokenType").value(jwtProperties.getTokenType()))
+        .andExpect(jsonPath("$.expiresIn").value(jwtProperties.getExpiration()))
+        .andExpect(jsonPath("$.userId").exists())
+        .andExpect(
+            result -> {
+              String json = result.getResponse().getContentAsString();
+              String id = read(json, "$.userId");
+              UUID uuid = UUID.fromString(id);
+              assertNotNull(uuid);
+            });
+  }
+
+  @Test
+  public void shouldReturn401WhenEmailDoesNotExist() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder()
+            .email("test2@emil.com")
+            .password(UserDataProvider.VALID_PASSWORD)
+            .build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn401WhenPasswordIsInvalid() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder()
+            .email(UserDataProvider.VALID_EMAIL)
+            .password("PasswordValid123!")
+            .build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn400WhenAllFieldsAreBlankLogin() throws Exception {
+    LoginRequest request = LoginRequest.builder().email("").password("").build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn400WhenAllFieldsAreNullLogin() throws Exception {
+    LoginRequest request = LoginRequest.builder().build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  // =========================================================================
+  // Email
+  // =========================================================================
+  @Test
+  public void shouldReturn400WhenEmailIsBlankLogin() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder().email("").password(UserDataProvider.VALID_PASSWORD).build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn400WhenEmailIsNull() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder().email(null).password(UserDataProvider.VALID_PASSWORD).build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn400WhenEmailHasNoAtSymbolLogin() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder()
+            .email("invalidemail.com")
+            .password(UserDataProvider.VALID_PASSWORD)
+            .build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn400WhenEmailHasNoDomainLogin() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder().email("user@").password(UserDataProvider.VALID_PASSWORD).build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn400WhenEmailHasNoLocalPartLogin() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder()
+            .email("@domain.com")
+            .password(UserDataProvider.VALID_PASSWORD)
+            .build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn400WhenEmailHasDoubleAtLogin() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder()
+            .email("user@@domain.com")
+            .password(UserDataProvider.VALID_PASSWORD)
+            .build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn400WhenEmailContainsSpacesLogin() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder()
+            .email("user name@domain.com")
+            .password(UserDataProvider.VALID_PASSWORD)
+            .build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn400WhenEmailIsPlainTextLogin() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder().email("plaintext").password(UserDataProvider.VALID_PASSWORD).build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  // =========================================================================
+  // Password
+  // =========================================================================
+  @Test
+  public void shouldReturn400WhenPasswordIsBlankLogin() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder().email(UserDataProvider.VALID_EMAIL).password("").build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn400WhenPasswordIsNullLogin() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder().email(UserDataProvider.VALID_EMAIL).password(null).build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.description").exists())
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  public void shouldReturn400WhenPasswordContainsOnlySpacesLogin() throws Exception {
+    LoginRequest request =
+        LoginRequest.builder().email(UserDataProvider.VALID_EMAIL).password("   ").build();
+
+    mockMvc
+        .perform(
+            post(ApiPaths.Auth.LOGIN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isBadRequest())

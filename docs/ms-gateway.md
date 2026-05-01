@@ -30,9 +30,29 @@ No business logic lives here — its sole responsibilities are routing and traff
 
 ### 1. `ANY /api/**`
 
-**Access:** Public (forwards to the corresponding service)
+**Access:** Public (with restrictions)
 
-**Description:** Reverse proxy. Redirects the request and returns the destination service's response without modification.
+**Description:**  
+
+Acts as a reverse proxy, forwarding incoming requests to the corresponding microservice and returning its response without modification.
+
+However, for security reasons, not all routes under `/api/**` are exposed to the client.
+
+A set of **protected/internal routes** has been explicitly configured within the `filterChain`. Any request targeting these routes will be blocked and **will not be forwarded**, returning a `404 Not Found` response instead.
+
+This prevents unintended exposure of internal communication endpoints between microservices.
+
+Requests to routes **not included** in the protected configuration will be forwarded normally.
+
+**Example of blocked response:**
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "not found",
+  "timestamp": "2025-01-15T10:30:00.000Z"
+}
+```
 
 ---
 
@@ -46,7 +66,8 @@ No business logic lives here — its sole responsibilities are routing and traff
 ```json
 {
   "gateway": "UP",
-  "timestamp": "2025-01-15T10:30:00Z",
+  "timestamp": "2025-01-15T10:30:000Z",
+  "dependencies": "UP",
   "services": {
     "ms-auth": "UP",
     "ms-leagues": "UP",
@@ -63,17 +84,74 @@ No business logic lives here — its sole responsibilities are routing and traff
 
 ## 🔧 Rate Limiting
 
-**Limit:** 60 requests/minute per IP address.
+The system applies rate limiting based on the request type and endpoint.
 
-**Response when exceeded — `429 Too Many Requests`:**
+### 🔹 Default Limit
+
+**Limit:** 60 requests per minute per IP address  
+**Refill:** Full refill every 60 seconds
+
+All endpoints are protected by this limit unless a more restrictive rule is applied.
+
+---
+
+### 🔹 Brute Force Protection (`/login`)
+
+**Limit:** 5 requests per minute per IP address  
+**Refill:** Full refill every 60 seconds
+
+To prevent brute force attacks, the `/login` endpoint has a stricter rate limit configuration.
+
+---
+
+### 🚫 Response when exceeded — `429 Too Many Requests`
+
 ```json
 {
   "code": 429,
   "name": "TOO_MANY_REQUESTS",
-  "description": "You have exceeded the rate limit. Please try again later.",
+  "description": "You have exceeded the rate limit. Please try again in 60 seconds.",
   "timestamp": "2025-01-15T10:30:00Z"
 }
 ```
+
+### Notes:
+
+- Rate limiting is applied per client IP.
+- Limits are enforced using a token bucket strategy.
+- When the limit is exceeded, requests are rejected until tokens are replenished.
+
+---
+
+## ⚠️ Service Unavailability Handling
+
+**Status:** `503 Service Unavailable`
+
+**Description:**  
+When a downstream microservice is unavailable, unreachable, or fails to respond within the expected time, the gateway will not propagate the original error.
+
+Instead, it returns a standardized `503 Service Unavailable` response to the client.
+
+This ensures a consistent error contract and prevents exposing internal service details.
+
+---
+
+### 🚫 Response when service is unavailable
+
+```json
+{
+  "code": 503,
+  "name": "SERVICE_UNAVAILABLE",
+  "description": "The service is temporarily unavailable. Please try again later.",
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
+
+### Notes:
+
+- Applies to timeouts, connection failures, or unavailable downstream services.
+- Prevents leaking internal infrastructure details.
+- Encourages clients to implement retry mechanisms with backoff strategies.
 
 ---
 
@@ -81,13 +159,23 @@ No business logic lives here — its sole responsibilities are routing and traff
 
 | Variable | Description | Example |
 |---|---|---|
-| `AUTH_SERVICE_URL` | URL for ms-auth | `http://ms-auth:8081` |
-| `LEAGUES_SERVICE_URL` | URL for ms-leagues | `http://ms-leagues:8082` |
-| `TEAMS_SERVICE_URL` | URL for ms-teams | `http://ms-teams:8083` |
-| `FIXTURES_SERVICE_URL` | URL for ms-fixtures | `http://ms-fixtures:8085` |
-| `STANDINGS_SERVICE_URL` | URL for ms-standings | `http://ms-standings:8086` |
-| `NOTIFICATIONS_SERVICE_URL` | URL for ms-notifications | `http://ms-notifications:8088` |
-| `DASHBOARD_SERVICE_URL` | URL for ms-dashboard | `http://ms-dashboard:8089` |
+| `SPORTS_PULSE_AUTH_SERVICE_URL` | URL for ms-auth | `http://ms-auth:8081` |
+| `SPORTS_PULSE_LEAGUES_SERVICE_URL` | URL for ms-leagues | `http://ms-leagues:8082` |
+| `SPORTS_PULSE_TEAMS_SERVICE_URL` | URL for ms-teams | `http://ms-teams:8083` |
+| `SPORTS_PULSE_FIXTURES_SERVICE_URL` | URL for ms-fixtures | `http://ms-fixtures:8085` |
+| `SPORTS_PULSE_STANDINGS_SERVICE_URL` | URL for ms-standings | `http://ms-standings:8086` |
+| `SPORTS_PULSE_NOTIFICATIONS_SERVICE_URL` | URL for ms-notifications | `http://ms-notifications:8088` |
+| `SPORTS_PULSE_DASHBOARD_SERVICE_URL` | URL for ms-dashboard | `http://ms-dashboard:8089` |
+| `SPORTS_PULSE_REDIS_HOST` | Redis host | `localhost` |
+| `SPORTS_PULSE_REDIS_PORT` | Redis port | `6379` |
+| `SPORTS_PULSE_GATEWAY_CONNECT_TIMEOUT` | Gateway connection timeout (ms) | `3000` |
+| `SPORTS_PULSE_GATEWAY_RESPONSE_TIMEOUT` | Gateway response timeout | `5s` |
+| `SPORTS_PULSE_GATEWAY_ALLOWED_METHODS` | Allowed CORS HTTP methods | `GET,POST,PUT,DELETE` |
+| `SPORTS_PULSE_GATEWAY_ALLOWED_ORIGINS` | Allowed CORS origins | `*` |
+| `SPORTS_PULSE_GATEWAY_MAX_AGE` | CORS max age (seconds) | `3600` |
+| `SPORTS_PULSE_LEVEL_LOGIN` | Logging level for Spring and root | `INFO` |
+| `SPRING_PROFILES_ACTIVE` | Active Spring profile | `prod` |
+| `SWAGGER_UI_DOCUMENTATION_ENABLED` | Enable/disable Swagger/OpenAPI docs | `false` |
 
 ---
 

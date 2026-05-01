@@ -124,8 +124,9 @@ Since the free API-Football plan allows only **100 requests per day**, in-memory
 
 | Variable | Description | Example |
 |---|---|---|
-| `RAPIDAPI_KEY` | API key for RapidAPI | `your_api_key_here` |
+| `SPORTS_PULSE_API_FOOTBALL_KEY` | API key for RapidAPI | `your_api_key_here` |
 | `JWT_SECRET` | Shared JWT secret for token validation | `sportpulse-secret-key-2025` |
+| `SPORTS_PULSE_API_FOOTBALL_BASE_URL` | Base endpoint for the football API     | `https://v3.football.api-sports.io` |
 
 ---
 

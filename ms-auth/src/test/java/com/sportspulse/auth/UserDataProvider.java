@@ -19,4 +19,14 @@ public class UserDataProvider {
         .role(UserRole.USER)
         .build();
   }
+
+  /** Static mock of fake user data. */
+  public static UserEntity createAnotherMockUser() {
+    return UserEntity.builder()
+        .username("test2-username")
+        .email("test2@email.com")
+        .password("Test12345!")
+        .role(UserRole.USER)
+        .build();
+  }
 }

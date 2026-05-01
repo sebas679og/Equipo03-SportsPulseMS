@@ -3,9 +3,9 @@ package com.sportspulse.auth.services.processors;
 import com.sportspulse.auth.models.UserEntity;
 import com.sportspulse.auth.repositories.UserRepository;
 import com.sportspulse.auth.utils.enums.UserRole;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /** User registration processing class. */
 @Service

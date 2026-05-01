@@ -134,12 +134,14 @@ public interface StandingsClient {
 | `FIXTURES_SERVICE_URL` | URL for ms-fixtures | `http://ms-fixtures:8085` |
 | `STANDINGS_SERVICE_URL` | URL for ms-standings | `http://ms-standings:8086` |
 | `LEAGUES_SERVICE_URL` | URL for ms-leagues | `http://ms-leagues:8082` |
+| `SPORTS_PULSE_API_FOOTBALL_BASE_URL` | Base endpoint for the football API | `https://v3.football.api-sports.io` |
+| `SPORTS_PULSE_API_FOOTBALL_KEY`             | Private key for API-Football authentication | `YOUR_API_KEY`|
 
 ---
 
 ## Notes
 
-- This service does **not** use a database and does **not** call API-Football directly.
+- This service does not use a database. It calls API-Football directly only for the topScorers endpoint.
 - All data aggregation happens at request time. Consider caching the dashboard response for a few minutes (e.g. 5–10 min TTL) to reduce load on downstream services.
 - To improve performance, downstream calls can be made in **parallel** using `CompletableFuture` or reactive streams.
-- The `topScorers` data comes from `GET /players/topscorers` on API-Football — this can be fetched by one of the downstream services or directly from here depending on your team's design decision.
+- The `topScorers` data is fetched directly from `GET /players/topscorers` using the centralized `SPORT_PULSE_API_BASE_URL` configuration.
