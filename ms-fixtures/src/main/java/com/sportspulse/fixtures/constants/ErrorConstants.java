@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
  * <p>This class is divided into two main categories:
  *
  * <ul>
- *   <li>{@link Code}: Machine-readable strings used for programmatic error identification.</li>
- *   <li>{@link Message}: Human-readable descriptions providing context about the failure.</li>
+ *   <li>{@link Code}: Machine-readable strings used for programmatic error identification.
+ *   <li>{@link Message}: Human-readable descriptions providing context about the failure.
  * </ul>
  *
  * <p>These constants ensure consistency in error responses across the microservice.
