@@ -3,7 +3,7 @@ package com.sportspulse.standings.config.properties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * ApiFootballProperties Configuration properties for accessing the Football API. Provides the API
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Getter
 @Setter
-@Configuration
+@Component
 @ConfigurationProperties(prefix = "sportspulse.standings.api.football")
 public class ApiFootballProperties {
   private String apiKey;
