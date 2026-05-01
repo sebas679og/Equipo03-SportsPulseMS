@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 /**
  * Utility class that centralizes error codes and descriptive messages for the application.
  *
- * <p>This class is divided into two main categories:</p>
+ * <p>This class is divided into two main categories:
  *
  * <ul>
  *   <li>{@link Code}: Machine-readable strings used for programmatic error identification.</li>
  *   <li>{@link Message}: Human-readable descriptions providing context about the failure.</li>
  * </ul>
  *
- * <p>These constants ensure consistency in error responses across the microservice.</p>
+ * <p>These constants ensure consistency in error responses across the microservice.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ErrorConstants {
