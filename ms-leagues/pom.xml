@@ -36,6 +36,7 @@
 		<jacoco.version>0.8.14</jacoco.version>
 		<spotless.version>3.4.0</spotless.version>
 		<google-java-format.version>1.35.0</google-java-format.version>
+		<wiremock-standalone.version>3.13.1</wiremock-standalone.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -111,6 +112,12 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.wiremock</groupId>
+			<artifactId>wiremock-standalone</artifactId>
+			<version>${wiremock-standalone.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
