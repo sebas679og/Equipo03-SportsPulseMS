@@ -22,17 +22,14 @@ public interface LeaguesMapper {
   /**
    * Converts a list of {@link ApiResponse} objects into a list of {@link LeagueSummary} instances.
    *
-   * <p>Only includes responses that contain at least one current season. Each valid response is
-   * mapped to its corresponding summary representation using {@link #toSummary(ApiResponse)}.
+   * <p>Maps all responses without filtering. The API already returns only the leagues matching the
+   * requested season, so no additional filtering is needed here.
    *
    * @param responses the list of API responses to process
-   * @return a list of league summaries for responses with a current season
+   * @return a list of league summaries
    */
   default List<LeagueSummary> toSummaryList(List<ApiResponse> responses) {
-    return responses.stream()
-        .filter(r -> r.seasons().stream().anyMatch(ApiSeason::current))
-        .map(this::toSummary)
-        .toList();
+    return responses.stream().map(this::toSummary).toList();
   }
 
   @Mapping(target = "id", source = "league.id")
@@ -40,9 +37,9 @@ public interface LeaguesMapper {
   @Mapping(target = "type", source = "league.type")
   @Mapping(target = "country", source = "country.name")
   @Mapping(target = "logo", source = "league.logo")
-  @Mapping(target = "currentSeason", expression = "java(findCurrentSeason(response).year())")
-  @Mapping(target = "startDate", expression = "java(findCurrentSeason(response).start())")
-  @Mapping(target = "endDate", expression = "java(findCurrentSeason(response).end())")
+  @Mapping(target = "currentSeason", expression = "java(firstSeason(response).year())")
+  @Mapping(target = "startDate", expression = "java(firstSeason(response).start())")
+  @Mapping(target = "endDate", expression = "java(firstSeason(response).end())")
   LeagueSummary toSummary(ApiResponse response);
 
   @Mapping(target = "id", source = "league.id")
@@ -53,7 +50,7 @@ public interface LeaguesMapper {
   @Mapping(target = "seasons", expression = "java(extractYears(response.seasons()))")
   @Mapping(
       target = "currentSeason",
-      expression = "java(toLeagueCurrentSeason(findCurrentSeason(response)))")
+      expression = "java(toLeagueCurrentSeason(firstSeason(response)))")
   LeagueDetailResponse toDetail(ApiResponse response);
 
   @Mapping(target = "startDate", source = "start")
@@ -61,25 +58,23 @@ public interface LeaguesMapper {
   LeagueCurrentSeason toLeagueCurrentSeason(ApiSeason season);
 
   /**
-   * Finds the current season from the given {@link ApiResponse}.
+   * Returns the first season from the given {@link ApiResponse}.
    *
-   * <p>Searches through the list of {@link ApiSeason} objects associated with the response and
-   * returns the first one marked as current. If no current season is found, an {@link
-   * ExternalDataInconsistencyException} is thrown to indicate inconsistent or invalid external
-   * data.
+   * <p>When the API is queried by season, each response contains exactly one season in the {@code
+   * seasons} array — the one matching the requested year. This method retrieves it without any
+   * filtering.
    *
    * @param response the API response containing league and season information
-   * @return the current season associated with the league
-   * @throws ExternalDataInconsistencyException if no current season exists for the league
+   * @return the first (and typically only) season in the response
+   * @throws ExternalDataInconsistencyException if the seasons list is empty
    */
-  default ApiSeason findCurrentSeason(ApiResponse response) {
+  default ApiSeason firstSeason(ApiResponse response) {
     return response.seasons().stream()
-        .filter(ApiSeason::current)
         .findFirst()
         .orElseThrow(
             () ->
                 new ExternalDataInconsistencyException(
-                    "No current season for league: " + response.league().id()));
+                    "No season data for league: " + response.league().id()));
   }
 
   default List<Integer> extractYears(List<ApiSeason> seasons) {
