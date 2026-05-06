@@ -1,4 +1,4 @@
-package com.sportspulse.leagues.integration.football.dto;
+package com.sportspulse.leagues.integrations.football.dto;
 
 /**
  * ApiLeague Data transfer object (DTO) representing league details provided by the external

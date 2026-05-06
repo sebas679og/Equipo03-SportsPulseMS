@@ -3,7 +3,7 @@ package com.sportspulse.leagues.config;
 import com.sportspulse.leagues.config.constants.ApiPaths;
 import com.sportspulse.leagues.exceptions.JsonWriter;
 import com.sportspulse.leagues.filters.BearerAuthenticationFilter;
-import com.sportspulse.leagues.integration.msauth.AuthClient;
+import com.sportspulse.leagues.integrations.msauth.AuthClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

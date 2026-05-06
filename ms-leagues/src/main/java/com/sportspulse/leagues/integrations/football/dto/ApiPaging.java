@@ -1,4 +1,4 @@
-package com.sportspulse.leagues.integration.football.dto;
+package com.sportspulse.leagues.integrations.football.dto;
 
 /**
  * ApiPaging Data transfer object (DTO) representing pagination details provided by the external

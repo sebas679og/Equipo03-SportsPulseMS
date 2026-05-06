@@ -1,4 +1,4 @@
-package com.sportspulse.leagues.integration.football.dto;
+package com.sportspulse.leagues.integrations.football.dto;
 
 /**
  * ApiSeason Data transfer object (DTO) representing season details provided by the external
