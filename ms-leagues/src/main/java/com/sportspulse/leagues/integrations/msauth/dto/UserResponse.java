@@ -1,4 +1,4 @@
-package com.sportspulse.leagues.integration.msauth.dto;
+package com.sportspulse.leagues.integrations.msauth.dto;
 
 import java.util.UUID;
 

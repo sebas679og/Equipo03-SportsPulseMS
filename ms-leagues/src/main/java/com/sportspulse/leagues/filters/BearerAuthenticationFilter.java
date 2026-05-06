@@ -2,8 +2,8 @@ package com.sportspulse.leagues.filters;
 
 import com.sportspulse.leagues.exceptions.CustomBadGatewayException;
 import com.sportspulse.leagues.exceptions.CustomUnauthorizedException;
-import com.sportspulse.leagues.integration.msauth.AuthClient;
-import com.sportspulse.leagues.integration.msauth.dto.UserResponse;
+import com.sportspulse.leagues.integrations.msauth.AuthClient;
+import com.sportspulse.leagues.integrations.msauth.dto.UserResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

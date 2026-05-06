@@ -1,16 +1,14 @@
 package com.sportspulse.leagues.dto.responses;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
 /** Current season details in league detail response. */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Value
+@Builder
 public class LeagueCurrentSeason {
-  private Integer year;
-  private String startDate;
-  private String endDate;
-  private Boolean current;
+  Integer year;
+  String startDate;
+  String endDate;
+  Boolean current;
 }

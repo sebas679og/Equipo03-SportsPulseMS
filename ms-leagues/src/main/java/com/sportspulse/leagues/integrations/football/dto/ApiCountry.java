@@ -1,4 +1,4 @@
-package com.sportspulse.leagues.integration.football.dto;
+package com.sportspulse.leagues.integrations.football.dto;
 
 /**
  * ApiCountry Data transfer object (DTO) representing country details provided by the external

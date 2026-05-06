@@ -1,8 +1,8 @@
-package com.sportspulse.leagues.integration.football;
+package com.sportspulse.leagues.integrations.football;
 
 import com.sportspulse.leagues.exceptions.CustomBadGatewayException;
 import com.sportspulse.leagues.exceptions.CustomServiceUnavailableException;
-import com.sportspulse.leagues.integration.football.dto.ApiLeagueResponse;
+import com.sportspulse.leagues.integrations.football.dto.ApiLeagueResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;

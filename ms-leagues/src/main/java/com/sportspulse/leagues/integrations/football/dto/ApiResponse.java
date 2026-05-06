@@ -1,4 +1,4 @@
-package com.sportspulse.leagues.integration.football.dto;
+package com.sportspulse.leagues.integrations.football.dto;
 
 import java.util.List;
 

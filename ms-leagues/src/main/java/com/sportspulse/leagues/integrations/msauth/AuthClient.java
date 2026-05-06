@@ -1,6 +1,6 @@
-package com.sportspulse.leagues.integration.msauth;
+package com.sportspulse.leagues.integrations.msauth;
 
-import com.sportspulse.leagues.integration.msauth.dto.UserResponse;
+import com.sportspulse.leagues.integrations.msauth.dto.UserResponse;
 
 /** Contract for validating tokens against ms-auth. */
 public interface AuthClient {

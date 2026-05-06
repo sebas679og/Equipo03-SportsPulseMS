@@ -1,6 +1,6 @@
-package com.sportspulse.leagues.integration.football;
+package com.sportspulse.leagues.integrations.football;
 
-import com.sportspulse.leagues.integration.football.dto.ApiLeagueResponse;
+import com.sportspulse.leagues.integrations.football.dto.ApiLeagueResponse;
 
 /** Client abstraction for API-Football leagues endpoint. */
 public interface FootballApiClient {

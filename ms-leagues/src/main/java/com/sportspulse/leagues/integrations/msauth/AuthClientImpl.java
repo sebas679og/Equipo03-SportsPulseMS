@@ -1,11 +1,11 @@
-package com.sportspulse.leagues.integration.msauth;
+package com.sportspulse.leagues.integrations.msauth;
 
 import com.sportspulse.leagues.config.constants.ApiPaths;
 import com.sportspulse.leagues.config.constants.InternalHeaders;
 import com.sportspulse.leagues.exceptions.CustomBadGatewayException;
 import com.sportspulse.leagues.exceptions.CustomServiceUnavailableException;
 import com.sportspulse.leagues.exceptions.CustomUnauthorizedException;
-import com.sportspulse.leagues.integration.msauth.dto.UserResponse;
+import com.sportspulse.leagues.integrations.msauth.dto.UserResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
