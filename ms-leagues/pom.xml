@@ -37,6 +37,7 @@
 		<spotless.version>3.4.0</spotless.version>
 		<google-java-format.version>1.35.0</google-java-format.version>
 		<wiremock-standalone.version>3.13.1</wiremock-standalone.version>
+		<mockwebserver.version>5.3.2</mockwebserver.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -118,6 +119,12 @@
 			<groupId>org.wiremock</groupId>
 			<artifactId>wiremock-standalone</artifactId>
 			<version>${wiremock-standalone.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>mockwebserver</artifactId>
+			<version>${mockwebserver.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
