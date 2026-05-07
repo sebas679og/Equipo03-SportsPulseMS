@@ -303,6 +303,80 @@
         }
       ],
       "description": "The `ms-standings` service generates and exposes the up-to-date classification table for any league and season. It consumes `ms-teams` to enrich each team entry in the standings with full team details (logo, stadium, etc.)."
+    },
+    {
+      "name": "ms-leagues —  Leagues Service",
+      "item": [
+        {
+          "name": "Get Leagues by Filters",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_MS_LEAGUES}}/api/leagues?country=spain&season=2023",
+              "host": [
+                "{{URL_MS_LEAGUES}}"
+              ],
+              "path": [
+                "api",
+                "leagues"
+              ],
+              "query": [
+                {
+                  "key": "country",
+                  "value": "spain"
+                },
+                {
+                  "key": "season",
+                  "value": "2023"
+                }
+              ]
+            },
+            "description": "# ⚽ Get Football Leagues\n\n## 📌 Endpoint\n\n**GET**  \n`api/leagues?country=&season=`\n\n---\n\n## 📖 Description\n\nRetrieves a list of available football leagues.\n\nResults can be filtered by:\n\n- `country`\n    \n- `season`\n    \n\nAt least **one filter parameter** must be provided in the request.\n\nThe data is retrieved from the external **API-Football** service and normalized before being returned to the client.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n**Allowed roles:**\n\n- `USER`\n    \n\n---\n\n# 📥 Request\n\n## Query Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| country | String | ❌ No | Filter leagues by country name (e.g. `Spain`) |\n| season | Integer | ❌ No | Filter leagues by season year (e.g. `2024`) |\n\n> ⚠️ At least one query parameter (`country` or `season`) must be provided. \n  \n\n---\n\n### Example Request (Filter by Country)\n\n``` http\nGET /api/leagues?country=Spain\nAuthorization: Bearer {{jwt_token}}\n\n ```\n\n---\n\n### Example Request (Filter by Season)\n\n``` http\nGET /api/leagues?season=2024\nAuthorization: Bearer {{jwt_token}}\n\n ```\n\n---\n\n### Example Request (Country + Season)\n\n``` http\nGET /api/leagues?country=Spain&season=2024\nAuthorization: Bearer {{jwt_token}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nLeagues were successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"data\": [\n    {\n      \"id\": 140,\n      \"name\": \"La Liga\",\n      \"type\": \"League\",\n      \"country\": \"Spain\",\n      \"logo\": \"https://media.api-sports.io/football/leagues/140.png\",\n      \"currentSeason\": 2024,\n      \"startDate\": \"2024-08-17\",\n      \"endDate\": \"2025-05-25\"\n    },\n    {\n      \"id\": 39,\n      \"name\": \"Premier League\",\n      \"type\": \"League\",\n      \"country\": \"England\",\n      \"logo\": \"https://media.api-sports.io/football/leagues/39.png\",\n      \"currentSeason\": 2024,\n      \"startDate\": \"2024-08-16\",\n      \"endDate\": \"2025-05-25\"\n    }\n  ]\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid query parameters.\n\nPossible Causes:\n\n- Missing both `country` and `season`\n    \n- Invalid `season` format\n    \n- Malformed query string\n    \n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\nPossible Causes:\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nNo leagues were found for the provided filters.\n\nPossible Causes:\n\n- No leagues available for the given country\n    \n- No leagues available for the given season\n    \n- Invalid filter combination\n    \n\n---\n\n## 🚫 429 Too Many Requests\n\nRate limit exceeded from **API-Football** external service.\n\nPossible Causes:\n\n- Too many requests in a short period\n    \n- External API quota exceeded\n    \n\n---\n\n## 🔌 502 Bad Gateway\n\nError while communicating with external services.\n\nPossible Causes:\n\n- Unexpected response from **API-Football**\n    \n- Error communicating with **ms-auth**\n    \n- Invalid response payload from downstream services\n    \n\n---\n\n## 🚨 503 Service Unavailable\n\nRequired external services are currently unavailable.\n\nPossible Causes:\n\n- API-Football service downtime\n    \n- ms-auth service unavailable\n    \n- Network connectivity issues"
+          },
+          "response": []
+        },
+        {
+          "name": "Get League by Id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_MS_LEAGUES}}/api/leagues/{{leagueId}}",
+              "host": [
+                "{{URL_MS_LEAGUES}}"
+              ],
+              "path": [
+                "api",
+                "leagues",
+                "{{leagueId}}"
+              ]
+            },
+            "description": "# ⚽ Get League Details\n\n## 📌 Endpoint\n\n**GET**  \n`api/leagues/{leagueId}`\n\n---\n\n## 📖 Description\n\nRetrieves the complete details of a specific football league identified by its ID.\n\nThe response includes:\n\n- General league information\n    \n- Available seasons\n    \n- Current season details\n    \n\nThe data is retrieved from the external **API-Football** service and normalized before being returned to the client.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n**Allowed roles:**\n\n- `USER`\n    \n\n---\n\n# 📥 Request\n\n## Path Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| leagueId | Integer | ✅ Yes | API-Football league ID |\n\n---\n\n### Example Request\n\n``` http\nGET /api/leagues/140\nAuthorization: Bearer {{jwt_token}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nLeague details were successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"id\": 140,\n  \"name\": \"La Liga\",\n  \"type\": \"League\",\n  \"country\": \"Spain\",\n  \"logo\": \"https://media.api-sports.io/football/leagues/140.png\",\n  \"seasons\": [2021, 2022, 2023, 2024],\n  \"currentSeason\": {\n    \"year\": 2024,\n    \"startDate\": \"2024-08-17\",\n    \"endDate\": \"2025-05-25\",\n    \"current\": true\n  }\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nNo league was found with the provided ID.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"code\": 404,\n  \"name\": \"Not Found\",\n  \"description\": \"No league found with the provided ID\",\n  \"timestamp\": \"2025-01-15T10:30:00Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\nPossible Causes:\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## 🚫 429 Too Many Requests\n\nRate limit exceeded from **API-Football** external service.\n\nPossible Causes:\n\n- Too many requests in a short period\n    \n- External API quota exceeded\n    \n\n---\n\n## 🔌 502 Bad Gateway\n\nError while communicating with external services.\n\nPossible Causes:\n\n- Unexpected response from **API-Football**\n    \n- Error communicating with **ms-auth**\n    \n- Invalid response payload from downstream services\n    \n\n---\n\n## 🚨 503 Service Unavailable\n\nRequired external services are currently unavailable.\n\nPossible Causes:\n\n- API-Football service downtime\n    \n- ms-auth service unavailable\n    \n- Network connectivity issues"
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [
@@ -358,6 +432,14 @@
     },
     {
       "key": "URL_MS_STANDINGS",
+      "value": ""
+    },
+    {
+      "key": "URL_MS_LEAGUES",
+      "value": ""
+    },
+    {
+      "key": "leagueId",
       "value": ""
     }
   ]
