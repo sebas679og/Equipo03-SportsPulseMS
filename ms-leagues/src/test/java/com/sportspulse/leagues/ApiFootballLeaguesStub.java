@@ -219,6 +219,26 @@ public class ApiFootballLeaguesStub {
   }
 
   /**
+   * Stubs the endpoint {@code GET /leagues?country=<country>} to return a 200 OK response with a
+   * predefined JSON body simulating an empty result.
+   *
+   * <p>Used to represent scenarios where no leagues are found for the given country, returning a
+   * "not found" JSON structure.
+   *
+   * @param country the country name to stub
+   */
+  public void stubByCountry_ReturnResponseEmpty(String country) {
+    wireMock.stubFor(
+        get(urlPathEqualTo("/leagues"))
+            .withQueryParam("country", equalTo(country))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withHeader("Content-Type", "application/json")
+                    .withBodyFile("api-football/leagues/leagues-by-country-not-found.json")));
+  }
+
+  /**
    * Resets all registered stubs on the WireMock server.
    *
    * <p>Useful for clearing state between test executions.

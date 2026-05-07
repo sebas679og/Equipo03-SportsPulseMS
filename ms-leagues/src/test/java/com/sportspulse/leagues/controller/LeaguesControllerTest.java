@@ -223,4 +223,21 @@ class LeaguesControllerTest extends AbstractIntegrationTest {
         .andExpect(jsonPath("$.name").value(HttpStatus.BAD_GATEWAY.getReasonPhrase()))
         .andExpect(jsonPath("$.timestamp").exists());
   }
+
+  @Test
+  void shouldReturn404_whenValidTokenAndCountryProvided_NotFound() throws Exception {
+    leaguesStub.stubByCountry_ReturnResponseEmpty("spain");
+
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("country", "spain")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.NOT_FOUND.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
 }
