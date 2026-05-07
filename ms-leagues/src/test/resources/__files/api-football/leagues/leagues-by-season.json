@@ -1,0 +1,2345 @@
+{
+  "get": "leagues",
+  "parameters": {
+    "season": "2023"
+  },
+  "errors": [],
+  "results": 50,
+  "paging": {
+    "current": 1,
+    "total": 1
+  },
+  "response": [
+    {
+      "league": {
+        "id": 850,
+        "name": "UEFA U21 Championship - Qualification",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/850.png"
+      },
+      "country": {
+        "name": "World",
+        "code": null,
+        "flag": null
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2021-03-25",
+          "end": "2022-09-27",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 880,
+        "name": "World Cup - Women - Qualification Europe",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/880.png"
+      },
+      "country": {
+        "name": "World",
+        "code": null,
+        "flag": null
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2021-09-16",
+          "end": "2022-10-11",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": false,
+            "top_scorers": false,
+            "top_assists": false,
+            "top_cards": false,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 36,
+        "name": "Africa Cup of Nations - Qualification",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/36.png"
+      },
+      "country": {
+        "name": "World",
+        "code": null,
+        "flag": null
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2022-03-21",
+          "end": "2023-03-28",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 886,
+        "name": "UEFA U17 Championship - Qualification",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/886.png"
+      },
+      "country": {
+        "name": "World",
+        "code": null,
+        "flag": null
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2022-10-05",
+          "end": "2023-03-27",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 565,
+        "name": "Liga Primera U20",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/565.png"
+      },
+      "country": {
+        "name": "Nicaragua",
+        "code": "NI",
+        "flag": "https://media.api-sports.io/flags/ni.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2022-07-09",
+          "end": "2023-05-22",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": false,
+            "top_scorers": false,
+            "top_assists": false,
+            "top_cards": false,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 720,
+        "name": "Emir Cup",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/720.png"
+      },
+      "country": {
+        "name": "Kuwait",
+        "code": "KW",
+        "flag": "https://media.api-sports.io/flags/kw.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-22",
+          "end": "2023-05-09",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 764,
+        "name": "Premier League",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/764.png"
+      },
+      "country": {
+        "name": "Mongolia",
+        "code": "MN",
+        "flag": "https://media.api-sports.io/flags/mn.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2022-08-23",
+          "end": "2023-07-02",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 544,
+        "name": "FA Cup",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/544.png"
+      },
+      "country": {
+        "name": "Hong-Kong",
+        "code": "HK",
+        "flag": "https://media.api-sports.io/flags/hk.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2022-10-02",
+          "end": "2023-05-13",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 893,
+        "name": "UEFA U19 Championship - Qualification",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/893.png"
+      },
+      "country": {
+        "name": "World",
+        "code": null,
+        "flag": null
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2022-09-21",
+          "end": "2023-03-27",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 38,
+        "name": "UEFA U21 Championship",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/38.png"
+      },
+      "country": {
+        "name": "World",
+        "code": null,
+        "flag": null
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-06-21",
+          "end": "2023-07-08",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": true,
+              "statistics_players": true
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 541,
+        "name": "CONMEBOL Recopa",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/541.png"
+      },
+      "country": {
+        "name": "World",
+        "code": null,
+        "flag": null
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-02-08",
+          "end": "2023-02-15",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 25,
+        "name": "Gulf Cup of Nations",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/25.png"
+      },
+      "country": {
+        "name": "World",
+        "code": null,
+        "flag": null
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-06",
+          "end": "2023-01-19",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 504,
+        "name": "King's Cup",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/504.png"
+      },
+      "country": {
+        "name": "Saudi-Arabia",
+        "code": "SA",
+        "flag": "https://media.api-sports.io/flags/sa.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2022-12-20",
+          "end": "2023-05-12",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": true,
+              "statistics_players": true
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 128,
+        "name": "Liga Profesional Argentina",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/128.png"
+      },
+      "country": {
+        "name": "Argentina",
+        "code": "AR",
+        "flag": "https://media.api-sports.io/flags/ar.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-26",
+          "end": "2023-07-30",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": true,
+              "statistics_players": true
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 16,
+        "name": "CONCACAF Champions League",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/16.png"
+      },
+      "country": {
+        "name": "World",
+        "code": null,
+        "flag": null
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-03-07",
+          "end": "2023-06-04",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": true,
+              "statistics_players": true
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 612,
+        "name": "Copa do Nordeste",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/612.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-04",
+          "end": "2023-05-03",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 477,
+        "name": "Gaúcho - 1",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/477.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-20",
+          "end": "2023-04-08",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 624,
+        "name": "Carioca - 1",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/624.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-13",
+          "end": "2023-04-09",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 77,
+        "name": "Alagoano",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/77.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-14",
+          "end": "2023-04-08",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 475,
+        "name": "Paulista - A1",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/475.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-14",
+          "end": "2023-04-09",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": true,
+              "statistics_players": true
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 609,
+        "name": "Cearense - 1",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/609.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-14",
+          "end": "2023-04-08",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 252,
+        "name": "Division Profesional - Clausura",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/252.png"
+      },
+      "country": {
+        "name": "Paraguay",
+        "code": "PY",
+        "flag": "https://media.api-sports.io/flags/py.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-07-07",
+          "end": "2023-12-01",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 250,
+        "name": "Division Profesional - Apertura",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/250.png"
+      },
+      "country": {
+        "name": "Paraguay",
+        "code": "PY",
+        "flag": "https://media.api-sports.io/flags/py.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-27",
+          "end": "2023-06-11",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 632,
+        "name": "Supercopa do Brasil",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/632.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-28",
+          "end": "2023-01-28",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 842,
+        "name": "Super Copa",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/842.png"
+      },
+      "country": {
+        "name": "Uruguay",
+        "code": "UY",
+        "flag": "https://media.api-sports.io/flags/uy.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-29",
+          "end": "2023-01-29",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 628,
+        "name": "Goiano - 1",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/628.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-10",
+          "end": "2023-04-09",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 603,
+        "name": "Paraibano",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/603.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-06",
+          "end": "2023-04-08",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 608,
+        "name": "Maranhense",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/608.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-11",
+          "end": "2023-03-26",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 901,
+        "name": "Ykköscup",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/901.png"
+      },
+      "country": {
+        "name": "Finland",
+        "code": "FI",
+        "flag": "https://media.api-sports.io/flags/fi.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-21",
+          "end": "2023-03-11",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 814,
+        "name": "Reykjavik Cup",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/814.png"
+      },
+      "country": {
+        "name": "Iceland",
+        "code": "IS",
+        "flag": "https://media.api-sports.io/flags/is.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-12",
+          "end": "2023-02-02",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 605,
+        "name": "Paulista - A3",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/605.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-20",
+          "end": "2023-05-14",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 476,
+        "name": "Paulista - A2",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/476.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-13",
+          "end": "2023-04-08",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 616,
+        "name": "Potiguar",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/616.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-09",
+          "end": "2023-08-06",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 602,
+        "name": "Baiano - 1",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/602.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-10",
+          "end": "2023-04-09",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 626,
+        "name": "Sergipano",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/626.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-13",
+          "end": "2023-04-22",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 606,
+        "name": "Paranaense - 1",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/606.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-14",
+          "end": "2023-04-09",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 630,
+        "name": "Matogrossense",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/630.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-21",
+          "end": "2023-04-08",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 604,
+        "name": "Catarinense - 1",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/604.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-13",
+          "end": "2023-04-08",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 168,
+        "name": "League Cup",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/168.png"
+      },
+      "country": {
+        "name": "Iceland",
+        "code": "IS",
+        "flag": "https://media.api-sports.io/flags/is.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-02-04",
+          "end": "2023-04-02",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 611,
+        "name": "Capixaba",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/611.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-19",
+          "end": "2023-04-22",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 621,
+        "name": "Piauiense",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/621.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-07",
+          "end": "2023-04-15",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 623,
+        "name": "Sul-Matogrossense",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/623.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-22",
+          "end": "2023-04-30",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 631,
+        "name": "Tocantinense",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/631.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-28",
+          "end": "2023-04-09",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 610,
+        "name": "Brasiliense",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/610.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-28",
+          "end": "2023-04-15",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 627,
+        "name": "Paraense",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/627.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-02-05",
+          "end": "2023-05-25",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 629,
+        "name": "Mineiro - 1",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/629.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-20",
+          "end": "2023-04-08",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 522,
+        "name": "Amazonense",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/522.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-28",
+          "end": "2023-04-23",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 527,
+        "name": "Super Cup",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/527.png"
+      },
+      "country": {
+        "name": "Chile",
+        "code": "CL",
+        "flag": "https://media.api-sports.io/flags/cl.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-15",
+          "end": "2023-01-15",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 618,
+        "name": "São Paulo Youth Cup",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/618.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-01",
+          "end": "2023-01-25",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": false,
+            "top_scorers": false,
+            "top_assists": false,
+            "top_cards": false,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 620,
+        "name": "Cearense - 2",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/620.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-02-04",
+          "end": "2023-04-16",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": false,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 398,
+        "name": "Premier League",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/398.png"
+      },
+      "country": {
+        "name": "Bangladesh",
+        "code": "BD",
+        "flag": "https://media.api-sports.io/flags/bd.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2022-12-09",
+          "end": "2023-07-22",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 904,
+        "name": "SheBelieves Cup",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/904.png"
+      },
+      "country": {
+        "name": "World",
+        "code": null,
+        "flag": null
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-02-16",
+          "end": "2023-02-23",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 195,
+        "name": "Victoria NPL",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/195.png"
+      },
+      "country": {
+        "name": "Australia",
+        "code": "AU",
+        "flag": "https://media.api-sports.io/flags/au.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-02-16",
+          "end": "2023-09-10",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 622,
+        "name": "Pernambucano - 1",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/622.png"
+      },
+      "country": {
+        "name": "Brazil",
+        "code": "BR",
+        "flag": "https://media.api-sports.io/flags/br.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-06",
+          "end": "2023-04-22",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 358,
+        "name": "First Division",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/358.png"
+      },
+      "country": {
+        "name": "Ireland",
+        "code": "IE",
+        "flag": "https://media.api-sports.io/flags/ie.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-02-17",
+          "end": "2023-11-04",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 130,
+        "name": "Copa Argentina",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/130.png"
+      },
+      "country": {
+        "name": "Argentina",
+        "code": "AR",
+        "flag": "https://media.api-sports.io/flags/ar.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-01-23",
+          "end": "2023-12-06",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 189,
+        "name": "Capital Territory NPL",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/189.png"
+      },
+      "country": {
+        "name": "Australia",
+        "code": "AU",
+        "flag": "https://media.api-sports.io/flags/au.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-04-01",
+          "end": "2023-09-23",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 836,
+        "name": "Victoria NPL 2",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/836.png"
+      },
+      "country": {
+        "name": "Australia",
+        "code": "AU",
+        "flag": "https://media.api-sports.io/flags/au.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-02-17",
+          "end": "2023-08-19",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": false,
+              "lineups": false,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 474,
+        "name": "2. Division - Group 2",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/474.png"
+      },
+      "country": {
+        "name": "Norway",
+        "code": "NO",
+        "flag": "https://media.api-sports.io/flags/no.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-04-10",
+          "end": "2023-11-11",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 473,
+        "name": "2. Division - Group 1",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/473.png"
+      },
+      "country": {
+        "name": "Norway",
+        "code": "NO",
+        "flag": "https://media.api-sports.io/flags/no.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-04-10",
+          "end": "2023-11-11",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 812,
+        "name": "Super Cup",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/812.png"
+      },
+      "country": {
+        "name": "Belarus",
+        "code": "BY",
+        "flag": "https://media.api-sports.io/flags/by.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-02-25",
+          "end": "2023-02-25",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": false,
+            "players": false,
+            "top_scorers": false,
+            "top_assists": false,
+            "top_cards": false,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 251,
+        "name": "Division Intermedia",
+        "type": "League",
+        "logo": "https://media.api-sports.io/football/leagues/251.png"
+      },
+      "country": {
+        "name": "Paraguay",
+        "code": "PY",
+        "flag": "https://media.api-sports.io/flags/py.svg"
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-03-31",
+          "end": "2023-10-09",
+          "current": false,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": false,
+              "statistics_players": false
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    },
+    {
+      "league": {
+        "id": 960,
+        "name": "Euro Championship - Qualification",
+        "type": "Cup",
+        "logo": "https://media.api-sports.io/football/leagues/960.png"
+      },
+      "country": {
+        "name": "World",
+        "code": null,
+        "flag": null
+      },
+      "seasons": [
+        {
+          "year": 2023,
+          "start": "2023-03-23",
+          "end": "2024-03-26",
+          "current": true,
+          "coverage": {
+            "fixtures": {
+              "events": true,
+              "lineups": true,
+              "statistics_fixtures": true,
+              "statistics_players": true
+            },
+            "standings": true,
+            "players": true,
+            "top_scorers": true,
+            "top_assists": true,
+            "top_cards": true,
+            "injuries": false,
+            "predictions": true,
+            "odds": false
+          }
+        }
+      ]
+    }
+  ]
+}
