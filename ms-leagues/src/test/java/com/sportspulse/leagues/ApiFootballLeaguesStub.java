@@ -100,6 +100,74 @@ public class ApiFootballLeaguesStub {
   }
 
   /**
+   * Stubs the endpoint {@code GET /leagues?country=<country>} to return a 204 No Content response
+   * with a predefined JSON body.
+   *
+   * @param country the country name to stub
+   */
+  public void stubByCountry_Return204(String country) {
+    wireMock.stubFor(
+        get(urlPathEqualTo("/leagues"))
+            .withQueryParam("country", equalTo(country))
+            .willReturn(
+                aResponse()
+                    .withStatus(204)
+                    .withHeader("Content-Type", "application/json")
+                    .withBodyFile("api-football/leagues/leagues-response-204.json")));
+  }
+
+  /**
+   * Stubs the endpoint {@code GET /leagues?country=<country>} to return a 499 Client Closed Request
+   * response with a predefined error JSON body.
+   *
+   * @param country the country name to stub
+   */
+  public void stubByCountry_Return499(String country) {
+    wireMock.stubFor(
+        get(urlPathEqualTo("/leagues"))
+            .withQueryParam("country", equalTo(country))
+            .willReturn(
+                aResponse()
+                    .withStatus(499)
+                    .withHeader("Content-Type", "application/json")
+                    .withBodyFile("api-football/leagues/leagues-response-error.json")));
+  }
+
+  /**
+   * Stubs the endpoint {@code GET /leagues?country=<country>} to return a 500 Internal Server Error
+   * response with a predefined error JSON body.
+   *
+   * @param country the country name to stub
+   */
+  public void stubByCountry_Return500(String country) {
+    wireMock.stubFor(
+        get(urlPathEqualTo("/leagues"))
+            .withQueryParam("country", equalTo(country))
+            .willReturn(
+                aResponse()
+                    .withStatus(500)
+                    .withHeader("Content-Type", "application/json")
+                    .withBodyFile("api-football/leagues/leagues-response-error.json")));
+  }
+
+  /**
+   * Stubs the endpoint {@code GET /leagues?country=<country>} to return a 200 Internal Server Error
+   * response with an empty JSON array body.
+   *
+   * @param country the country name to stub
+   */
+  public void stubByCountry_ReturnEmpty(String country) {
+    wireMock.stubFor(
+        get(urlPathEqualTo("/leagues"))
+            .withQueryParam("country", equalTo(country))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withHeader("Content-Type", "application/json")
+                    .withBody("")));
+  }
+
+  /**
    * Resets all registered stubs on the WireMock server.
    *
    * <p>Useful for clearing state between test executions.
