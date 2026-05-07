@@ -8,6 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.sportspulse.leagues.AbstractIntegrationTest;
 import com.sportspulse.leagues.config.constants.ApiPaths;
+import com.sportspulse.leagues.exceptions.CustomBadGatewayException;
+import com.sportspulse.leagues.exceptions.CustomServiceUnavailableException;
+import com.sportspulse.leagues.exceptions.CustomUnauthorizedException;
 import com.sportspulse.leagues.integrations.msauth.AuthClient;
 import com.sportspulse.leagues.integrations.msauth.dto.UserResponse;
 import java.util.UUID;
@@ -238,6 +241,150 @@ class LeaguesControllerTest extends AbstractIntegrationTest {
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
         .andExpect(jsonPath("$.name").value(HttpStatus.NOT_FOUND.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn400_ValidateQueryParams() throws Exception {
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn400_ValidateParamMinSeason() throws Exception {
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("season", "999")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn400_ValidateParamMaxSeason() throws Exception {
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("season", "10000")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn400_ValidateParamCharacterSeason() throws Exception {
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("season", "abc")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn400_ValidateParamCharacterAndNumbersSeason() throws Exception {
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("season", "a132")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn401_InvalidToken() throws Exception {
+    Mockito.when(authClient.isTokenValid("token-invalid"))
+        .thenThrow(new CustomUnauthorizedException("Invalid or expired token"));
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("season", "2023")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + "token-invalid"))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn401_NotAuthorization() throws Exception {
+    Mockito.when(authClient.isTokenValid("token-invalid"))
+        .thenThrow(new CustomUnauthorizedException("Invalid or expired token"));
+    mockMvc
+        .perform(get(ApiPaths.Leagues.LEAGUES_BY_FILTER).param("season", "2023"))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn401_MsAuth403() throws Exception {
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN))
+        .thenThrow(
+            new CustomBadGatewayException("Session validation service rejected the request"));
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("season", "2023")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn401_MsAuth5xx() throws Exception {
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN))
+        .thenThrow(
+            new CustomServiceUnavailableException(
+                "Session validation service is not available at this time"));
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("season", "2023")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn401_WebClientError() throws Exception {
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN))
+        .thenThrow(new CustomBadGatewayException("Session validation service is unreachable"));
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("season", "2023")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
         .andExpect(jsonPath("$.timestamp").exists());
   }
 }

@@ -36,7 +36,7 @@ public class JsonWriter {
     ErrorResponse body =
         ErrorResponse.builder()
             .code(status.value())
-            .name(status.name())
+            .name(status.getReasonPhrase())
             .description(message)
             .build();
 

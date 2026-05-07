@@ -86,7 +86,8 @@ class JsonWriterTest {
     jsonWriter.sendError(response, HttpStatus.NOT_FOUND, "Resource not found");
 
     then(objectMapper).should().writeValue(eq(outputStream), captor.capture());
-    assertThat(captor.getValue()).hasFieldOrPropertyWithValue("name", HttpStatus.NOT_FOUND.name());
+    assertThat(captor.getValue())
+        .hasFieldOrPropertyWithValue("name", HttpStatus.NOT_FOUND.getReasonPhrase());
   }
 
   @Test
@@ -123,7 +124,7 @@ class JsonWriterTest {
     then(objectMapper).should().writeValue(eq(outputStream), captor.capture());
     assertThat(captor.getValue())
         .hasFieldOrPropertyWithValue("code", status.value())
-        .hasFieldOrPropertyWithValue("name", status.name());
+        .hasFieldOrPropertyWithValue("name", status.getReasonPhrase());
   }
 
   static Stream<HttpStatus> httpStatusProvider() {
