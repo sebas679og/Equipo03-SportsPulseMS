@@ -13,7 +13,6 @@ Each team must design, implement, document, and deploy the complete system in th
 | **Project Name** | SportPulse — Football Analysis Platform |
 | **Type** | Backend with microservices architecture connected to an external API |
 | **External API** | API-Football — https://v3.football.api-sports.io |
-| **Duration** | 2 weeks (1 sprint) |
 | **Mode** | Each team builds the complete system independently |
 
 ---
