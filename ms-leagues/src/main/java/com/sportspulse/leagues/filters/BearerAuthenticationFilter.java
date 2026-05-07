@@ -1,6 +1,7 @@
 package com.sportspulse.leagues.filters;
 
 import com.sportspulse.leagues.exceptions.CustomBadGatewayException;
+import com.sportspulse.leagues.exceptions.CustomServiceUnavailableException;
 import com.sportspulse.leagues.exceptions.CustomUnauthorizedException;
 import com.sportspulse.leagues.integrations.msauth.AuthClient;
 import com.sportspulse.leagues.integrations.msauth.dto.UserResponse;
@@ -67,7 +68,9 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
       SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    } catch (CustomUnauthorizedException | CustomBadGatewayException ignored) {
+    } catch (CustomUnauthorizedException
+        | CustomBadGatewayException
+        | CustomServiceUnavailableException ignored) {
       SecurityContextHolder.clearContext();
     }
 
