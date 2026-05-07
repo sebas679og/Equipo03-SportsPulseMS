@@ -3,6 +3,7 @@ package com.sportspulse.teams.dto.responses;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Value;
 
 /**
  * DataLeagueSeasonResponse Data transfer object (DTO) representing a collection of teams
@@ -11,8 +12,8 @@ import lombok.Data;
  * <p>Encapsulates a list of {@link TeamLeagueSeasonResponse} objects, providing structured access
  * to team information within the context of a specific league season.
  */
-@Data
+@Value
 @Builder
 public class DataLeagueSeasonResponse {
-  private List<TeamLeagueSeasonResponse> data;
+  List<TeamLeagueSeasonResponse> data;
 }

@@ -1,21 +1,31 @@
 package com.sportspulse.leagues.controller;
 
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.sportspulse.leagues.AbstractIntegrationTest;
+import com.sportspulse.leagues.config.constants.ApiPaths;
 import com.sportspulse.leagues.integrations.msauth.AuthClient;
 import com.sportspulse.leagues.integrations.msauth.dto.UserResponse;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.servlet.MockMvc;
 
+@AutoConfigureMockMvc
 class LeaguesControllerTest extends AbstractIntegrationTest {
 
   private static final String VALID_TOKEN = "valid-test-token";
+
+  private static final String TYPE_TOKEN = "Bearer ";
 
   private static final UserResponse VALID_USER =
       new UserResponse(
@@ -23,12 +33,7 @@ class LeaguesControllerTest extends AbstractIntegrationTest {
 
   @MockitoBean private AuthClient authClient;
 
-  @Autowired private WebTestClient webTestClient;
-
-  @BeforeEach
-  void setUp() {
-    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
-  }
+  @Autowired MockMvc mockMvc;
 
   @AfterEach
   void tearDown() {
@@ -36,20 +41,66 @@ class LeaguesControllerTest extends AbstractIntegrationTest {
   }
 
   @Test
-  void shouldReturnLeaguesByCountry_whenValidTokenAndCountryProvided() {
-    leaguesStub.stubByCountry("spain"); // ← accede directo al campo del padre
+  void shouldReturnLeaguesByCountry_whenValidTokenAndCountryProvided() throws Exception {
+    leaguesStub.stubByCountry("spain");
 
-    webTestClient
-        .get()
-        .uri("/api/leagues?country=spain")
-        .header(HttpHeaders.AUTHORIZATION, "Bearer " + VALID_TOKEN)
-        .exchange()
-        .expectStatus()
-        .isOk()
-        .expectBody()
-        .jsonPath("$.data")
-        .isArray()
-        .jsonPath("$.data[0].name")
-        .isEqualTo("La Liga");
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("country", "spain")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data").isArray())
+        .andExpect(jsonPath("$.data", hasSize(greaterThan(0))));
+  }
+
+  @Test
+  void shouldReturnLeaguesBySeason_whenValidTokenAndSeasonProvided() throws Exception {
+    leaguesStub.stubBySeason("2023");
+
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("season", "2023")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data").isArray())
+        .andExpect(jsonPath("$.data", hasSize(greaterThan(0))));
+  }
+
+  @Test
+  void shouldReturnLeaguesBySeasonAndCountry_whenValidTokenAndSeasonAndCountryProvided()
+      throws Exception {
+    leaguesStub.stubBySeasonAndCountry("2023", "spain");
+
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("season", "2023")
+                .param("country", "spain")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data").isArray())
+        .andExpect(jsonPath("$.data", hasSize(greaterThan(0))));
+  }
+
+  @Test
+  void shouldReturnLeaguesById_whenValidTokenAndIdProvided() throws Exception {
+    leaguesStub.stubById(140);
+
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUE_BY_ID, 140)
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(140));
   }
 }
