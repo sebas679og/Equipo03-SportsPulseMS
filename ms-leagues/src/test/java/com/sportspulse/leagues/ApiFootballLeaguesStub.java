@@ -168,6 +168,57 @@ public class ApiFootballLeaguesStub {
   }
 
   /**
+   * Stubs the endpoint {@code GET /leagues?country=<country>} to return a 200 OK response with a
+   * predefined JSON body simulating a "plan error".
+   *
+   * @param country the country name to stub
+   */
+  public void stubByCountry_ReturnErrorPlan(String country) {
+    wireMock.stubFor(
+        get(urlPathEqualTo("/leagues"))
+            .withQueryParam("country", equalTo(country))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withHeader("Content-Type", "application/json")
+                    .withBodyFile("api-football/leagues/leagues-response-error-plan.json")));
+  }
+
+  /**
+   * Stubs the endpoint {@code GET /leagues?country=<country>} to return a 200 OK response with a
+   * predefined JSON body simulating a "too many requests" error.
+   *
+   * @param country the country name to stub
+   */
+  public void stubByCountry_ReturnErrorRequests(String country) {
+    wireMock.stubFor(
+        get(urlPathEqualTo("/leagues"))
+            .withQueryParam("country", equalTo(country))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withHeader("Content-Type", "application/json")
+                    .withBodyFile("api-football/leagues/leagues-response-error-requests.json")));
+  }
+
+  /**
+   * Stubs the endpoint {@code GET /leagues?country=<country>} to return a 200 OK response with a
+   * predefined JSON body simulating multiple error messages.
+   *
+   * @param country the country name to stub
+   */
+  public void stubByCountry_ReturnErrors(String country) {
+    wireMock.stubFor(
+        get(urlPathEqualTo("/leagues"))
+            .withQueryParam("country", equalTo(country))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withHeader("Content-Type", "application/json")
+                    .withBodyFile("api-football/leagues/leagues-response-errors.json")));
+  }
+
+  /**
    * Resets all registered stubs on the WireMock server.
    *
    * <p>Useful for clearing state between test executions.

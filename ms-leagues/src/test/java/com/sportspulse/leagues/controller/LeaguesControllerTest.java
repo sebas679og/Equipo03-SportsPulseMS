@@ -172,4 +172,55 @@ class LeaguesControllerTest extends AbstractIntegrationTest {
         .andExpect(jsonPath("$.name").value(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase()))
         .andExpect(jsonPath("$.timestamp").exists());
   }
+
+  @Test
+  void shouldReturn429_whenValidTokenAndCountryProvided_ErrorPlan() throws Exception {
+    leaguesStub.stubByCountry_ReturnErrorPlan("spain");
+
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("country", "spain")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isTooManyRequests())
+        .andExpect(jsonPath("$.code").value(HttpStatus.TOO_MANY_REQUESTS.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn429_whenValidTokenAndCountryProvided_ErrorRequests() throws Exception {
+    leaguesStub.stubByCountry_ReturnErrorRequests("spain");
+
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("country", "spain")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isTooManyRequests())
+        .andExpect(jsonPath("$.code").value(HttpStatus.TOO_MANY_REQUESTS.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn429_whenValidTokenAndCountryProvided_Errors() throws Exception {
+    leaguesStub.stubByCountry_ReturnErrors("spain");
+
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("country", "spain")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isBadGateway())
+        .andExpect(jsonPath("$.code").value(HttpStatus.BAD_GATEWAY.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.BAD_GATEWAY.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
 }
