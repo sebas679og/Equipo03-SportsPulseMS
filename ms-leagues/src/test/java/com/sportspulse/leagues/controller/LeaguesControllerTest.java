@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -102,5 +103,73 @@ class LeaguesControllerTest extends AbstractIntegrationTest {
                 .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(140));
+  }
+
+  @Test
+  void shouldReturn503_whenValidTokenAndCountryProvided() throws Exception {
+    leaguesStub.stubByCountry_Return204("spain");
+
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("country", "spain")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isServiceUnavailable())
+        .andExpect(jsonPath("$.code").value(HttpStatus.SERVICE_UNAVAILABLE.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn503_whenValidTokenAndCountryProvided_ErrorApiFootball499() throws Exception {
+    leaguesStub.stubByCountry_Return499("spain");
+
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("country", "spain")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isServiceUnavailable())
+        .andExpect(jsonPath("$.code").value(HttpStatus.SERVICE_UNAVAILABLE.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn503_whenValidTokenAndCountryProvided_ErrorApiFootball500() throws Exception {
+    leaguesStub.stubByCountry_Return500("spain");
+
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("country", "spain")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isServiceUnavailable())
+        .andExpect(jsonPath("$.code").value(HttpStatus.SERVICE_UNAVAILABLE.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
+  }
+
+  @Test
+  void shouldReturn503_whenValidTokenAndCountryProvided_EmptyResponse() throws Exception {
+    leaguesStub.stubByCountry_ReturnEmpty("spain");
+
+    Mockito.when(authClient.isTokenValid(VALID_TOKEN)).thenReturn(VALID_USER);
+
+    mockMvc
+        .perform(
+            get(ApiPaths.Leagues.LEAGUES_BY_FILTER)
+                .param("country", "spain")
+                .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + VALID_TOKEN))
+        .andExpect(status().isServiceUnavailable())
+        .andExpect(jsonPath("$.code").value(HttpStatus.SERVICE_UNAVAILABLE.value()))
+        .andExpect(jsonPath("$.name").value(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase()))
+        .andExpect(jsonPath("$.timestamp").exists());
   }
 }
