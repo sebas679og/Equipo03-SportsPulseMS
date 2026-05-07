@@ -2,7 +2,6 @@ package com.sportspulse.teams.dto.responses;
 
 import java.util.List;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Value;
 
 /**
