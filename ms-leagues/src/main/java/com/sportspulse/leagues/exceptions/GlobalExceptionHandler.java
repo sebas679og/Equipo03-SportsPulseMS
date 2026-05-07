@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(CustomNotFoundException.class)
-  public ResponseEntity<ErrorResponse> handleCustomNotFoundException(CustomBadGatewayException ex) {
+  public ResponseEntity<ErrorResponse> handleCustomNotFoundException(CustomNotFoundException ex) {
     return buildError(HttpStatus.NOT_FOUND, ex.getMessage());
   }
 

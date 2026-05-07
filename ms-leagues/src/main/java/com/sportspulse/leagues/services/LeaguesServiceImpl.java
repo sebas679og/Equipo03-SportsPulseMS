@@ -12,6 +12,7 @@ import com.sportspulse.leagues.integrations.football.dto.ApiLeagueResponse;
 import com.sportspulse.leagues.integrations.football.dto.ApiResponse;
 import com.sportspulse.leagues.utils.mappers.LeaguesMapper;
 import java.util.Map;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,10 +40,12 @@ public class LeaguesServiceImpl implements LeaguesService {
     handleApiFootballErrors(apiResponse);
 
     if (apiResponse.response() == null || apiResponse.response().isEmpty()) {
+
       throw new CustomNotFoundException(
           String.format(
               "No leagues found for country '%s' and season '%s'",
-              request.getCountry(), request.getSeason()));
+              Objects.toString(request.getCountry(), "any"),
+              Objects.toString(request.getSeason(), "any")));
     }
 
     return LeaguesResponse.builder()
