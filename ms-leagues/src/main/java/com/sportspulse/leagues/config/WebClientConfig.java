@@ -1,0 +1,66 @@
+package com.sportspulse.leagues.config;
+
+import com.sportspulse.leagues.config.constants.InternalHeaders;
+import com.sportspulse.leagues.config.properties.FootballApiProperties;
+import com.sportspulse.leagues.config.properties.MsAuthProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.ClientRequest;
+import org.springframework.web.reactive.function.client.WebClient;
+
+/** Rest client configuration for outbound HTTP calls. */
+@Configuration
+public class WebClientConfig {
+
+  /**
+   * Creates a {@link WebClient} instance for the Football API. Configures the client with the base
+   * URL and attaches the API key as a request header for authentication.
+   *
+   * @param apiFootballProperties the configuration properties containing the Football API base URL
+   *     and API key
+   * @return a configured {@link WebClient} for the Football API
+   */
+  @Bean("apiFootballWebClient")
+  public WebClient apiFootballWebClient(FootballApiProperties apiFootballProperties) {
+    return WebClient.builder()
+        .baseUrl(apiFootballProperties.getBaseUrl())
+        .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024))
+        .filter(
+            (request, next) -> {
+              ClientRequest newRequest =
+                  ClientRequest.from(request)
+                      .header(
+                          InternalHeaders.ApiFootball.API_FOOTBALL_KEY,
+                          apiFootballProperties.getApiKey())
+                      .build();
+
+              return next.exchange(newRequest);
+            })
+        .build();
+  }
+
+  /**
+   * Creates a {@link WebClient} instance for the internal authentication service. Configures the
+   * client with the base URL and attaches the internal API key as a request header for secure
+   * communication between microservices.
+   *
+   * @param msAuthProperties the configuration properties containing the authentication service base
+   *     URL and API key
+   * @return a configured {@link WebClient} for the authentication service
+   */
+  @Bean("msAuthWebClient")
+  public WebClient msAuthWebClient(MsAuthProperties msAuthProperties) {
+    return WebClient.builder()
+        .baseUrl(msAuthProperties.getBaseUrl())
+        .filter(
+            (request, next) -> {
+              ClientRequest newRequest =
+                  ClientRequest.from(request)
+                      .header(InternalHeaders.MsAuth.MS_AUTH_KEY, msAuthProperties.getApiKey())
+                      .build();
+
+              return next.exchange(newRequest);
+            })
+        .build();
+  }
+}

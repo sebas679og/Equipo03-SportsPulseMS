@@ -3,7 +3,7 @@ package com.sportspulse.teams.config.properties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * TeamsCacheProperties Configuration properties for the teams caching mechanism. Defines whether
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Getter
 @Setter
-@Configuration
+@Component
 @ConfigurationProperties(prefix = "sportspulse.teams.cache")
 public class TeamsCacheProperties {
   private boolean enabled;

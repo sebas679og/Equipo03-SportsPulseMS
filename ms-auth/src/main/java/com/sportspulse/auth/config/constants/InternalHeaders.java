@@ -1,6 +1,6 @@
 package com.sportspulse.auth.config.constants;
 
-/** InternalHeaders Defines constant values for commonly used HTTP headers. */
+/** Internal header constants. */
 public class InternalHeaders {
 
   private InternalHeaders() {}
