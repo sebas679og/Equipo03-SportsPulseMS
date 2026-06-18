@@ -14,7 +14,11 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 @ConfigurationProperties(prefix = "sportspulse.fixtures.services.auth")
-public class AuthProperties {
+public class AuthProperties implements WebClientTimeoutProperties {
   private String baseUrl;
   private String apiKey;
+  private long connectTimeoutMs;
+  private long readTimeoutMs;
+  private long writeTimeoutMs;
+  private int memorySize;
 }

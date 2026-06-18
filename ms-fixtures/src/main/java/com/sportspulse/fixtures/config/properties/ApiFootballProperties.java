@@ -14,7 +14,11 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 @ConfigurationProperties(prefix = "sportspulse.fixtures.api.football")
-public class ApiFootballProperties {
+public class ApiFootballProperties implements WebClientTimeoutProperties{
   private String baseUrl;
   private String apiKey;
+  private long connectTimeoutMs;
+  private long readTimeoutMs;
+  private long writeTimeoutMs;
+  private int memorySize;
 }
