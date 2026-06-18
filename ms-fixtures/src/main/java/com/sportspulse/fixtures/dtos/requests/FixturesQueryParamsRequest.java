@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QueryParamsRequest {
+public class FixturesQueryParamsRequest {
     private int league;
     private int team;
     private String date;
