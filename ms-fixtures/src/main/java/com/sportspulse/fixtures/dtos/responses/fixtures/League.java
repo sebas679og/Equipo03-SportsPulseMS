@@ -1,4 +1,4 @@
-package com.sportspulse.fixtures.dtos.responses;
+package com.sportspulse.fixtures.dtos.responses.fixtures;
 
 import lombok.Builder;
 import lombok.Value;
