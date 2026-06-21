@@ -1,20 +1,66 @@
 package com.sportspulse.fixtures.integration.football;
 
+import com.sportspulse.fixtures.config.constants.CacheConstants;
 import com.sportspulse.fixtures.exceptions.CustomBadGatewayException;
 import com.sportspulse.fixtures.exceptions.CustomServiceUnavailableException;
 import com.sportspulse.fixtures.integration.football.dto.ApiFixtureResponse;
+import com.sportspulse.fixtures.utils.Status;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
+import java.time.LocalDate;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
+
 @Slf4j
 @Component
 public class FootballClientImpl implements FootballClient{
 
+    private final WebClient apiFootballWebClient;
+
+    public FootballClientImpl(@Qualifier("apiFootballWebClient") WebClient apiFootballWebClient) {
+        this.apiFootballWebClient = apiFootballWebClient;
+    }
+
+
+    @Override
+    @Cacheable(value = CacheConstants.FIXTURES_CACHE, key = "#league + '-' + #team + '-' + #date + '-' + #status")
+    public ApiFixtureResponse getFixtures(Integer league, Integer team, LocalDate date, Status status) {
+        final AtomicReference<URI> uriTracker = new AtomicReference<>();
+        WebClient.RequestHeadersSpec<?> request =
+                apiFootballWebClient.get()
+                        .uri(
+                                uriBuilder -> {
+                                    uriBuilder.path("/fixtures");
+                                    if (league != null){
+                                        uriBuilder.queryParam("league", league);
+                                    }
+                                    if (team != null){
+                                        uriBuilder.queryParam("team", team);
+                                    }
+                                    if (date != null){
+                                        uriBuilder.queryParam("date", date);
+                                    }
+                                    if (status != null){
+                                        uriBuilder.queryParam("status", status.name().toLowerCase(Locale.ROOT));
+                                    }
+                                    URI builtUri = uriBuilder.build();
+                                    uriTracker.set(builtUri);
+                                    return builtUri;
+                                });
+        String fullUrlPath =
+                uriTracker.get() != null ? uriTracker.get().toString() : "/fixtures";
+        return executeRequest(request, fullUrlPath);
+    }
+
     private ApiFixtureResponse executeRequest(
-            WebClient.RequestHeadersSpec<?> request, String standingKey) {
+            WebClient.RequestHeadersSpec<?> request, String fixtureKey) {
         return request
                 .retrieve()
                 .onStatus(
@@ -29,7 +75,7 @@ public class FootballClientImpl implements FootballClient{
                                                             "Api-Football 204 No Content. "
                                                                     + "The requested standing Api-Football error. "
                                                                     + "fixtures: {}, Body: {}",
-                                                            standingKey,
+                                                            fixtureKey,
                                                             response);
                                                     return Mono.error(
                                                             new CustomServiceUnavailableException(
@@ -70,7 +116,7 @@ public class FootballClientImpl implements FootballClient{
                         () -> {
                             log.error(
                                     "Api-Football returned an empty or null body for the requested. standing: {}",
-                                    standingKey);
+                                    fixtureKey);
                             return new CustomServiceUnavailableException(
                                     "Api-Football is not currently available, please try again");
                         });
