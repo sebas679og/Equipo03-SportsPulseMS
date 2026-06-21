@@ -95,7 +95,7 @@ public class AuthClientImpl implements AuthClient{
                             if (log.isErrorEnabled()) {
                                 log.error(
                                         "Auth Service is unreachable. Cause: {} - {}",
-                                        ex.getClass().getSimpleName(),
+                                        ex.getCause() != null ? ex.getCause().getCause().getMessage() : ex.getClass().getSimpleName(),
                                         ex.getMessage());
                             }
                             return new CustomBadGatewayException("Session validation service is unreachable");
