@@ -3,11 +3,9 @@ package com.sportspulse.fixtures.dtos.responses.fixtures;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Value;
-import lombok.extern.jackson.Jacksonized;
 
 @Value
 @Builder
-@Jacksonized
 public class Status {
 
     @JsonProperty("short")
