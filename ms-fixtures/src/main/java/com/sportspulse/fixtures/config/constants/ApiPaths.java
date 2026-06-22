@@ -11,4 +11,17 @@ public final class ApiPaths {
     public static final class AuthService {
         public static final String VALIDATE_TOKEN = "/api/auth/validate";
     }
+
+    /** Fixtures Defines API endpoint paths related to standings services. */
+    public static final class Standings {
+        public static final String ACTUATOR_HEALTH = "/actuator/health";
+        public static final String FIXTURES = "/api/fixtures";
+    }
+
+
+    /** API documentation endpoints. */
+    public static final class Docs {
+        public static final String SWAGGER_UI = "/swagger-ui/**";
+        public static final String API_DOCS = "/v3/api-docs/**";
+    }
 }
