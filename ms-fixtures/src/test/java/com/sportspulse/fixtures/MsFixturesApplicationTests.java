@@ -1,10 +1,8 @@
 package com.sportspulse.fixtures;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class MsFixturesApplicationTests {
+class MsFixturesApplicationTests extends AbstractIntegrationTest{
 
   @Test
   void contextLoads() {}
