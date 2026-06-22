@@ -38,14 +38,12 @@ public class FootballClientImpl implements FootballClient{
                         .uri(
                                 uriBuilder -> {
                                     uriBuilder.path("/fixtures");
+                                    uriBuilder.queryParam("date", date);
                                     if (league != null){
                                         uriBuilder.queryParam("league", league);
                                     }
                                     if (team != null){
                                         uriBuilder.queryParam("team", team);
-                                    }
-                                    if (date != null){
-                                        uriBuilder.queryParam("date", date);
                                     }
                                     if (status != null){
                                         uriBuilder.queryParam("status", status.name().toLowerCase(Locale.ROOT));

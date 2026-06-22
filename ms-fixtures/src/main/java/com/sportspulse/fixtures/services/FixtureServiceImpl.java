@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class FixtureServiceImpl implements FixtureService{
         ApiFixtureResponse api = footballClient.getFixtures(
                 queryParams.getLeague(),
                 queryParams.getTeam(),
-                queryParams.getDate(),
+                queryParams.getDate() == null ? LocalDate.now() : queryParams.getDate(),
                 queryParams.getStatus()
         );
 

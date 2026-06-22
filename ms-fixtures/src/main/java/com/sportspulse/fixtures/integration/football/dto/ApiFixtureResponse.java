@@ -9,7 +9,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record ApiFixtureResponse(
         String get,
-        ApiParameters parameters,
+        @JsonDeserialize(using = FlexibleErrorsDeserializer.class) List<Object> parameters,
         @JsonDeserialize(using = FlexibleErrorsDeserializer.class) List<Object> errors,
         int results,
         ApiPaging paging,
