@@ -13,7 +13,7 @@ public final class ApiPaths {
     }
 
     /** Fixtures Defines API endpoint paths related to standings services. */
-    public static final class Standings {
+    public static final class Fixtures {
         public static final String ACTUATOR_HEALTH = "/actuator/health";
         public static final String FIXTURES = "/api/fixtures";
     }

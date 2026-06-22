@@ -35,9 +35,9 @@ public class SecurityConfig {
                         auth ->
                                 auth.requestMatchers(ApiPaths.Docs.SWAGGER_UI, ApiPaths.Docs.API_DOCS)
                                         .permitAll()
-                                        .requestMatchers(HttpMethod.GET, ApiPaths.Standings.ACTUATOR_HEALTH)
+                                        .requestMatchers(HttpMethod.GET, ApiPaths.Fixtures.ACTUATOR_HEALTH)
                                         .permitAll()
-                                        .requestMatchers(HttpMethod.GET, ApiPaths.Standings.FIXTURES)
+                                        .requestMatchers(HttpMethod.GET, ApiPaths.Fixtures.FIXTURES)
                                         .hasAuthority("AUTH_JWT")
                                         .anyRequest()
                                         .authenticated())
