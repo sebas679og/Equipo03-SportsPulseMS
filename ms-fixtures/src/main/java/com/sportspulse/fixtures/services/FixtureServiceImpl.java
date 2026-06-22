@@ -54,7 +54,7 @@ public class FixtureServiceImpl implements FixtureService{
         }
 
         @SuppressWarnings("unchecked")
-        Map<String, Object> errorDetail = (Map<String, Object>) api.errors().getFirst();
+        Map<String, Object> errorDetail = (Map<String, Object>) api.errors().get(0);
 
         if (errorDetail.containsKey("requests")) {
             log.warn(
