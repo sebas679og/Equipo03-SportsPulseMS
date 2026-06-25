@@ -112,8 +112,6 @@ class FootballApiClientImplTest {
         @Test
         void shouldOmitQueryParam_whenAllParamsExceptDateIsNull() throws Exception {
             mockWebServer.enqueue(jsonResponse(buildFixtureResponse()));
-            LocalDate now = LocalDate.now();
-            Status status = Status.FT;
 
             footballClient.getFixtures(
                     null,
