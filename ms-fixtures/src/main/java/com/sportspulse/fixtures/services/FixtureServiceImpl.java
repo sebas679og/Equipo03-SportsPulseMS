@@ -30,7 +30,7 @@ public class FixtureServiceImpl implements FixtureService{
         ApiFixtureResponse api = footballClient.getFixtures(
                 queryParams.getLeague(),
                 queryParams.getTeam(),
-                queryParams.getDate() == null ? LocalDate.now() : queryParams.getDate(),
+                queryParams.getDate(),
                 queryParams.getStatus()
         );
 

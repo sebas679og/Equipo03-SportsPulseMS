@@ -20,14 +20,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.instancio.Select.all;
+import static org.instancio.Select.field;
 
-@DisplayName("FootballApiClientImpl Unit Tests")
-class FootballApiClientImplTest {
+@DisplayName("FootballClientImpl Unit Tests")
+class FootballClientImplTest {
 
     private MockWebServer mockWebServer;
     private FootballClientImpl footballClient;
@@ -37,7 +42,7 @@ class FootballApiClientImplTest {
                     .disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     @BeforeEach
-    void setUp() throws Exception{
+    void setUp() throws Exception {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
 
@@ -55,8 +60,19 @@ class FootballApiClientImplTest {
         mockWebServer.shutdown();
     }
 
-    private ApiFixtureResponse buildFixtureResponse(){
-        return Instancio.create(ApiFixtureResponse.class);
+    private static final int SAMPLE_SIZE = 2;
+
+    private ApiFixtureResponse buildFixtureResponse() {
+        return Instancio.of(ApiFixtureResponse.class)
+                .generate(field(ApiFixtureResponse::response), gen -> gen.collection().size(SAMPLE_SIZE))
+                .supply(all(Instant.class), () -> Instant.now().truncatedTo(ChronoUnit.MILLIS))
+                .set(field(ApiFixtureResponse::parameters), com.fasterxml.jackson.databind.node.NullNode.getInstance())
+                .set(field(ApiFixtureResponse::errors), com.fasterxml.jackson.databind.node.NullNode.getInstance())
+                .create();
+    }
+
+    private ApiFixtureResponse minimalResponse() {
+        return new ApiFixtureResponse("fixtures", null, null, 0, null, List.of());
     }
 
     private MockResponse jsonResponse(Object body) throws Exception {
@@ -71,53 +87,54 @@ class FootballApiClientImplTest {
     }
 
     @Nested
-    @DisplayName("getFixtures")
+    @DisplayName("getFixtures - successful response")
     class GetFixtures {
 
         @Test
-        void shouldReturnResponse_whenDateProvided() throws Exception {
+        @DisplayName("returns the exact deserialized response when the server responds with fixtures")
+        void shouldReturnExactResponse_whenFixturesExist() throws Exception {
             ApiFixtureResponse expected = buildFixtureResponse();
             mockWebServer.enqueue(jsonResponse(expected));
 
-            ApiFixtureResponse result =
-                    footballClient.getFixtures(null, null, null, null);
+            ApiFixtureResponse result = footballClient.getFixtures(null, null, null, null);
 
-            assertThat(result).isNotNull();
-            assertThat(result.response()).hasSizeGreaterThanOrEqualTo(1);
-
-            String name = result.response().getFirst().league().name();
-            assertThat(result.response().getFirst().league().name()).isEqualTo(name);
+            assertThat(result).isEqualTo(expected);
         }
 
         @Test
+        @DisplayName("deserializes a fixture list of the expected size")
+        void shouldDeserializeFixtureListOfExpectedSize() throws Exception {
+            ApiFixtureResponse expected = buildFixtureResponse();
+            mockWebServer.enqueue(jsonResponse(expected));
+
+            ApiFixtureResponse result = footballClient.getFixtures(null, null, null, null);
+
+            assertThat(result.response()).hasSize(SAMPLE_SIZE);
+        }
+
+        @Test
+        @DisplayName("sends every query param when league, team, date and status are provided")
         void shouldSendCorrectQueryParams_whenAllParamsProvided() throws Exception {
-            mockWebServer.enqueue(jsonResponse(buildFixtureResponse()));
-            LocalDate now = LocalDate.now();
+            mockWebServer.enqueue(jsonResponse(minimalResponse()));
+            LocalDate date = LocalDate.now();
             Status status = Status.FT;
 
-            footballClient.getFixtures(
-                    223,
-                    23,
-                    now,
-                    status);
+            footballClient.getFixtures(223, 23, date, status);
 
             RecordedRequest request = mockWebServer.takeRequest();
             assertThat(request.getPath())
                     .contains("league=223")
                     .contains("team=23")
-                    .contains(String.format("date=%s", now))
+                    .contains(String.format("date=%s", date))
                     .contains(String.format("status=%s", status.name().toLowerCase(Locale.ROOT)));
         }
 
         @Test
-        void shouldOmitQueryParam_whenAllParamsExceptDateIsNull() throws Exception {
-            mockWebServer.enqueue(jsonResponse(buildFixtureResponse()));
+        @DisplayName("omits league, team and status when null, but always sends date")
+        void shouldOmitOptionalQueryParams_whenNull() throws Exception {
+            mockWebServer.enqueue(jsonResponse(minimalResponse()));
 
-            footballClient.getFixtures(
-                    null,
-                    null,
-                    null,
-                    null);
+            footballClient.getFixtures(null, null, null, null);
 
             RecordedRequest request = mockWebServer.takeRequest();
             assertThat(request.getPath())
@@ -129,57 +146,52 @@ class FootballApiClientImplTest {
     }
 
     // ===========================================================================
-    // 5xx error handling
+    // 5xx / unexpected status code handling
     // ===========================================================================
     @Nested
-    @DisplayName("5xx server errors")
+    @DisplayName("Non-2xx server responses")
     class ServerErrorTest {
+
         @Test
+        @DisplayName("throws CustomServiceUnavailableException on 204 No Content")
         void shouldThrowServiceUnavailable_on204() {
             mockWebServer.enqueue(emptyResponse(204));
 
-            assertThatThrownBy(() -> footballClient.getFixtures(
-                    123,
-                    21,
-                    LocalDate.now(),
-                    Status.FT
-            )).isInstanceOf(CustomServiceUnavailableException.class);
+            assertThatThrownBy(
+                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT))
+                    .isInstanceOf(CustomServiceUnavailableException.class);
         }
 
         @Test
+        @DisplayName("throws CustomServiceUnavailableException on 499")
         void shouldThrowServiceUnavailable_on499() {
             mockWebServer.enqueue(emptyResponse(499));
 
-            assertThatThrownBy(() -> footballClient.getFixtures(
-                    123,
-                    21,
-                    LocalDate.now(),
-                    Status.FT
-            )).isInstanceOf(CustomServiceUnavailableException.class);
+            assertThatThrownBy(
+                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT))
+                    .isInstanceOf(CustomServiceUnavailableException.class);
         }
 
         @Test
+        @DisplayName("throws CustomServiceUnavailableException on 500")
         void shouldThrowServiceUnavailable_on500() {
             mockWebServer.enqueue(emptyResponse(500));
 
-            assertThatThrownBy(() -> footballClient.getFixtures(
-                    123,
-                    21,
-                    LocalDate.now(),
-                    Status.FT
-            )).isInstanceOf(CustomServiceUnavailableException.class);
+            assertThatThrownBy(
+                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT))
+                    .isInstanceOf(CustomServiceUnavailableException.class);
         }
     }
 
     // ===========================================================================
     // Empty body handling
     // ===========================================================================
-
     @Nested
     @DisplayName("Empty response body")
     class EmptyBodyTest {
 
         @Test
+        @DisplayName("throws CustomServiceUnavailableException when body is the JSON literal null")
         void shouldThrowServiceUnavailable_whenBodyIsNull() {
             mockWebServer.enqueue(
                     new MockResponse()
@@ -187,34 +199,27 @@ class FootballApiClientImplTest {
                             .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                             .setBody("null"));
 
-            assertThatThrownBy(() -> footballClient.getFixtures(
-                    123,
-                    21,
-                    LocalDate.now(),
-                    Status.FT
-            )).isInstanceOf(CustomServiceUnavailableException.class);
+            assertThatThrownBy(
+                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT))
+                    .isInstanceOf(CustomServiceUnavailableException.class);
         }
     }
 
     // ===========================================================================
     // Connection failure handling
     // ===========================================================================
-
     @Nested
     @DisplayName("Connection failures")
     class ConnectionFailureTest {
 
         @Test
+        @DisplayName("throws CustomBadGatewayException when the server is unreachable")
         void shouldThrowBadGatewayWhenServerIsUnreachable() throws Exception {
             mockWebServer.shutdown();
 
-            assertThatThrownBy(() -> footballClient.getFixtures(
-                    123,
-                    21,
-                    LocalDate.now(),
-                    Status.FT
-            )).isInstanceOf(CustomBadGatewayException.class);
+            assertThatThrownBy(
+                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT))
+                    .isInstanceOf(CustomBadGatewayException.class);
         }
     }
-
 }
