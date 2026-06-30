@@ -11,8 +11,18 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./sports-pulse-data:/var/lib/postgresql
+      - sports-pulse-data:/var/lib/postgresql
       - ./config/postgres_db/init-multiple-db.sh:/docker-entrypoint-initdb.d/init-multiple-db.sh
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${SPORTS_PULSE_DATASOURCE_USERNAME} -d ${SPORTS_PULSE_DATASOURCE_DB_AUTH} && pg_isready -U ${SPORTS_PULSE_DATASOURCE_USERNAME} -d ${SPORTS_PULSE_DATASOURCE_DB_NOTIFICATIONS}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     restart: always
     networks:
       - sports-pulse-network
@@ -22,6 +32,14 @@ services:
     ports:
       - "6379:6379"
     restart: always
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     networks:
       - sports-pulse-network
 
@@ -32,7 +50,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
@@ -50,6 +69,12 @@ services:
       SPORTS_PULSE_STANDINGS_SERVICE_URL: http://ms-standings:8086
       SPORTS_PULSE_NOTIFICATIONS_SERVICE_URL: http://ms-notifications:8088
       SPORTS_PULSE_DASHBOARD_SERVICE_URL: http://ms-dashboard:8089
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -61,7 +86,8 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - postgres-datasource
+      postgres-datasource:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SPORTS_PULSE_DATASOURCE_URL_AUTH: jdbc:postgresql://postgres-datasource:5432/${SPORTS_PULSE_DATASOURCE_DB_AUTH}
@@ -73,6 +99,12 @@ services:
       SPORTS_PULSE_TOKEN_TYPE: ${SPORTS_PULSE_TOKEN_TYPE}
       SPORTS_PULSE_INTERNAL_API_KEY: ${SPORTS_PULSE_INTERNAL_API_KEY}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8081/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -93,6 +125,12 @@ services:
       SPORTS_PULSE_CACHE_LEAGUES_ENABLED: ${SPORTS_PULSE_CACHE_LEAGUES_ENABLED}
       SPORTS_PULSE_CACHE_LEAGUES_TTL_MINUTES: ${SPORTS_PULSE_CACHE_LEAGUES_TTL_MINUTES}
       SPORTS_PULSE_CACHE_LEAGUES_MAX_SIZE: ${SPORTS_PULSE_CACHE_LEAGUES_MAX_SIZE}
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8082/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -113,6 +151,12 @@ services:
       SPORTS_PULSE_CACHE_TEAMS_MAX_SIZE: ${SPORTS_PULSE_CACHE_TEAMS_MAX_SIZE}
       SPORTS_PULSE_API_FOOTBALL_BASE_URL: ${SPORTS_PULSE_API_FOOTBALL_BASE_URL}
       SPORTS_PULSE_API_FOOTBALL_KEY: ${SPORTS_PULSE_API_FOOTBALL_KEY}
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8083/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -141,6 +185,12 @@ services:
       SPORTS_PULSE_CACHE_FIXTURES_ENABLED: ${SPORTS_PULSE_CACHE_FIXTURES_ENABLED}
       SPORTS_PULSE_CACHE_FIXTURES_TTL_MINUTES: ${SPORTS_PULSE_CACHE_FIXTURES_TTL_MINUTES}
       SPORTS_PULSE_CACHE_FIXTURES_MAX_SIZE: ${SPORTS_PULSE_CACHE_FIXTURES_MAX_SIZE}
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8085/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -161,6 +211,12 @@ services:
       SPORTS_PULSE_CACHE_STANDINGS_ENABLED: ${SPORTS_PULSE_CACHE_STANDINGS_ENABLED}
       SPORTS_PULSE_CACHE_STANDINGS_TTL_MINUTES: ${SPORTS_PULSE_CACHE_STANDINGS_TTL_MINUTES}
       SPORTS_PULSE_CACHE_STANDINGS_MAX_SIZE: ${SPORTS_PULSE_CACHE_STANDINGS_MAX_SIZE}
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8086/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -172,8 +228,10 @@ services:
     ports:
       - "8088:8088"
     depends_on:
-      - postgres-datasource
-      - ms-fixtures
+      postgres-datasource:
+        condition: service_healthy
+      ms-fixtures:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SPORTS_PULSE_DATASOURCE_URL_NOIFICATIONS: jdbc:postgresql://postgres-datasource:5432/${SPORTS_PULSE_DATASOURCE_DB_NOTIFICATIONS}
@@ -182,6 +240,12 @@ services:
       SPORTS_PULSE_JPA_DDL: ${SPORTS_PULSE_JPA_DDL}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
       FIXTURES_SERVICE_URL: http://ms-fixtures:8085
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8088/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -193,9 +257,12 @@ services:
     ports:
       - "8089:8089"
     depends_on:
-      - ms-fixtures
-      - ms-standings
-      - ms-leagues
+      ms-fixtures:
+        condition: service_healthy
+      ms-standings:
+        condition: service_healthy
+      ms-leagues:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
@@ -204,6 +271,12 @@ services:
       LEAGUES_SERVICE_URL: http://ms-leagues:8082
       SPORTS_PULSE_API_FOOTBALL_BASE_URL: ${SPORTS_PULSE_API_FOOTBALL_BASE_URL}
       SPORTS_PULSE_API_FOOTBALL_KEY: ${SPORTS_PULSE_API_FOOTBALL_KEY}
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8089/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     restart: on-failure
     networks:
       - sports-pulse-network
@@ -211,3 +284,7 @@ services:
 networks:
   sports-pulse-network:
     driver: bridge
+
+volumes:
+  sports-pulse-data:
+  redis-data:
