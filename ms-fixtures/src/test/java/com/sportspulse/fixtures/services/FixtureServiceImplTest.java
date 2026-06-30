@@ -30,6 +30,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -162,6 +164,106 @@ class FixtureServiceImplTest {
                             queryParams.getTeam(),
                             queryParams.getDate(),
                             queryParams.getStatus());
+        }
+
+        @Nested
+        @DisplayName("getFixtures - date default logic")
+        class DateDefaultLogic {
+
+            // Reusable minimal response to avoid repeating this boilerplate
+            private ApiFixtureResponse successResponse() {
+                ArrayNode emptyErrors = objectMapper.createArrayNode();
+                return new ApiFixtureResponse("fixtures", null, emptyErrors, 1,
+                        null, List.of(apiFixtureData));
+            }
+
+            @Test
+            @DisplayName("uses today as date when all filters are null and date is null")
+            void usesTodayWhenAllFiltersAndDateAreNull() {
+                FixturesQueryParamsRequest allNull = FixturesQueryParamsRequest.builder()
+                        .league(null).team(null).date(null).status(null)
+                        .build();
+                when(footballClient.getFixtures(isNull(), isNull(), eq(LocalDate.now()), isNull()))
+                        .thenReturn(successResponse());
+                when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
+
+                fixtureService.getFixtures(allNull);
+
+                verify(footballClient).getFixtures(null, null, LocalDate.now(), null);
+            }
+
+            @Test
+            @DisplayName("uses explicit date when provided even if all other filters are null")
+            void usesExplicitDateWhenProvided() {
+                LocalDate customDate = LocalDate.of(2026, 1, 15);
+                FixturesQueryParamsRequest onlyDate = FixturesQueryParamsRequest.builder()
+                        .date(customDate)
+                        .build();
+                when(footballClient.getFixtures(isNull(), isNull(), eq(customDate), isNull()))
+                        .thenReturn(successResponse());
+                when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
+
+                fixtureService.getFixtures(onlyDate);
+
+                verify(footballClient).getFixtures(null, null, customDate, null);
+            }
+
+            @Test
+            @DisplayName("passes null date when league is provided (filter-specific query)")
+            void passesNullDateWhenLeagueIsProvided() {
+                FixturesQueryParamsRequest withLeague = FixturesQueryParamsRequest.builder()
+                        .league(39).date(null).build();
+                when(footballClient.getFixtures(eq(39), isNull(), isNull(), isNull()))
+                        .thenReturn(successResponse());
+                when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
+
+                fixtureService.getFixtures(withLeague);
+
+                verify(footballClient).getFixtures(39, null, null, null);
+            }
+
+            @Test
+            @DisplayName("passes null date when team is provided")
+            void passesNullDateWhenTeamIsProvided() {
+                FixturesQueryParamsRequest withTeam = FixturesQueryParamsRequest.builder()
+                        .team(33).date(null).build();
+                when(footballClient.getFixtures(isNull(), eq(33), isNull(), isNull()))
+                        .thenReturn(successResponse());
+                when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
+
+                fixtureService.getFixtures(withTeam);
+
+                verify(footballClient).getFixtures(null, 33, null, null);
+            }
+
+            @Test
+            @DisplayName("passes null date when status is provided")
+            void passesNullDateWhenStatusIsProvided() {
+                FixturesQueryParamsRequest withStatus = FixturesQueryParamsRequest.builder()
+                        .status(com.sportspulse.fixtures.utils.Status.FT).date(null).build();
+                when(footballClient.getFixtures(isNull(), isNull(), isNull(), eq(com.sportspulse.fixtures.utils.Status.FT)))
+                        .thenReturn(successResponse());
+                when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
+
+                fixtureService.getFixtures(withStatus);
+
+                verify(footballClient).getFixtures(null, null, null, com.sportspulse.fixtures.utils.Status.FT);
+            }
+
+            @Test
+            @DisplayName("uses explicit date alongside a filter when both are provided")
+            void usesExplicitDateAlongsideFilter() {
+                LocalDate customDate = LocalDate.of(2026, 3, 10);
+                FixturesQueryParamsRequest withLeagueAndDate = FixturesQueryParamsRequest.builder()
+                        .league(39).date(customDate).build();
+                when(footballClient.getFixtures(eq(39), isNull(), eq(customDate), isNull()))
+                        .thenReturn(successResponse());
+                when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
+
+                fixtureService.getFixtures(withLeagueAndDate);
+
+                verify(footballClient).getFixtures(39, null, customDate, null);
+            }
         }
     }
 

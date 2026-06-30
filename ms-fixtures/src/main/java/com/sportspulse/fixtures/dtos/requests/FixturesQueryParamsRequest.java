@@ -22,8 +22,7 @@ public class FixturesQueryParamsRequest {
     private Integer team;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @Builder.Default
-    private LocalDate date = LocalDate.now();
+    private LocalDate date;
 
     private Status status;
 }

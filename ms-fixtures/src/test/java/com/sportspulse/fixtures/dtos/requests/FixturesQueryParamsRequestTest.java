@@ -254,40 +254,4 @@ class FixturesQueryParamsRequestTest {
                     .containsExactlyInAnyOrder("league", "team");
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Default value of date
-    // -------------------------------------------------------------------------
-
-    @Nested
-    @DisplayName("date field default value")
-    class DateDefault {
-
-        @Test
-        @DisplayName("date defaults to today when built without explicit date")
-        void dateDefaultsToTodayWhenNotSet() {
-            FixturesQueryParamsRequest request = FixturesQueryParamsRequest.builder().build();
-
-            assertThat(request.getDate()).isEqualTo(LocalDate.now());
-        }
-
-        @Test
-        @DisplayName("date defaults to today when created via no-args constructor")
-        void dateDefaultsToTodayViaNoArgsConstructor() {
-            FixturesQueryParamsRequest request = new FixturesQueryParamsRequest();
-
-            assertThat(request.getDate()).isEqualTo(LocalDate.now());
-        }
-
-        @Test
-        @DisplayName("explicit date overrides the default")
-        void explicitDateOverridesDefault() {
-            LocalDate customDate = LocalDate.of(2025, 1, 15);
-            FixturesQueryParamsRequest request = FixturesQueryParamsRequest.builder()
-                    .date(customDate)
-                    .build();
-
-            assertThat(request.getDate()).isEqualTo(customDate);
-        }
-    }
 }

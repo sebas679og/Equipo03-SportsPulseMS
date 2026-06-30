@@ -27,10 +27,19 @@ public class FixtureServiceImpl implements FixtureService{
 
     @Override
     public FixturesResponse getFixtures(FixturesQueryParamsRequest queryParams) {
+        boolean noFilters = queryParams.getLeague() == null
+                && queryParams.getTeam() == null
+                && queryParams.getStatus() == null;
+
+        LocalDate effectiveDate = (noFilters && queryParams.getDate() == null)
+                ? LocalDate.now()
+                : queryParams.getDate();
+
+
         ApiFixtureResponse api = footballClient.getFixtures(
                 queryParams.getLeague(),
                 queryParams.getTeam(),
-                queryParams.getDate(),
+                effectiveDate,
                 queryParams.getStatus()
         );
 
