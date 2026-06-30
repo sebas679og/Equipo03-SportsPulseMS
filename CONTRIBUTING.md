@@ -28,13 +28,13 @@ Thank you for being part of this project. This document defines the workflows, c
 
 Make sure the following tools are installed on your machine before proceeding:
 
-| Tool | Minimum Version |
-|---|---|
-| Git | 2.x |
-| Docker | 24.x |
-| Docker Compose | 2.x |
-| Java (JDK) | 21 |
-| Maven | 3.9.x |
+| Tool           | Minimum Version |
+|----------------|-----------------|
+| Git            | 2.x             |
+| Docker         | 24.x            |
+| Docker Compose | 2.x             |
+| Java (JDK)     | 21              |
+| Maven          | 3.9.x           |
 
 ---
 
@@ -102,11 +102,11 @@ The project follows a three-tier branching model:
 feat/* ──► dev ──► main
 ```
 
-| Branch | Purpose |
-|---|---|
-| `main` | Stable, production-ready code. Only receives merges from `dev`. |
-| `dev` | Integration branch. All feature branches merge here first. |
-| `feat/*`, `fix/*`, etc. | Short-lived branches for individual changes. |
+| Branch                  | Purpose                                                         |
+|-------------------------|-----------------------------------------------------------------|
+| `main`                  | Stable, production-ready code. Only receives merges from `dev`. |
+| `dev`                   | Integration branch. All feature branches merge here first.      |
+| `feat/*`, `fix/*`, etc. | Short-lived branches for individual changes.                    |
 
 **Key rules:**
 - **Never push directly to `main`**
@@ -123,13 +123,13 @@ Every branch must be created from `main` and follow this naming format:
 <prefix>/<short-description-in-kebab-case>
 ```
 
-| Prefix | When to use |
-|---|---|
-| `feat/` | A new feature or endpoint |
-| `fix/` | A bug fix |
-| `refactor/` | Code restructuring with no behaviour change |
-| `docs/` | Documentation-only changes |
-| `chore/` | Maintenance tasks: dependencies, CI config, build scripts |
+| Prefix      | When to use                                               |
+|-------------|-----------------------------------------------------------|
+| `feat/`     | A new feature or endpoint                                 |
+| `fix/`      | A bug fix                                                 |
+| `refactor/` | Code restructuring with no behaviour change               |
+| `docs/`     | Documentation-only changes                                |
+| `chore/`    | Maintenance tasks: dependencies, CI config, build scripts |
 
 **Examples:**
 
@@ -193,15 +193,15 @@ Commits must be **atomic** (one logical change per commit) and follow this forma
 requires additional context.>
 ```
 
-| Type | When to use |
-|---|---|
-| `feat` | Introducing new functionality |
-| `fix` | Correcting a bug |
+| Type       | When to use                                   |
+|------------|-----------------------------------------------|
+| `feat`     | Introducing new functionality                 |
+| `fix`      | Correcting a bug                              |
 | `refactor` | Restructuring code without changing behaviour |
-| `docs` | Documentation changes only |
-| `chore` | Build system, dependencies, CI/CD, config |
-| `test` | Adding or updating tests |
-| `style` | Formatting, whitespace — no logic changes |
+| `docs`     | Documentation changes only                    |
+| `chore`    | Build system, dependencies, CI/CD, config     |
+| `test`     | Adding or updating tests                      |
+| `style`    | Formatting, whitespace — no logic changes     |
 
 **Rules:**
 - The description must be in **imperative mood**: _"add endpoint"_, not _"added endpoint"_ or _"adds endpoint"_.
@@ -341,11 +341,11 @@ Before requesting a review, verify the following:
 
 SportPulse follows **[Semantic Versioning](https://semver.org/)** (`MAJOR.MINOR.PATCH`). Each microservice is versioned independently via its own `pom.xml`.
 
-| Change type | Version bump | Example |
-|---|---|---|
-| Bug fix | Patch | `0.1.0 → 0.1.1` |
-| New feature (backwards-compatible) | Minor | `0.1.0 → 0.2.0` |
-| Breaking change | Major | `0.1.0 → 1.0.0` |
+| Change type                        | Version bump | Example         |
+|------------------------------------|--------------|-----------------|
+| Bug fix                            | Patch        | `0.1.0 → 0.1.1` |
+| New feature (backwards-compatible) | Minor        | `0.1.0 → 0.2.0` |
+| Breaking change                    | Major        | `0.1.0 → 1.0.0` |
 
 **Always bump the version before opening a PR** for the affected microservice. Use the Maven Versions plugin to avoid manual edits:
 

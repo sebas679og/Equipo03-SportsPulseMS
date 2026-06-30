@@ -8,46 +8,46 @@ Each team must design, implement, document, and deploy the complete system in th
 
 ## 📋 Project Overview
 
-| Field | Details |
-|---|---|
-| **Project Name** | SportPulse — Football Analysis Platform |
-| **Type** | Backend with microservices architecture connected to an external API |
-| **External API** | API-Football — https://v3.football.api-sports.io |
-| **Mode** | Each team builds the complete system independently |
+| Field            | Details                                                              |
+|------------------|----------------------------------------------------------------------|
+| **Project Name** | SportPulse — Football Analysis Platform                              |
+| **Type**         | Backend with microservices architecture connected to an external API |
+| **External API** | API-Football — https://v3.football.api-sports.io                     |
+| **Mode**         | Each team builds the complete system independently                   |
 
 ---
 
 ## 🛠️ Technologies & Tools
 
-| Category | Technology                                   |
-|---|----------------------------------------------|
-| **Language** | Java 21                                      |
-| **Framework** | Spring Boot 3.5.x                            |
-| **Security** | Spring Security + JWT                        |
-| **Database** | PostgreSQL (one DB per microservice, only where applicable) |
-| **External API** | API-Football                                 |
-| **Inter-service Communication** | Webclient                                    |
-| **Documentation** | Swagger UI / OpenAPI 3.1                     |
-| **Testing** | JUnit 5 + Mockito + Postman                  |
-| **Mappers** | MapStruct                                    |
-| **Utilities** | Lombok                                       |
-| **Containerization** | Docker + Docker Compose                      |
-| **Build Tool** | Maven or Gradle                              |
+| Category                        | Technology                                                  |
+|---------------------------------|-------------------------------------------------------------|
+| **Language**                    | Java 21                                                     |
+| **Framework**                   | Spring Boot 3.5.x                                           |
+| **Security**                    | Spring Security + JWT                                       |
+| **Database**                    | PostgreSQL (one DB per microservice, only where applicable) |
+| **External API**                | API-Football                                                |
+| **Inter-service Communication** | Webclient                                                   |
+| **Documentation**               | Swagger UI / OpenAPI 3.1                                    |
+| **Testing**                     | JUnit 5 + Mockito + Postman                                 |
+| **Mappers**                     | MapStruct                                                   |
+| **Utilities**                   | Lombok                                                      |
+| **Containerization**            | Docker + Docker Compose                                     |
+| **Build Tool**                  | Maven or Gradle                                             |
 
 ---
 
 ## 🧩 Microservices
 
-| Microservice | Port | Responsibility |
-|---|---|---|
-| [ms-gateway](./docs/ms-gateway.md) | 8080 | Entry point, routing and rate limiting |
-| [ms-auth](./docs/ms-auth.md) | 8081 | Registration, login and JWT token issuance |
-| [ms-leagues](./docs/ms-leagues.md) | 8082 | Leagues, countries and seasons |
-| [ms-teams](./docs/ms-teams.md) | 8083 | Teams, crests and general info |
-| [ms-fixtures](./docs/ms-fixtures.md) | 8085 | Matches, schedules and results |
-| [ms-standings](./docs/ms-standings.md) | 8086 | League standings by season |
-| [ms-notifications](./docs/ms-notifications.md) | 8088 | Subscriptions and event alerts |
-| [ms-dashboard](./docs/ms-dashboard.md) | 8089 | Aggregated executive summary |
+| Microservice                                   | Port | Responsibility                             |
+|------------------------------------------------|------|--------------------------------------------|
+| [ms-gateway](./docs/ms-gateway.md)             | 8080 | Entry point, routing and rate limiting     |
+| [ms-auth](./docs/ms-auth.md)                   | 8081 | Registration, login and JWT token issuance |
+| [ms-leagues](./docs/ms-leagues.md)             | 8082 | Leagues, countries and seasons             |
+| [ms-teams](./docs/ms-teams.md)                 | 8083 | Teams, crests and general info             |
+| [ms-fixtures](./docs/ms-fixtures.md)           | 8085 | Matches, schedules and results             |
+| [ms-standings](./docs/ms-standings.md)         | 8086 | League standings by season                 |
+| [ms-notifications](./docs/ms-notifications.md) | 8088 | Subscriptions and event alerts             |
+| [ms-dashboard](./docs/ms-dashboard.md)         | 8089 | Aggregated executive summary               |
 
 ---
 
@@ -74,21 +74,21 @@ All domain services → validate JWT issued by ms-auth
 
 ### ⚙️ **Environment Variables**
 
-| Variable                   | Description | Value                         |
-|----------------------------|-------------|-------------------------------|
-| `SPORTS_PULSE_API_FOOTBALL_BASE_URL` | Base endpoint for the football API | `https://v3.football.api-sports.io` |
-| `SPORTS_PULSE_API_FOOTBALL_KEY`             | Your private secret key from RapidAPI | `YOUR_API_KEY`|
+| Variable                             | Description                           | Value                               |
+|--------------------------------------|---------------------------------------|-------------------------------------|
+| `SPORTS_PULSE_API_FOOTBALL_BASE_URL` | Base endpoint for the football API    | `https://v3.football.api-sports.io` |
+| `SPORTS_PULSE_API_FOOTBALL_KEY`      | Your private secret key from RapidAPI | `YOUR_API_KEY`                      |
 
 ### **Endpoint Mapping**
 
 The following endpoints are consumed by the microservices using the `base-url` defined above:
 
-| RapidAPI Endpoint | Used by |
-|---|---|
-| `GET /leagues` | ms-leagues |
-| `GET /teams` | ms-teams |
-| `GET /fixtures` | ms-fixtures |
-| `GET /standings` | ms-standings |
+| RapidAPI Endpoint         | Used by      |
+|---------------------------|--------------|
+| `GET /leagues`            | ms-leagues   |
+| `GET /teams`              | ms-teams     |
+| `GET /fixtures`           | ms-fixtures  |
+| `GET /standings`          | ms-standings |
 | `GET /players/topscorers` | ms-dashboard |
 
 > ⚠️ The free plan allows **100 requests/day**. Implement in-memory caching to avoid exhausting the limit during development.
@@ -126,16 +126,16 @@ docker-compose up --build
 
 ### Service URLs (local)
 
-| Service | URL |
-|---|---|
-| Gateway | http://localhost:8080 |
-| Auth | http://localhost:8081 |
-| Leagues | http://localhost:8082 |
-| Teams | http://localhost:8083 |
-| Fixtures | http://localhost:8085 |
-| Standings | http://localhost:8086 |
+| Service       | URL                   |
+|---------------|-----------------------|
+| Gateway       | http://localhost:8080 |
+| Auth          | http://localhost:8081 |
+| Leagues       | http://localhost:8082 |
+| Teams         | http://localhost:8083 |
+| Fixtures      | http://localhost:8085 |
+| Standings     | http://localhost:8086 |
 | Notifications | http://localhost:8088 |
-| Dashboard | http://localhost:8089 |
+| Dashboard     | http://localhost:8089 |
 
 ### Swagger UI
 
@@ -160,16 +160,16 @@ http://localhost:{PORT}/swagger-ui/index.html
 
 ## 📁 Documentation
 
-| Microservice | Description |
-|---|---|
-| [ms-gateway](./docs/ms-gateway.md) | API gateway, reverse proxy, rate limiting |
-| [ms-auth](./docs/ms-auth.md) | Authentication, JWT issuance and validation |
-| [ms-leagues](./docs/ms-leagues.md) | Football leagues and seasons |
-| [ms-teams](./docs/ms-teams.md) | Football teams and stadiums |
-| [ms-fixtures](./docs/ms-fixtures.md) | Matches, live scores and events |
-| [ms-standings](./docs/ms-standings.md) | League classification tables |
-| [ms-notifications](./docs/ms-notifications.md) | Alert subscriptions and webhooks |
-| [ms-dashboard](./docs/ms-dashboard.md) | Aggregated daily summary |
+| Microservice                                   | Description                                 |
+|------------------------------------------------|---------------------------------------------|
+| [ms-gateway](./docs/ms-gateway.md)             | API gateway, reverse proxy, rate limiting   |
+| [ms-auth](./docs/ms-auth.md)                   | Authentication, JWT issuance and validation |
+| [ms-leagues](./docs/ms-leagues.md)             | Football leagues and seasons                |
+| [ms-teams](./docs/ms-teams.md)                 | Football teams and stadiums                 |
+| [ms-fixtures](./docs/ms-fixtures.md)           | Matches, live scores and events             |
+| [ms-standings](./docs/ms-standings.md)         | League classification tables                |
+| [ms-notifications](./docs/ms-notifications.md) | Alert subscriptions and webhooks            |
+| [ms-dashboard](./docs/ms-dashboard.md)         | Aggregated daily summary                    |
 
 ---
 
