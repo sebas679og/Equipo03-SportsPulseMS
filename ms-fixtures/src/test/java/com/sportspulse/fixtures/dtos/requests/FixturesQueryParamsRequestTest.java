@@ -42,6 +42,7 @@ class FixturesQueryParamsRequestTest {
                 .team(33)
                 .date(LocalDate.of(2026, 6, 27))
                 .status(Status.NS)
+                .season(2024)
                 .build();
     }
 
@@ -110,6 +111,33 @@ class FixturesQueryParamsRequestTest {
         void passesWhenTeamIsOne() {
             FixturesQueryParamsRequest request = validRequest();
             request.setTeam(1);
+
+            assertThat(validate(request)).isEmpty();
+        }
+
+        @Test
+        @DisplayName("passes validation when season is null (optional field)")
+        void passesWhenSeasonIsNull() {
+            FixturesQueryParamsRequest request = validRequest();
+            request.setSeason(null);
+
+            assertThat(validate(request)).isEmpty();
+        }
+
+        @Test
+        @DisplayName("passes validation when season is exactly 1900 (boundary: minimum value)")
+        void passesWhenSeasonIsMinBoundary() {
+            FixturesQueryParamsRequest request = validRequest();
+            request.setSeason(1900);
+
+            assertThat(validate(request)).isEmpty();
+        }
+
+        @Test
+        @DisplayName("passes validation when season is exactly 9999 (boundary: maximum value)")
+        void passesWhenSeasonIsMaxBoundary() {
+            FixturesQueryParamsRequest request = validRequest();
+            request.setSeason(9999);
 
             assertThat(validate(request)).isEmpty();
         }
@@ -216,6 +244,70 @@ class FixturesQueryParamsRequestTest {
     }
 
     // -------------------------------------------------------------------------
+// season violations
+// -------------------------------------------------------------------------
+
+    @Nested
+    @DisplayName("season field validation")
+    class SeasonValidation {
+
+        @Test
+        @DisplayName("fails when season is below 1900 (1899)")
+        void failsWhenSeasonIsBelowMin() {
+            FixturesQueryParamsRequest request = validRequest();
+            request.setSeason(1899);
+
+            Set<ConstraintViolation<FixturesQueryParamsRequest>> violations = validate(request);
+
+            assertThat(violations).hasSize(1);
+            assertThat(violations)
+                    .extracting(ConstraintViolation::getMessage)
+                    .containsExactly("season must be greater than or equal to 1900");
+        }
+
+        @Test
+        @DisplayName("fails when season is negative")
+        void failsWhenSeasonIsNegative() {
+            FixturesQueryParamsRequest request = validRequest();
+            request.setSeason(-1);
+
+            Set<ConstraintViolation<FixturesQueryParamsRequest>> violations = validate(request);
+
+            assertThat(violations).hasSize(1);
+            assertThat(violations)
+                    .extracting(ConstraintViolation::getMessage)
+                    .containsExactly("season must be greater than or equal to 1900");
+        }
+
+        @Test
+        @DisplayName("fails when season is above 9999 (5 digits)")
+        void failsWhenSeasonIsAboveMax() {
+            FixturesQueryParamsRequest request = validRequest();
+            request.setSeason(10000);
+
+            Set<ConstraintViolation<FixturesQueryParamsRequest>> violations = validate(request);
+
+            assertThat(violations).hasSize(1);
+            assertThat(violations)
+                    .extracting(ConstraintViolation::getMessage)
+                    .containsExactly("season must have 4 digits");
+        }
+
+        @Test
+        @DisplayName("violation is on the 'season' property path")
+        void violationPropertyPathIsSeason() {
+            FixturesQueryParamsRequest request = validRequest();
+            request.setSeason(500);
+
+            Set<ConstraintViolation<FixturesQueryParamsRequest>> violations = validate(request);
+
+            assertThat(violations)
+                    .extracting(v -> v.getPropertyPath().toString())
+                    .containsExactly("season");
+        }
+    }
+
+    // -------------------------------------------------------------------------
     // Multiple simultaneous violations
     // -------------------------------------------------------------------------
 
@@ -252,6 +344,39 @@ class FixturesQueryParamsRequestTest {
             assertThat(violations)
                     .extracting(v -> v.getPropertyPath().toString())
                     .containsExactlyInAnyOrder("league", "team");
+        }
+
+        @Test
+        @DisplayName("reports all three violations when league, team, and season are all invalid")
+        void reportsAllViolationsWhenLeagueTeamAndSeasonAreInvalid() {
+            FixturesQueryParamsRequest request = validRequest();
+            request.setLeague(0);
+            request.setTeam(-5);
+            request.setSeason(1800);
+
+            Set<ConstraintViolation<FixturesQueryParamsRequest>> violations = validate(request);
+
+            assertThat(violations).hasSize(3);
+            assertThat(violations)
+                    .extracting(ConstraintViolation::getMessage)
+                    .containsExactlyInAnyOrder(
+                            "league must be greater than 0",
+                            "team must be greater than 0",
+                            "season must be greater than or equal to 1900");
+        }
+
+        @Test
+        @DisplayName("violation property paths include 'season' when combined with other invalid fields")
+        void violationPathsIncludeSeasonWhenCombinedWithOthers() {
+            FixturesQueryParamsRequest request = validRequest();
+            request.setTeam(-1);
+            request.setSeason(10001);
+
+            Set<ConstraintViolation<FixturesQueryParamsRequest>> violations = validate(request);
+
+            assertThat(violations)
+                    .extracting(v -> v.getPropertyPath().toString())
+                    .containsExactlyInAnyOrder("team", "season");
         }
     }
 }
