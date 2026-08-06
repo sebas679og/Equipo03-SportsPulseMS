@@ -9,6 +9,7 @@ import com.sportspulse.fixtures.dtos.responses.fixtures.Fixture;
 import com.sportspulse.fixtures.dtos.responses.fixtures.FixturesResponse;
 import com.sportspulse.fixtures.dtos.responses.fixtures.Status;
 import com.sportspulse.fixtures.exceptions.CustomBadGatewayException;
+import com.sportspulse.fixtures.exceptions.CustomBadRequestException;
 import com.sportspulse.fixtures.exceptions.CustomNotFoundException;
 import com.sportspulse.fixtures.exceptions.CustomTooManyRequestsException;
 import com.sportspulse.fixtures.integration.football.FootballClient;
@@ -64,6 +65,7 @@ class FixtureServiceImplTest {
                         .team(33)
                         .date(LocalDate.of(2026, 6, 27))
                         .status(null)
+                        .season(2024)
                         .build();
 
         apiFixtureData = mockApiFixtureData();
@@ -98,14 +100,14 @@ class FixtureServiceImplTest {
             ApiFixtureResponse apiResponse =
                     responseWithFixtures(emptyErrors, List.of(apiFixtureData));
 
-            when(footballClient.getFixtures(39, 33, queryParams.getDate(), null))
+            when(footballClient.getFixtures(39, 33, queryParams.getDate(), null, queryParams.getSeason()))
                     .thenReturn(apiResponse);
             when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
 
             FixturesResponse result = fixtureService.getFixtures(queryParams);
 
             assertThat(result.getData()).containsExactly(mappedFixture);
-            verify(footballClient).getFixtures(39, 33, queryParams.getDate(), null);
+            verify(footballClient).getFixtures(39, 33, queryParams.getDate(), null, queryParams.getSeason());
             verify(fixtureMapper).toFixture(apiFixtureData);
         }
 
@@ -115,7 +117,7 @@ class FixtureServiceImplTest {
             ApiFixtureResponse apiResponse =
                     responseWithFixtures(null, List.of(apiFixtureData));
 
-            when(footballClient.getFixtures(any(), any(), any(), any())).thenReturn(apiResponse);
+            when(footballClient.getFixtures(any(), any(), any(), any(), any())).thenReturn(apiResponse);
             when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
 
             FixturesResponse result = fixtureService.getFixtures(queryParams);
@@ -133,7 +135,7 @@ class FixtureServiceImplTest {
             ApiFixtureResponse apiResponse =
                     responseWithFixtures(emptyErrors, List.of(apiFixtureData, second));
 
-            when(footballClient.getFixtures(any(), any(), any(), any())).thenReturn(apiResponse);
+            when(footballClient.getFixtures(any(), any(), any(), any(), any())).thenReturn(apiResponse);
             when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
             when(fixtureMapper.toFixture(second)).thenReturn(secondMapped);
 
@@ -152,7 +154,8 @@ class FixtureServiceImplTest {
                     queryParams.getLeague(),
                     queryParams.getTeam(),
                     queryParams.getDate(),
-                    queryParams.getStatus()))
+                    queryParams.getStatus(),
+                    queryParams.getSeason()))
                     .thenReturn(apiResponse);
             when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
 
@@ -163,7 +166,8 @@ class FixtureServiceImplTest {
                             queryParams.getLeague(),
                             queryParams.getTeam(),
                             queryParams.getDate(),
-                            queryParams.getStatus());
+                            queryParams.getStatus(),
+                            queryParams.getSeason());
         }
 
         @Nested
@@ -183,13 +187,13 @@ class FixtureServiceImplTest {
                 FixturesQueryParamsRequest allNull = FixturesQueryParamsRequest.builder()
                         .league(null).team(null).date(null).status(null)
                         .build();
-                when(footballClient.getFixtures(isNull(), isNull(), eq(LocalDate.now()), isNull()))
+                when(footballClient.getFixtures(isNull(), isNull(), eq(LocalDate.now()), isNull(), isNull()))
                         .thenReturn(successResponse());
                 when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
 
                 fixtureService.getFixtures(allNull);
 
-                verify(footballClient).getFixtures(null, null, LocalDate.now(), null);
+                verify(footballClient).getFixtures(null, null, LocalDate.now(), null, null);
             }
 
             @Test
@@ -199,41 +203,41 @@ class FixtureServiceImplTest {
                 FixturesQueryParamsRequest onlyDate = FixturesQueryParamsRequest.builder()
                         .date(customDate)
                         .build();
-                when(footballClient.getFixtures(isNull(), isNull(), eq(customDate), isNull()))
+                when(footballClient.getFixtures(isNull(), isNull(), eq(customDate), isNull(), isNull()))
                         .thenReturn(successResponse());
                 when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
 
                 fixtureService.getFixtures(onlyDate);
 
-                verify(footballClient).getFixtures(null, null, customDate, null);
+                verify(footballClient).getFixtures(null, null, customDate, null, null);
             }
 
             @Test
             @DisplayName("passes null date when league is provided (filter-specific query)")
             void passesNullDateWhenLeagueIsProvided() {
                 FixturesQueryParamsRequest withLeague = FixturesQueryParamsRequest.builder()
-                        .league(39).date(null).build();
-                when(footballClient.getFixtures(eq(39), isNull(), isNull(), isNull()))
+                        .league(39).date(null).season(2024).build();
+                when(footballClient.getFixtures(eq(39), isNull(), isNull(), isNull(), eq(2024)))
                         .thenReturn(successResponse());
                 when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
 
                 fixtureService.getFixtures(withLeague);
 
-                verify(footballClient).getFixtures(39, null, null, null);
+                verify(footballClient).getFixtures(39, null, null, null, 2024);
             }
 
             @Test
             @DisplayName("passes null date when team is provided")
             void passesNullDateWhenTeamIsProvided() {
                 FixturesQueryParamsRequest withTeam = FixturesQueryParamsRequest.builder()
-                        .team(33).date(null).build();
-                when(footballClient.getFixtures(isNull(), eq(33), isNull(), isNull()))
+                        .team(33).date(null).season(2024).build();
+                when(footballClient.getFixtures(isNull(), eq(33), isNull(), isNull(), eq(2024)))
                         .thenReturn(successResponse());
                 when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
 
                 fixtureService.getFixtures(withTeam);
 
-                verify(footballClient).getFixtures(null, 33, null, null);
+                verify(footballClient).getFixtures(null, 33, null, null, 2024);
             }
 
             @Test
@@ -241,13 +245,13 @@ class FixtureServiceImplTest {
             void passesNullDateWhenStatusIsProvided() {
                 FixturesQueryParamsRequest withStatus = FixturesQueryParamsRequest.builder()
                         .status(com.sportspulse.fixtures.utils.Status.FT).date(null).build();
-                when(footballClient.getFixtures(isNull(), isNull(), isNull(), eq(com.sportspulse.fixtures.utils.Status.FT)))
+                when(footballClient.getFixtures(isNull(), isNull(), isNull(), eq(com.sportspulse.fixtures.utils.Status.FT), isNull()))
                         .thenReturn(successResponse());
                 when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
 
                 fixtureService.getFixtures(withStatus);
 
-                verify(footballClient).getFixtures(null, null, null, com.sportspulse.fixtures.utils.Status.FT);
+                verify(footballClient).getFixtures(null, null, null, com.sportspulse.fixtures.utils.Status.FT, null);
             }
 
             @Test
@@ -255,14 +259,41 @@ class FixtureServiceImplTest {
             void usesExplicitDateAlongsideFilter() {
                 LocalDate customDate = LocalDate.of(2026, 3, 10);
                 FixturesQueryParamsRequest withLeagueAndDate = FixturesQueryParamsRequest.builder()
-                        .league(39).date(customDate).build();
-                when(footballClient.getFixtures(eq(39), isNull(), eq(customDate), isNull()))
+                        .league(39).date(customDate).season(2024).build();
+                when(footballClient.getFixtures(eq(39), isNull(), eq(customDate), isNull(), eq(2024)))
                         .thenReturn(successResponse());
                 when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
 
                 fixtureService.getFixtures(withLeagueAndDate);
 
-                verify(footballClient).getFixtures(39, null, customDate, null);
+                verify(footballClient).getFixtures(39, null, customDate, null, 2024);
+            }
+        }
+
+        @Nested
+        @DisplayName("getFixtures - BadRequestExcpetion With Season")
+        class BadRequestSeasonNotPresent {
+
+            @Test
+            @DisplayName("throws CustomBadRequestException when season is not called on team")
+            void throwsBadRequestExceptionWithSeasonNotPresentInTeam(){
+                FixturesQueryParamsRequest request = FixturesQueryParamsRequest.builder()
+                        .team(2024).build();
+
+                assertThatThrownBy(() -> fixtureService.getFixtures(request))
+                        .isInstanceOf(CustomBadRequestException.class)
+                        .hasMessage("The season field is required to search for leagues and teams");
+            }
+
+            @Test
+            @DisplayName("throws CustomBadRequestException when season is not called on league")
+            void throwsBadRequestExceptionWithSeasonNotPresentInLeague(){
+                FixturesQueryParamsRequest request = FixturesQueryParamsRequest.builder()
+                        .league(1234).build();
+
+                assertThatThrownBy(() -> fixtureService.getFixtures(request))
+                        .isInstanceOf(CustomBadRequestException.class)
+                        .hasMessage("The season field is required to search for leagues and teams");
             }
         }
     }
@@ -277,7 +308,7 @@ class FixtureServiceImplTest {
             ArrayNode emptyErrors = objectMapper.createArrayNode();
             ApiFixtureResponse apiResponse = responseWithFixtures(emptyErrors, List.of());
 
-            when(footballClient.getFixtures(any(), any(), any(), any())).thenReturn(apiResponse);
+            when(footballClient.getFixtures(any(), any(), any(), any(), any())).thenReturn(apiResponse);
 
             assertThatThrownBy(() -> fixtureService.getFixtures(queryParams))
                     .isInstanceOf(CustomNotFoundException.class)
@@ -293,7 +324,7 @@ class FixtureServiceImplTest {
             ApiFixtureResponse apiResponse =
                     new ApiFixtureResponse("fixtures", null, emptyErrors, 0, null, null);
 
-            when(footballClient.getFixtures(any(), any(), any(), any())).thenReturn(apiResponse);
+            when(footballClient.getFixtures(any(), any(), any(), any(), any())).thenReturn(apiResponse);
 
             assertThatThrownBy(() -> fixtureService.getFixtures(queryParams))
                     .isInstanceOf(CustomNotFoundException.class)
@@ -314,7 +345,7 @@ class FixtureServiceImplTest {
             errors.put("requests", "Too many requests");
             ApiFixtureResponse apiResponse = responseWithErrors(errors);
 
-            when(footballClient.getFixtures(any(), any(), any(), any())).thenReturn(apiResponse);
+            when(footballClient.getFixtures(any(), any(), any(), any(), any())).thenReturn(apiResponse);
 
             assertThatThrownBy(() -> fixtureService.getFixtures(queryParams))
                     .isInstanceOf(CustomTooManyRequestsException.class)
@@ -332,7 +363,7 @@ class FixtureServiceImplTest {
             errors.put("plan", "Season request limit reached");
             ApiFixtureResponse apiResponse = responseWithErrors(errors);
 
-            when(footballClient.getFixtures(any(), any(), any(), any())).thenReturn(apiResponse);
+            when(footballClient.getFixtures(any(), any(), any(), any(), any())).thenReturn(apiResponse);
 
             assertThatThrownBy(() -> fixtureService.getFixtures(queryParams))
                     .isInstanceOf(CustomTooManyRequestsException.class)
@@ -349,7 +380,7 @@ class FixtureServiceImplTest {
             errors.put("plan", "Season request limit reached");
             ApiFixtureResponse apiResponse = responseWithErrors(errors);
 
-            when(footballClient.getFixtures(any(), any(), any(), any())).thenReturn(apiResponse);
+            when(footballClient.getFixtures(any(), any(), any(), any(), any())).thenReturn(apiResponse);
 
             assertThatThrownBy(() -> fixtureService.getFixtures(queryParams))
                     .isInstanceOf(CustomTooManyRequestsException.class)
@@ -365,7 +396,7 @@ class FixtureServiceImplTest {
             errors.put("token", "Invalid API token");
             ApiFixtureResponse apiResponse = responseWithErrors(errors);
 
-            when(footballClient.getFixtures(any(), any(), any(), any())).thenReturn(apiResponse);
+            when(footballClient.getFixtures(any(), any(), any(), any(), any())).thenReturn(apiResponse);
 
             assertThatThrownBy(() -> fixtureService.getFixtures(queryParams))
                     .isInstanceOf(CustomBadGatewayException.class)
@@ -383,7 +414,7 @@ class FixtureServiceImplTest {
             errors.add("some-array-element");
             ApiFixtureResponse apiResponse = responseWithFixtures(errors, List.of(apiFixtureData));
 
-            when(footballClient.getFixtures(any(), any(), any(), any())).thenReturn(apiResponse);
+            when(footballClient.getFixtures(any(), any(), any(), any(), any())).thenReturn(apiResponse);
             when(fixtureMapper.toFixture(apiFixtureData)).thenReturn(mappedFixture);
 
             FixturesResponse result = fixtureService.getFixtures(queryParams);
@@ -398,7 +429,7 @@ class FixtureServiceImplTest {
             errors.put("token", "Invalid API token");
             ApiFixtureResponse apiResponse = responseWithErrors(errors);
 
-            when(footballClient.getFixtures(any(), any(), any(), any())).thenReturn(apiResponse);
+            when(footballClient.getFixtures(any(), any(), any(), any(), any())).thenReturn(apiResponse);
 
             assertThatThrownBy(() -> fixtureService.getFixtures(queryParams))
                     .isInstanceOf(CustomBadGatewayException.class);

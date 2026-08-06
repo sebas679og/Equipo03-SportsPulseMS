@@ -46,7 +46,8 @@ public class FixtureServiceImpl implements FixtureService{
                 queryParams.getLeague(),
                 queryParams.getTeam(),
                 effectiveDate,
-                queryParams.getStatus()
+                queryParams.getStatus(),
+                queryParams.getSeason()
         );
 
         handleApiFootballErrors(api);

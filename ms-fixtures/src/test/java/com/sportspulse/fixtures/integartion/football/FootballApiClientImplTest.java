@@ -96,7 +96,7 @@ class FootballClientImplTest {
             ApiFixtureResponse expected = buildFixtureResponse();
             mockWebServer.enqueue(jsonResponse(expected));
 
-            ApiFixtureResponse result = footballClient.getFixtures(null, null, null, null);
+            ApiFixtureResponse result = footballClient.getFixtures(null, null, null, null, null);
 
             assertThat(result).isEqualTo(expected);
         }
@@ -107,7 +107,7 @@ class FootballClientImplTest {
             ApiFixtureResponse expected = buildFixtureResponse();
             mockWebServer.enqueue(jsonResponse(expected));
 
-            ApiFixtureResponse result = footballClient.getFixtures(null, null, null, null);
+            ApiFixtureResponse result = footballClient.getFixtures(null, null, null, null, null);
 
             assertThat(result.response()).hasSize(SAMPLE_SIZE);
         }
@@ -119,14 +119,15 @@ class FootballClientImplTest {
             LocalDate date = LocalDate.now();
             Status status = Status.FT;
 
-            footballClient.getFixtures(223, 23, date, status);
+            footballClient.getFixtures(223, 23, date, status, 2026);
 
             RecordedRequest request = mockWebServer.takeRequest();
             assertThat(request.getPath())
                     .contains("league=223")
                     .contains("team=23")
                     .contains(String.format("date=%s", date))
-                    .contains(String.format("status=%s", status.name().toLowerCase(Locale.ROOT)));
+                    .contains(String.format("status=%s", status.name().toLowerCase(Locale.ROOT)))
+                    .contains("season=2026");
         }
 
         @Test
@@ -134,13 +135,14 @@ class FootballClientImplTest {
         void shouldOmitOptionalQueryParams_whenNull() throws Exception {
             mockWebServer.enqueue(jsonResponse(minimalResponse()));
 
-            footballClient.getFixtures(null, null, null, null);
+            footballClient.getFixtures(null, null, null, null, null);
 
             RecordedRequest request = mockWebServer.takeRequest();
             assertThat(request.getPath())
                     .doesNotContain("league=")
                     .doesNotContain("team=")
                     .doesNotContain("status=")
+                    .doesNotContain("season=")
                     .contains("date");
         }
     }
@@ -158,7 +160,7 @@ class FootballClientImplTest {
             mockWebServer.enqueue(emptyResponse(204));
 
             assertThatThrownBy(
-                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT))
+                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT, 2024))
                     .isInstanceOf(CustomServiceUnavailableException.class);
         }
 
@@ -168,7 +170,7 @@ class FootballClientImplTest {
             mockWebServer.enqueue(emptyResponse(499));
 
             assertThatThrownBy(
-                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT))
+                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT, 2024))
                     .isInstanceOf(CustomServiceUnavailableException.class);
         }
 
@@ -178,7 +180,7 @@ class FootballClientImplTest {
             mockWebServer.enqueue(emptyResponse(500));
 
             assertThatThrownBy(
-                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT))
+                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT, 2024))
                     .isInstanceOf(CustomServiceUnavailableException.class);
         }
     }
@@ -200,7 +202,7 @@ class FootballClientImplTest {
                             .setBody("null"));
 
             assertThatThrownBy(
-                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT))
+                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT, 2024))
                     .isInstanceOf(CustomServiceUnavailableException.class);
         }
     }
@@ -218,7 +220,7 @@ class FootballClientImplTest {
             mockWebServer.shutdown();
 
             assertThatThrownBy(
-                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT))
+                    () -> footballClient.getFixtures(123, 21, LocalDate.now(), Status.FT, 2024))
                     .isInstanceOf(CustomBadGatewayException.class);
         }
     }
