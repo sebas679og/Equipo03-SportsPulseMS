@@ -25,4 +25,5 @@ public class FixturesQueryParamsRequest {
     private LocalDate date;
 
     private Status status;
+    private Integer season;
 }

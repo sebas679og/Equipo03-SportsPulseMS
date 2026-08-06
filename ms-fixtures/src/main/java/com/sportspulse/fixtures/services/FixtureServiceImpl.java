@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.sportspulse.fixtures.dtos.requests.FixturesQueryParamsRequest;
 import com.sportspulse.fixtures.dtos.responses.fixtures.FixturesResponse;
 import com.sportspulse.fixtures.exceptions.CustomBadGatewayException;
+import com.sportspulse.fixtures.exceptions.CustomBadRequestException;
 import com.sportspulse.fixtures.exceptions.CustomNotFoundException;
 import com.sportspulse.fixtures.exceptions.CustomTooManyRequestsException;
 import com.sportspulse.fixtures.integration.football.FootballClient;
@@ -34,6 +35,11 @@ public class FixtureServiceImpl implements FixtureService{
         LocalDate effectiveDate = (noFilters && queryParams.getDate() == null)
                 ? LocalDate.now()
                 : queryParams.getDate();
+
+        if (queryParams.getTeam() != null && queryParams.getSeason() == null
+                || queryParams.getLeague() != null && queryParams.getSeason() == null){
+            throw new CustomBadRequestException("The season field is required to search for leagues and teams");
+        }
 
 
         ApiFixtureResponse api = footballClient.getFixtures(

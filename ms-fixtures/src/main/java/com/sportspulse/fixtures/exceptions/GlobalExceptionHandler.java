@@ -106,6 +106,11 @@ public class GlobalExceptionHandler {
         return badRequest(message);
     }
 
+    @ExceptionHandler(CustomBadRequestException.class)
+    public ResponseEntity<ErrorResponse> handleCustomBadRequestException(CustomBadRequestException ex){
+        return badRequest(ex.getMessage());
+    }
+
     @ExceptionHandler(CustomUnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handleCustomUnauthorizedException(CustomUnauthorizedException ex){
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
