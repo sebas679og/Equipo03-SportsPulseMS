@@ -30,8 +30,8 @@ public class FootballClientImpl implements FootballClient{
 
 
     @Override
-    @Cacheable(value = CacheConstants.FIXTURES_CACHE, key = "#league + '-' + #team + '-' + #date + '-' + #status")
-    public ApiFixtureResponse getFixtures(Integer league, Integer team, LocalDate date, Status status) {
+    @Cacheable(value = CacheConstants.FIXTURES_CACHE, key = "#league + '-' + #team + '-' + #date + '-' + #status + '-' + #season")
+    public ApiFixtureResponse getFixtures(Integer league, Integer team, LocalDate date, Status status, Integer season) {
         final AtomicReference<URI> uriTracker = new AtomicReference<>();
         WebClient.RequestHeadersSpec<?> request =
                 apiFootballWebClient.get()
@@ -47,6 +47,9 @@ public class FootballClientImpl implements FootballClient{
                                     }
                                     if (status != null){
                                         uriBuilder.queryParam("status", status.name().toLowerCase(Locale.ROOT));
+                                    }
+                                    if (season != null){
+                                        uriBuilder.queryParam("season", season);
                                     }
                                     URI builtUri = uriBuilder.build();
                                     uriTracker.set(builtUri);

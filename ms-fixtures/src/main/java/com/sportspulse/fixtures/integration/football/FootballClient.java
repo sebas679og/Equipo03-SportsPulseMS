@@ -7,5 +7,5 @@ import java.time.LocalDate;
 
 public interface FootballClient {
 
-    ApiFixtureResponse getFixtures(Integer league, Integer team, LocalDate date, Status status);
+    ApiFixtureResponse getFixtures(Integer league, Integer team, LocalDate date, Status status, Integer season);
 }
