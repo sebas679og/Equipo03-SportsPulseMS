@@ -1,6 +1,7 @@
 package com.sportspulse.fixtures;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import com.sportspulse.fixtures.stubs.ApiFootballFixtures;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -23,15 +24,17 @@ public abstract class AbstractIntegrationTest {
                     .options(wireMockConfig().dynamicPort().usingFilesUnderClasspath("src/test/resources"))
                     .build();
 
+    protected ApiFootballFixtures fixturesStub;
+
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry){
         registry.add("sportspulse.fixtures.api.football.base-url", wireMockExtension::baseUrl);
     }
 
     @BeforeEach
-    void setUpBase(){}
+    void setUpBase(){fixturesStub = new ApiFootballFixtures(wireMockExtension);}
 
     @AfterEach
-    void tearDown(){}
+    void tearDown(){fixturesStub.reset();}
 
 }
