@@ -1,0 +1,1836 @@
+{
+  "get": "fixtures",
+  "parameters": {
+    "status": "FT",
+    "season": "2024",
+    "team": "18814"
+  },
+  "errors": [],
+  "results": 26,
+  "paging": {
+    "current": 1,
+    "total": 1
+  },
+  "response": [
+    {
+      "fixture": {
+        "id": 1174148,
+        "referee": "M. Verso",
+        "timezone": "UTC",
+        "date": "2024-03-17T20:00:00+00:00",
+        "timestamp": 1710705600,
+        "periods": {
+          "first": 1710705600,
+          "second": 1710709200
+        },
+        "venue": {
+          "id": 20584,
+          "name": "Titan Stadium",
+          "city": "Fullerton, California"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 2",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 21141,
+          "name": "Los Angeles FC II",
+          "logo": "https://media.api-sports.io/football/teams/21141.png",
+          "winner": true
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 4,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 1,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 4,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174156,
+        "referee": "A. Calume",
+        "timezone": "UTC",
+        "date": "2024-08-29T01:00:00+00:00",
+        "timestamp": 1724893200,
+        "periods": {
+          "first": 1724893200,
+          "second": 1724896800
+        },
+        "venue": {
+          "id": 20582,
+          "name": "Parmer Field at St. David’s Performance Center",
+          "city": "Austin, Texas"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 33",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 21138,
+          "name": "Austin II",
+          "logo": "https://media.api-sports.io/football/teams/21138.png",
+          "winner": true
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 2,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 1,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 2,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174169,
+        "referee": "R. Vincze",
+        "timezone": "UTC",
+        "date": "2024-03-28T01:00:00+00:00",
+        "timestamp": 1711587600,
+        "periods": {
+          "first": 1711587600,
+          "second": 1711591200
+        },
+        "venue": {
+          "id": 3062,
+          "name": "Zions Bank Stadium",
+          "city": "Herriman, Utah"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 4",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 4012,
+          "name": "Real Monarchs",
+          "logo": "https://media.api-sports.io/football/teams/4012.png",
+          "winner": true
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 2,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 1,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 2,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174181,
+        "referee": "S. Caouette",
+        "timezone": "UTC",
+        "date": "2024-08-22T00:00:00+00:00",
+        "timestamp": 1724284800,
+        "periods": {
+          "first": 1724284800,
+          "second": 1724288400
+        },
+        "venue": {
+          "id": 20580,
+          "name": "SaberCats Stadium",
+          "city": "Houston, Texas"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 31",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18813,
+          "name": "Houston Dynamo FC II",
+          "logo": "https://media.api-sports.io/football/teams/18813.png",
+          "winner": true
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 4,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 2,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 4,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174218,
+        "referee": "J. Metz",
+        "timezone": "UTC",
+        "date": "2024-04-21T21:00:00+00:00",
+        "timestamp": 1713733200,
+        "periods": {
+          "first": 1713733200,
+          "second": 1713736800
+        },
+        "venue": {
+          "id": 1748,
+          "name": "Providence Park",
+          "city": "Portland, Oregon"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 8",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 4011,
+          "name": "Portland Timbers II",
+          "logo": "https://media.api-sports.io/football/teams/4011.png",
+          "winner": false
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 3,
+        "away": 4
+      },
+      "score": {
+        "halftime": {
+          "home": 2,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 3,
+          "away": 4
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174230,
+        "referee": "W. Caouette",
+        "timezone": "UTC",
+        "date": "2024-04-28T21:00:00+00:00",
+        "timestamp": 1714338000,
+        "periods": {
+          "first": 1714338000,
+          "second": 1714341600
+        },
+        "venue": {
+          "id": 3102,
+          "name": "Rock Chalk Park",
+          "city": "Lawrence, Kansas"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 9",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 4019,
+          "name": "Sporting KC II",
+          "logo": "https://media.api-sports.io/football/teams/4019.png",
+          "winner": true
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 4,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 2,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 4,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174235,
+        "referee": "A. Voigt",
+        "timezone": "UTC",
+        "date": "2024-05-03T23:00:00+00:00",
+        "timestamp": 1714777200,
+        "periods": {
+          "first": 1714777200,
+          "second": 1714780800
+        },
+        "venue": {
+          "id": 20581,
+          "name": "National Sports Center",
+          "city": "Blaine, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 10",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        },
+        "away": {
+          "id": 18740,
+          "name": "St. Louis City II",
+          "logo": "https://media.api-sports.io/football/teams/18740.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 1,
+        "away": 2
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 1,
+          "away": 2
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174255,
+        "referee": "R. Shanklin",
+        "timezone": "UTC",
+        "date": "2024-05-12T19:00:00+00:00",
+        "timestamp": 1715540400,
+        "periods": {
+          "first": 1715540400,
+          "second": 1715544000
+        },
+        "venue": {
+          "id": 20581,
+          "name": "National Sports Center",
+          "city": "Blaine, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 12",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": true
+        },
+        "away": {
+          "id": 3997,
+          "name": "Ventura County",
+          "logo": "https://media.api-sports.io/football/teams/3997.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 1,
+        "away": 0
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 1,
+          "away": 0
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174267,
+        "referee": "E. Osmanovic",
+        "timezone": "UTC",
+        "date": "2024-05-19T19:00:00+00:00",
+        "timestamp": 1716145200,
+        "periods": {
+          "first": 1716145200,
+          "second": 1716148800
+        },
+        "venue": {
+          "id": 20581,
+          "name": "National Sports Center",
+          "city": "Blaine, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 13",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": true
+        },
+        "away": {
+          "id": 4020,
+          "name": "Tacoma Defiance",
+          "logo": "https://media.api-sports.io/football/teams/4020.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 3,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 1,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 3,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174286,
+        "referee": "B. Jensen",
+        "timezone": "UTC",
+        "date": "2024-05-27T00:00:00+00:00",
+        "timestamp": 1716768000,
+        "periods": {
+          "first": 1716768000,
+          "second": 1716771600
+        },
+        "venue": {
+          "id": 1610,
+          "name": "Dick's Sporting Goods Park",
+          "city": "Commerce City, Colorado"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 15",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 4102,
+          "name": "Colorado Rapids II",
+          "logo": "https://media.api-sports.io/football/teams/4102.png",
+          "winner": false
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 0,
+        "away": 2
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 0,
+          "away": 2
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174297,
+        "referee": "K. Johnston",
+        "timezone": "UTC",
+        "date": "2024-06-02T23:00:00+00:00",
+        "timestamp": 1717369200,
+        "periods": {
+          "first": 1717369200,
+          "second": 1717372800
+        },
+        "venue": {
+          "id": 20581,
+          "name": "National Sports Center",
+          "city": "Blaine, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 16",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        },
+        "away": {
+          "id": 4019,
+          "name": "Sporting KC II",
+          "logo": "https://media.api-sports.io/football/teams/4019.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 3,
+        "away": 4
+      },
+      "score": {
+        "halftime": {
+          "home": 2,
+          "away": 2
+        },
+        "fulltime": {
+          "home": 3,
+          "away": 4
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174310,
+        "referee": "G. Flores",
+        "timezone": "UTC",
+        "date": "2024-06-10T00:00:00+00:00",
+        "timestamp": 1717977600,
+        "periods": {
+          "first": 1717977600,
+          "second": 1717981200
+        },
+        "venue": {
+          "id": 20581,
+          "name": "National Sports Center",
+          "city": "Blaine, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 18",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        },
+        "away": {
+          "id": 10282,
+          "name": "North Texas",
+          "logo": "https://media.api-sports.io/football/teams/10282.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 0,
+        "away": 3
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 0,
+          "away": 3
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174319,
+        "referee": "A. Ruch",
+        "timezone": "UTC",
+        "date": "2024-06-14T01:00:00+00:00",
+        "timestamp": 1718326800,
+        "periods": {
+          "first": 1718326800,
+          "second": 1718330400
+        },
+        "venue": {
+          "id": 3128,
+          "name": "Swangard Stadium",
+          "city": "Burnaby, British Columbia"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 18",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 4028,
+          "name": "Vancouver Whitecaps II",
+          "logo": "https://media.api-sports.io/football/teams/4028.png",
+          "winner": true
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 4,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 1,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 4,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174335,
+        "referee": "R. Farrell",
+        "timezone": "UTC",
+        "date": "2024-06-26T18:00:00+00:00",
+        "timestamp": 1719424800,
+        "periods": {
+          "first": 1719424800,
+          "second": 1719428400
+        },
+        "venue": {
+          "id": 20581,
+          "name": "National Sports Center",
+          "city": "Blaine, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 20",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        },
+        "away": {
+          "id": 4011,
+          "name": "Portland Timbers II",
+          "logo": "https://media.api-sports.io/football/teams/4011.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 2,
+        "away": 3
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 3
+        },
+        "fulltime": {
+          "home": 2,
+          "away": 3
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174347,
+        "referee": "K. Harms",
+        "timezone": "UTC",
+        "date": "2024-06-30T23:00:00+00:00",
+        "timestamp": 1719788400,
+        "periods": {
+          "first": 1719788400,
+          "second": 1719792000
+        },
+        "venue": {
+          "id": 20581,
+          "name": "National Sports Center",
+          "city": "Blaine, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 21",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        },
+        "away": {
+          "id": 18813,
+          "name": "Houston Dynamo FC II",
+          "logo": "https://media.api-sports.io/football/teams/18813.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 1,
+        "away": 3
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 1,
+          "away": 3
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174354,
+        "referee": "R. Shanklin",
+        "timezone": "UTC",
+        "date": "2024-07-04T00:45:00+00:00",
+        "timestamp": 1720053900,
+        "periods": {
+          "first": 1720053900,
+          "second": 1720057500
+        },
+        "venue": {
+          "id": 18550,
+          "name": "Choctaw Stadium",
+          "city": "Arlington, Texas"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 22",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 10282,
+          "name": "North Texas",
+          "logo": "https://media.api-sports.io/football/teams/10282.png",
+          "winner": true
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 4,
+        "away": 0
+      },
+      "score": {
+        "halftime": {
+          "home": 1,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 4,
+          "away": 0
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174394,
+        "referee": "V. Stefanovic",
+        "timezone": "UTC",
+        "date": "2024-07-27T00:00:00+00:00",
+        "timestamp": 1722038400,
+        "periods": {
+          "first": 1722038400,
+          "second": 1722042000
+        },
+        "venue": {
+          "id": 20581,
+          "name": "National Sports Center",
+          "city": "Blaine, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 26",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": true
+        },
+        "away": {
+          "id": 4102,
+          "name": "Colorado Rapids II",
+          "logo": "https://media.api-sports.io/football/teams/4102.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 1,
+        "away": 0
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 1,
+          "away": 0
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174420,
+        "referee": "S. Berna Rico",
+        "timezone": "UTC",
+        "date": "2024-08-04T19:00:00+00:00",
+        "timestamp": 1722798000,
+        "periods": {
+          "first": 1722798000,
+          "second": 1722801600
+        },
+        "venue": {
+          "id": 20579,
+          "name": "Starfire Sports Stadium",
+          "city": "Tukwila, Washington"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 28",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 4020,
+          "name": "Tacoma Defiance",
+          "logo": "https://media.api-sports.io/football/teams/4020.png",
+          "winner": true
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 5,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 3,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 5,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174439,
+        "referee": "I. Petrunok",
+        "timezone": "UTC",
+        "date": "2024-08-18T19:00:00+00:00",
+        "timestamp": 1724007600,
+        "periods": {
+          "first": 1724007600,
+          "second": 1724011200
+        },
+        "venue": {
+          "id": 20581,
+          "name": "National Sports Center",
+          "city": "Blaine, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 30",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        },
+        "away": {
+          "id": 18740,
+          "name": "St. Louis City II",
+          "logo": "https://media.api-sports.io/football/teams/18740.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 0,
+        "away": 3
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 0,
+          "away": 3
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174458,
+        "referee": "J. Surgan",
+        "timezone": "UTC",
+        "date": "2024-08-26T00:00:00+00:00",
+        "timestamp": 1724630400,
+        "periods": {
+          "first": 1724630400,
+          "second": 1724634000
+        },
+        "venue": {
+          "id": 20580,
+          "name": "SaberCats Stadium",
+          "city": "Houston, Texas"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 32",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18813,
+          "name": "Houston Dynamo FC II",
+          "logo": "https://media.api-sports.io/football/teams/18813.png",
+          "winner": true
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 3,
+        "away": 1
+      },
+      "score": {
+        "halftime": {
+          "home": 1,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 3,
+          "away": 1
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174481,
+        "referee": "S. Briem",
+        "timezone": "UTC",
+        "date": "2024-09-08T19:00:00+00:00",
+        "timestamp": 1725822000,
+        "periods": {
+          "first": 1725822000,
+          "second": 1725825600
+        },
+        "venue": {
+          "id": 20581,
+          "name": "National Sports Center",
+          "city": "Blaine, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 35",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": true
+        },
+        "away": {
+          "id": 21138,
+          "name": "Austin II",
+          "logo": "https://media.api-sports.io/football/teams/21138.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 3,
+        "away": 2
+      },
+      "score": {
+        "halftime": {
+          "home": 1,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 3,
+          "away": 2
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174511,
+        "referee": "J. Lara",
+        "timezone": "UTC",
+        "date": "2024-09-22T22:00:00+00:00",
+        "timestamp": 1727042400,
+        "periods": {
+          "first": 1727042400,
+          "second": 1727046000
+        },
+        "venue": {
+          "id": 21617,
+          "name": "Children's Mercy Victory Field",
+          "city": "Kansas City, Missouri"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": 3
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 38",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 4019,
+          "name": "Sporting KC II",
+          "logo": "https://media.api-sports.io/football/teams/4019.png",
+          "winner": false
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 2,
+        "away": 4
+      },
+      "score": {
+        "halftime": {
+          "home": 2,
+          "away": 2
+        },
+        "fulltime": {
+          "home": 2,
+          "away": 4
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174518,
+        "referee": "J. Matto",
+        "timezone": "UTC",
+        "date": "2024-09-28T00:00:00+00:00",
+        "timestamp": 1727481600,
+        "periods": {
+          "first": 1727481600,
+          "second": 1727485200
+        },
+        "venue": {
+          "id": 20581,
+          "name": "National Sports Center",
+          "city": "Blaine, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": 10
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 39",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": true
+        },
+        "away": {
+          "id": 4102,
+          "name": "Colorado Rapids II",
+          "logo": "https://media.api-sports.io/football/teams/4102.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 1,
+        "away": 0
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 1,
+          "away": 0
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1174542,
+        "referee": "D. Klemp",
+        "timezone": "UTC",
+        "date": "2024-10-06T20:00:00+00:00",
+        "timestamp": 1728244800,
+        "periods": {
+          "first": 1728244800,
+          "second": 1728248400
+        },
+        "venue": {
+          "id": 18550,
+          "name": "Choctaw Stadium",
+          "city": "Arlington, Texas"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": 5
+        }
+      },
+      "league": {
+        "id": 909,
+        "name": "MLS Next Pro",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/909.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "Regular Season - 41",
+        "standings": true
+      },
+      "teams": {
+        "home": {
+          "id": 10282,
+          "name": "North Texas",
+          "logo": "https://media.api-sports.io/football/teams/10282.png",
+          "winner": true
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        }
+      },
+      "goals": {
+        "home": 8,
+        "away": 2
+      },
+      "score": {
+        "halftime": {
+          "home": 4,
+          "away": 1
+        },
+        "fulltime": {
+          "home": 8,
+          "away": 2
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1182057,
+        "referee": "I. Bych",
+        "timezone": "UTC",
+        "date": "2024-03-21T00:00:00+00:00",
+        "timestamp": 1710979200,
+        "periods": {
+          "first": 1710979200,
+          "second": 1710982800
+        },
+        "venue": {
+          "id": null,
+          "name": "Langhorst Field",
+          "city": "Elmhurst, Illinois"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 257,
+        "name": "US Open Cup",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/257.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "1st Round",
+        "standings": false
+      },
+      "teams": {
+        "home": {
+          "id": 17375,
+          "name": "Chicago House",
+          "logo": "https://media.api-sports.io/football/teams/17375.png",
+          "winner": false
+        },
+        "away": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 0,
+        "away": 3
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 0,
+          "away": 3
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    },
+    {
+      "fixture": {
+        "id": 1188698,
+        "referee": "C. Ruska",
+        "timezone": "UTC",
+        "date": "2024-04-03T00:30:00+00:00",
+        "timestamp": 1712104200,
+        "periods": {
+          "first": 1712104200,
+          "second": 1712107800
+        },
+        "venue": {
+          "id": 1617,
+          "name": "Allianz Field",
+          "city": "Saint Paul, Minnesota"
+        },
+        "status": {
+          "long": "Match Finished",
+          "short": "FT",
+          "elapsed": 90,
+          "extra": null
+        }
+      },
+      "league": {
+        "id": 257,
+        "name": "US Open Cup",
+        "country": "USA",
+        "logo": "https://media.api-sports.io/football/leagues/257.png",
+        "flag": "https://media.api-sports.io/flags/us.svg",
+        "season": 2024,
+        "round": "2nd Round",
+        "standings": false
+      },
+      "teams": {
+        "home": {
+          "id": 18814,
+          "name": "Minnesota United II",
+          "logo": "https://media.api-sports.io/football/teams/18814.png",
+          "winner": false
+        },
+        "away": {
+          "id": 10873,
+          "name": "Michigan Stars",
+          "logo": "https://media.api-sports.io/football/teams/10873.png",
+          "winner": true
+        }
+      },
+      "goals": {
+        "home": 0,
+        "away": 2
+      },
+      "score": {
+        "halftime": {
+          "home": 0,
+          "away": 0
+        },
+        "fulltime": {
+          "home": 0,
+          "away": 2
+        },
+        "extratime": {
+          "home": null,
+          "away": null
+        },
+        "penalty": {
+          "home": null,
+          "away": null
+        }
+      }
+    }
+  ]
+}
