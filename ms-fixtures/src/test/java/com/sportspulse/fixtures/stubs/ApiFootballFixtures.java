@@ -23,8 +23,7 @@ public class ApiFootballFixtures {
                         .willReturn(
                                 aResponse()
                                         .withStatus(HttpStatus.OK.value())
-                                        .withHeader(HttpHeaders.CONTENT_TYPE,
-                                                MediaType.APPLICATION_JSON_VALUE)
+                                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                         .withBodyFile(
                                                 "api-football/fixtures/fixtures-by-date.json")));
     }
@@ -36,8 +35,7 @@ public class ApiFootballFixtures {
                         .willReturn(
                                 aResponse()
                                         .withStatus(HttpStatus.OK.value())
-                                        .withHeader(HttpHeaders.CONTENT_TYPE,
-                                                MediaType.APPLICATION_JSON_VALUE)
+                                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                         .withBodyFile(
                                                 "api-football/fixtures/fixtures-by-error-plan-date.json")));
     }
@@ -50,8 +48,7 @@ public class ApiFootballFixtures {
                         .willReturn(
                                 aResponse()
                                         .withStatus(HttpStatus.OK.value())
-                                        .withHeader(HttpHeaders.CONTENT_TYPE,
-                                                MediaType.APPLICATION_JSON_VALUE)
+                                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                         .withBodyFile(
                                                 "api-football/fixtures/fixtures-by-league-and-season.json")));
     }
@@ -65,8 +62,7 @@ public class ApiFootballFixtures {
                         .willReturn(
                                 aResponse()
                                         .withStatus(HttpStatus.OK.value())
-                                        .withHeader(HttpHeaders.CONTENT_TYPE,
-                                                MediaType.APPLICATION_JSON_VALUE)
+                                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                         .withBodyFile(
                                                 "api-football/fixtures/fixtures-by-status-season-and-league.json")));
     }
