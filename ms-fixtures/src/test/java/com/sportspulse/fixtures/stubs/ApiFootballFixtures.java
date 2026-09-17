@@ -23,8 +23,37 @@ public class ApiFootballFixtures {
                         .willReturn(
                                 aResponse()
                                         .withStatus(HttpStatus.OK.value())
-                                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                                        .withBodyFile("api-football/fixtures/fixtures-by-date.json")));
+                                        .withHeader(HttpHeaders.CONTENT_TYPE,
+                                                MediaType.APPLICATION_JSON_VALUE)
+                                        .withBodyFile(
+                                                "api-football/fixtures/fixtures-by-date.json")));
+    }
+
+    public void stubByErrorPlan(String date){
+        wireMock.stubFor(
+                get(urlPathEqualTo("/fixtures"))
+                        .withQueryParam("date", equalTo(date))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(HttpStatus.OK.value())
+                                        .withHeader(HttpHeaders.CONTENT_TYPE,
+                                                MediaType.APPLICATION_JSON_VALUE)
+                                        .withBodyFile(
+                                                "api-football/fixtures/fixtures-by-error-plan-date.json")));
+    }
+
+    public void stubByLeagueAndSeason(String league, String season){
+        wireMock.stubFor(
+                get(urlPathEqualTo("/fixtures"))
+                        .withQueryParam("league", equalTo(league))
+                        .withQueryParam("season", equalTo(season))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(HttpStatus.OK.value())
+                                        .withHeader(HttpHeaders.CONTENT_TYPE,
+                                                MediaType.APPLICATION_JSON_VALUE)
+                                        .withBodyFile(
+                                                "api-football/fixtures/fixtures-by-league-and-season.json")));
     }
 
     public void reset(){wireMock.resetAll();}

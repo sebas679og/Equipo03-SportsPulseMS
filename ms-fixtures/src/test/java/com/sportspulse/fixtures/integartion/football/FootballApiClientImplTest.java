@@ -32,7 +32,7 @@ import static org.instancio.Select.all;
 import static org.instancio.Select.field;
 
 @DisplayName("FootballClientImpl Unit Tests")
-class FootballClientImplTest {
+class FootballApiClientImplTest {
 
     private MockWebServer mockWebServer;
     private FootballClientImpl footballClient;
