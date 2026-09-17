@@ -56,5 +56,20 @@ public class ApiFootballFixtures {
                                                 "api-football/fixtures/fixtures-by-league-and-season.json")));
     }
 
+    public void stubByStatusSeasonAndLeague(String status, String season, String league){
+        wireMock.stubFor(
+                get(urlPathEqualTo("/fixtures"))
+                        .withQueryParam("status", equalTo(status))
+                        .withQueryParam("league", equalTo(league))
+                        .withQueryParam("season", equalTo(season))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(HttpStatus.OK.value())
+                                        .withHeader(HttpHeaders.CONTENT_TYPE,
+                                                MediaType.APPLICATION_JSON_VALUE)
+                                        .withBodyFile(
+                                                "api-football/fixtures/fixtures-by-status-season-and-league.json")));
+    }
+
     public void reset(){wireMock.resetAll();}
 }
