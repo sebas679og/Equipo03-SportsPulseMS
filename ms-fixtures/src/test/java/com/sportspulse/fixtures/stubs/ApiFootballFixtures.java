@@ -67,5 +67,69 @@ public class ApiFootballFixtures {
                                                 "api-football/fixtures/fixtures-by-status-season-and-league.json")));
     }
 
+    public void stubByStatusSeasonAndTeam(String status, String season, String team){
+        wireMock.stubFor(
+                get(urlPathEqualTo("/fixtures"))
+                        .withQueryParam("status", equalTo(status))
+                        .withQueryParam("team", equalTo(team))
+                        .withQueryParam("season", equalTo(season))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(HttpStatus.OK.value())
+                                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                        .withBodyFile(
+                                                "api-football/fixtures/fixtures-by-status-season-and-team.json")));
+    }
+
+    public void stubByTeamAndSeason(String team, String season){
+        wireMock.stubFor(
+                get(urlPathEqualTo("/fixtures"))
+                        .withQueryParam("team", equalTo(team))
+                        .withQueryParam("season", equalTo(season))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(HttpStatus.OK.value())
+                                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                        .withBodyFile(
+                                                "api-football/fixtures/fixtures-by-team-and-season.json")));
+    }
+
+    public void stubByDate_Return204(String date){
+        wireMock.stubFor(
+                get(urlPathEqualTo("/fixtures"))
+                        .withQueryParam("date", equalTo(date))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(HttpStatus.NO_CONTENT.value())
+                                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                        .withBodyFile(
+                                                "api-football/fixtures/fixtures-response-204.json")));
+    }
+
+    public void stubByDate_Return499(String date){
+        wireMock.stubFor(
+                get(urlPathEqualTo("/fixtures"))
+                        .withQueryParam("date", equalTo(date))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(499)
+                                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                        .withBodyFile(
+                                                "api-football/fixtures/fixtures-response-error.json")));
+    }
+
+    public void stubByDate_Return500(String date){
+        wireMock.stubFor(
+                get(urlPathEqualTo("/fixtures"))
+                        .withQueryParam("date", equalTo(date))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                        .withBodyFile(
+                                                "api-football/fixtures/fixtures-response-error.json")));
+    }
+
+
     public void reset(){wireMock.resetAll();}
 }
